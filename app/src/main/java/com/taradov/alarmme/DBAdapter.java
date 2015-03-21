@@ -26,26 +26,27 @@ public class DBAdapter {
     public static final String KEY_ALARM_TITLE      = "Title";
     public static final String KEY_ALARM_FROMDATE   = "FromDate";
     public static final String KEY_ALARM_TODATE     = "ToDate";
-    public static final String KEY_ALARM_ATTIME     = "AtTime";
+    public static final String KEY_ALARM_TIME       = "Time";
     public static final String KEY_ALARM_DAYS       = "Days";
     public static final String KEY_ALARM_MEDICINEID = "MedicineId";
     public static final String KEY_ALARM_INTERVAL   = "Interval";
     public static final String KEY_ALARM_ICON       = "Icon";
     public static final String KEY_ALARM_ENABLED    = "Enabled";
 
-    // TODO: Check consistency with attribute names
+    public static final int ALARM_ID_COLUMN         = 0;
     public static final int ALARM_TITLE_COLUMN      = 1;
     public static final int ALARM_FROMDATE_COLUMN   = 2;
     public static final int ALARM_TODATE_COLUMN     = 3;
-    public static final int ALARM_ATTIME_COLUMN     = 4;
+    public static final int ALARM_TIME_COLUMN       = 4;
     public static final int ALARM_DAYS_COLUMN       = 5;
     public static final int ALARM_MEDICINEID_COLUMN = 6;
     public static final int ALARM_INTERVAL_COLUMN   = 7;
     public static final int ALARM_ICON_COLUMN       = 8;
     public static final int ALARM_ENABLED_COLUMN    = 9;
 
-    private static final String[] AlarmTableColumns= new String[] { KEY_ALARM_ID, KEY_ALARM_TITLE, KEY_ALARM_FROMDATE,
-            KEY_ALARM_TODATE, KEY_ALARM_ATTIME, KEY_ALARM_DAYS, KEY_ALARM_INTERVAL, KEY_ALARM_ICON, KEY_ALARM_ENABLED};
+    public static final String[] ALL_ALARM_TABLE_COLUMNS = new String[] { KEY_ALARM_ID, KEY_ALARM_TITLE,
+            KEY_ALARM_FROMDATE, KEY_ALARM_TODATE, KEY_ALARM_TIME, KEY_ALARM_DAYS,
+            KEY_ALARM_MEDICINEID, KEY_ALARM_INTERVAL, KEY_ALARM_ICON, KEY_ALARM_ENABLED};
 
     // Medicine Table Constants
     private static final String MEDICINE_TABLE = "Medicine";
@@ -55,9 +56,13 @@ public class DBAdapter {
     public static final String KEY_MEDICINE_COLOR   = "Color";
     public static final String KEY_MEDICINE_AUDIO   = "Audio";
 
+    public static final int MEDICINE_ID_COLUMN      = 0;
     public static final int MEDICINE_NAME_COLUMN    = 1;
     public static final int MEDICINE_COLOR_COLUMN   = 2;
     public static final int MEDICINE_AUDIO_COLUMN   = 3;
+
+    public static final String[] ALL_MEDICINE_TABLE_COLUMNS = new String[] { KEY_MEDICINE_ID,
+            KEY_MEDICINE_NAME, KEY_MEDICINE_COLOR, KEY_MEDICINE_AUDIO};
 
     // Validation Table Constants
     private static final String HISTORY_TABLE = "MedicationHistory";
@@ -67,9 +72,13 @@ public class DBAdapter {
     public static final String KEY_HISTORY_TIMEDUE      = "TimeDue";
     public static final String KEY_HISTORY_TIMETAKEN    = "TimeTaken";
 
+    public static final int HISTORY_ID_COLUMN           = 0;
     public static final int HISTORY_ALARMID_COLUMN      = 1;
     public static final int HISTORY_TIMEDUE_COLUMN      = 2;
     public static final int HISTORY_TIMETAKEN_COLUMN    = 3;
+
+    public static final String[] ALL_HISTORY_TABLE_COLUMNS = new String[] { KEY_HISTORY_ID,
+            KEY_HISTORY_ALARMID, KEY_HISTORY_TIMEDUE, KEY_HISTORY_TIMETAKEN};
 
     public DBAdapter(Context _context) {
         this.mContext = _context;
@@ -88,8 +97,8 @@ public class DBAdapter {
                 KEY_ALARM_ID          + " integer primary key autoincrement, " +
                 KEY_ALARM_TITLE       + " text, " +
                 KEY_ALARM_FROMDATE    + " long not null, " +
-                KEY_ALARM_TODATE      + " long not null, " +
-                KEY_ALARM_ATTIME      + " long not null, " +
+                KEY_ALARM_TODATE      + " long, " +
+                KEY_ALARM_TIME        + " long not null, " +
                 KEY_ALARM_DAYS        + " integer not null, " +
                 KEY_ALARM_MEDICINEID  + " integer not null, " +
                 KEY_ALARM_INTERVAL    + " integer not null, " +
@@ -149,22 +158,26 @@ public class DBAdapter {
     }
 
     // Insert a new medicine
-    public long addMedicine(String _name) {
+    public long addMedicine(String _name, int _color, int _audio) {
         // Create a new row of values to insert.
         ContentValues values = new ContentValues();
         // Assign values for each column.
         values.put(KEY_MEDICINE_NAME, _name);
+        values.put(KEY_MEDICINE_COLOR, _color);
+        values.put(KEY_MEDICINE_COLOR, _audio);
 
         // Insert the row.
         return db.insert(MEDICINE_TABLE, null, values);
     }
 
     // Update a medicine entry
-    public boolean updateMedicine(long _id, String _name) {
+    public boolean updateMedicine(long _id, String _name, int _color, int _audio) {
         // Create a new row of values to insert.
         ContentValues newValues = new ContentValues();
         // Assign values for each column.
         newValues.put(KEY_MEDICINE_NAME, _name);
+        newValues.put(KEY_MEDICINE_COLOR, _color);
+        newValues.put(KEY_MEDICINE_AUDIO, _audio);
 
         // Insert the row.
         return db.update(MEDICINE_TABLE, newValues, KEY_MEDICINE_ID + "=" + _id, null) > 0;
@@ -175,23 +188,38 @@ public class DBAdapter {
         return db.delete(MEDICINE_TABLE, KEY_MEDICINE_NAME + "=" + _name, null) > 0;
     }
 
+    // get a cursor to all history items
+    public Cursor getAllMedicineCursor() {
+        return db.query(MEDICINE_TABLE, ALL_MEDICINE_TABLE_COLUMNS,
+                null, null, null, null, null);
+    }
+
+    public Medicine createMedicineItem(Cursor _cursor)
+    {
+        return new Medicine(mContext,
+                _cursor.getInt(MEDICINE_ID_COLUMN),
+                _cursor.getString(MEDICINE_NAME_COLUMN),
+                _cursor.getInt(MEDICINE_COLOR_COLUMN),
+                _cursor.getInt(MEDICINE_AUDIO_COLUMN));
+    }
+
     // Insert a new alarm
-    public long addAlarm(Alarm _alarm)
+    public long addAlarm(Alarm _alarm, int _medicineID)
     {
         // Create a new row of values to insert.
         ContentValues values = new ContentValues();
-        DateTime dT = new DateTime(mContext);
-
-        // TODO: Adopt this to changes to the new Alarm class
 
         // Assign values for each column.
-        values.put(KEY_ALARM_ID, _alarm.getId());
-        values.put(KEY_ALARM_TITLE, _alarm.getTitle());
-        values.put(KEY_ALARM_FROMDATE, dT.formatDate(_alarm));
-        values.put(KEY_ALARM_DAYS, dT.formatDays(_alarm));
-        values.put(KEY_ALARM_ATTIME, dT.formatTime(_alarm));
-        values.put(KEY_ALARM_INTERVAL, _alarm.getDays());
-        values.put(KEY_ALARM_ICON, _alarm.getpId());
+        //values.put(KEY_ALARM_ID         , _alarm.getId());
+        values.put(KEY_ALARM_TITLE      , _alarm.getTitle());
+        values.put(KEY_ALARM_FROMDATE, _alarm.getDate());
+        values.put(KEY_ALARM_TODATE     , _alarm.getToDate());
+        values.put(KEY_ALARM_TIME       , _alarm.getTime());
+        values.put(KEY_ALARM_DAYS       , _alarm.getDays());
+        values.put(KEY_ALARM_MEDICINEID , _medicineID);
+        values.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
+        values.put(KEY_ALARM_ICON       , _alarm.getpId());
+        values.put(KEY_ALARM_ENABLED, _alarm.getEnabled());
 
         // Insert the row.
         return db.insert(ALARM_TABLE, null, values);
@@ -204,16 +232,15 @@ public class DBAdapter {
         ContentValues newValues = new ContentValues();
         DateTime dT = new DateTime(mContext);
 
-        // TODO: Adopt this to changes to the new Alarm class
-
         // Assign values for each column.
-        newValues.put(KEY_ALARM_ID, _alarm.getId());
-        newValues.put(KEY_ALARM_TITLE, _alarm.getTitle());
-        newValues.put(KEY_ALARM_FROMDATE, dT.formatDate(_alarm));
-        newValues.put(KEY_ALARM_DAYS, dT.formatDays(_alarm));
-        newValues.put(KEY_ALARM_ATTIME, dT.formatTime(_alarm));
-        newValues.put(KEY_ALARM_INTERVAL, _alarm.getDays());
-        newValues.put(KEY_ALARM_ICON, _alarm.getpId());
+        newValues.put(KEY_ALARM_TITLE      , _alarm.getTitle());
+        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getDate());
+        newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
+        newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
+        newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
+        newValues.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
+        newValues.put(KEY_ALARM_ICON       , _alarm.getpId());
+        newValues.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
 
         // Update the row.
         return db.update(ALARM_TABLE, newValues, KEY_ALARM_ID + "=" + _id, null) > 0;
@@ -231,7 +258,58 @@ public class DBAdapter {
         return db.delete(ALARM_TABLE, KEY_ALARM_ID + "=" + _id, null) > 0;
     }
 
-    // Insert a new alarm
+    // get a cursor to all alarms
+    public Cursor getAllAlarmCursor() {
+        return db.query(ALARM_TABLE, ALL_ALARM_TABLE_COLUMNS,
+                null, null, null, null, null);
+    }
+
+    // get cursor to a particular alarm with id
+    public Cursor setCursorAlarm(long _rowIndex) throws SQLException {
+        Cursor result = db.query(true, ALARM_TABLE, ALL_ALARM_TABLE_COLUMNS,
+                KEY_ALARM_ID + "=" + _rowIndex, null, null, null,
+                null, null);
+
+        if ((result.getCount() == 0) || !result.moveToFirst()) {
+            throw new SQLException("No to do items found for row: " + _rowIndex);
+        }
+
+        return result;
+    }
+
+    // get alarm object using id
+    public Alarm getAlarm(long _rowIndex) throws SQLException {
+        Cursor cursor = db.query(true, ALARM_TABLE,
+                ALL_ALARM_TABLE_COLUMNS,
+                KEY_ALARM_ID + "=" + _rowIndex, null, null, null,
+                null, null);
+
+        if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
+            throw new SQLException("No to do item found for row: " + _rowIndex);
+        }
+
+        return createAlarm(cursor);
+    }
+
+    public Alarm createAlarm(Cursor _cursor)
+    {
+        Alarm result = new Alarm(mContext);
+
+        result.setId(_cursor.getInt(ALARM_ID_COLUMN));
+        result.setTitle(_cursor.getString(ALARM_TITLE_COLUMN));
+        result.setDate(_cursor.getLong(ALARM_FROMDATE_COLUMN));
+        result.setToDate(_cursor.getLong(ALARM_TODATE_COLUMN));
+        result.setTime(_cursor.getLong(ALARM_TIME_COLUMN));
+        result.setDays(_cursor.getInt(ALARM_DAYS_COLUMN));
+        //result.set(_cursor.get(ALARM_MEDICINEID_COLUMN));
+        result.setInterval(_cursor.getInt(ALARM_INTERVAL_COLUMN));
+        result.setpId(_cursor.getInt(ALARM_ICON_COLUMN));
+        result.setEnabled((_cursor.getInt(ALARM_ENABLED_COLUMN) == 1));
+
+        return result;
+    }
+
+    // Insert a new history item
     public long addHistory(HistoryItem _historyItem)
     {
         // Create a new row of values to insert.
@@ -246,7 +324,7 @@ public class DBAdapter {
         return db.insert(ALARM_TABLE, null, values);
     }
 
-    // Update an alarm entry
+    // Update a history item
     public boolean updateHistory(long _id, HistoryItem _historyItem)
     {
         // Create a new row of values to insert.
@@ -261,48 +339,24 @@ public class DBAdapter {
         return db.update(HISTORY_TABLE, newValues, KEY_HISTORY_ID + "=" + _id, null) > 0;
     }
 
-    // Remove an alarm from the database using its name
+    // Remove a history item from the database using its name
     public boolean removeHistory(String _name)
     {
         return db.delete(ALARM_TABLE, KEY_ALARM_TITLE + "=" + _name, null) > 0;
     }
 
-    public Cursor getAllAlarmCursor() {
-        return db.query(ALARM_TABLE, AlarmTableColumns,
-        null, null, null, null, null);
+    // get a cursor to all history items
+    public Cursor getAllHistoryCursor() {
+        return db.query(HISTORY_TABLE, ALL_HISTORY_TABLE_COLUMNS,
+                null, null, null, null, null);
     }
 
-    public Cursor setCursorAlarm(long _rowIndex) throws SQLException {
-        Cursor result = db.query(true, ALARM_TABLE, AlarmTableColumns,
-                KEY_ALARM_ID + "=" + _rowIndex, null, null, null,
-                null, null);
-
-        if ((result.getCount() == 0) || !result.moveToFirst()) {
-            throw new SQLException("No to do items found for row: " + _rowIndex);
-        }
-
-        return result;
-    }
-
-    public Alarm getAlarm(long _rowIndex) throws SQLException {
-        Cursor cursor = db.query(true, ALARM_TABLE,
-                AlarmTableColumns,
-                KEY_ALARM_ID + "=" + _rowIndex, null, null, null,
-                null, null);
-
-        if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
-            throw new SQLException("No to do item found for row: " + _rowIndex);
-        }
-
-        Alarm result = new Alarm(mContext);
-
-        result.setTitle(cursor.getString(ALARM_TITLE_COLUMN));
-        result.setId(_rowIndex);
-//        result.setDate();
-//        result.setDays();
-//        result.setInterval();
-//        result.setpId();
-
-        return result;
+    public HistoryItem createHistoryItem(Cursor _cursor)
+    {
+        return new HistoryItem(mContext,
+                _cursor.getInt(HISTORY_ID_COLUMN),
+                _cursor.getInt(HISTORY_ALARMID_COLUMN),
+                _cursor.getLong(HISTORY_TIMEDUE_COLUMN),
+                _cursor.getLong(HISTORY_TIMETAKEN_COLUMN));
     }
 }

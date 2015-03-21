@@ -92,6 +92,11 @@ public class DateTime
     return mDateFormat.format(new Date(alarm.getDate()));
   }
 
+  public String formatToDate(Alarm alarm)
+  {
+      return mDateFormat.format(new Date(alarm.getToDate()));
+  }
+
   public String formatDays(Alarm alarm)
   {
     boolean[] days = getDays(alarm);

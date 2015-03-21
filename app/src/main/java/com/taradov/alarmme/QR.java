@@ -61,7 +61,7 @@ public class QR extends Activity {
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					Toast.makeText(getApplicationContext(), "ERROR:" + e, 1).show();
+					Toast.makeText(getApplicationContext(), "ERROR:" + e, Toast.LENGTH_LONG).show();
 
 				}
 
@@ -69,7 +69,7 @@ public class QR extends Activity {
 		});
 
 	}
-	//In the same activity you’ll need the following to retrieve the results:
+	//In the same activity youï¿½ll need the following to retrieve the results:
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode == 0) {
 

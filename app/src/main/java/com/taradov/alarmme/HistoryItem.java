@@ -1,18 +1,34 @@
 package com.taradov.alarmme;
 
+import android.content.Context;
+
 /**
  * Created by Inshal on 14-Mar-15.
  */
 public class HistoryItem {
+    Context mContext;
+    private int mId;
     private int mAlarmId;
     private long mTimeDue;
     private long mTimeTaken;
 
-    public HistoryItem( int _alarmId, long _timeDue, long _timeTaken)
+    public HistoryItem( Context _context, int _id, int _alarmId, long _timeDue, long _timeTaken)
     {
+        mContext = _context;
+        mId = _id;
         mAlarmId = _alarmId;
         mTimeDue = _timeDue;
         mTimeTaken = _timeTaken;
+    }
+
+    public int getId()
+    {
+        return mId;
+    }
+
+    public void setId(int _id)
+    {
+        mId = _id;
     }
 
     public long getTimeDue()
@@ -29,7 +45,6 @@ public class HistoryItem {
     {
         return mAlarmId;
     }
-
 
     public void setTimeDue(long _timeDue)
     {

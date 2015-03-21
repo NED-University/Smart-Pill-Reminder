@@ -41,5 +41,5 @@ dependencies {
     // This mostly affects encoding, but you should test if you plan to support these versions.
     // Older versions e.g. 2.2 may also work if you need support for older Android versions.
     compile 'com.google.zxing:core:3.0.1'
-    compile files('C:/Users/Inshal/AndroidStudioProjects/AlarmMe/libs/jexcelapi/jxl.jar')
+    compile files('C:/Users/Inshal/Documents/GitHub/Smart-Pill-Reminder/libs/jexcelapi/jxl.jar')
 }
