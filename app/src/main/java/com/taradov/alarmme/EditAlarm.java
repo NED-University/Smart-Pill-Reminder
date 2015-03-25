@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.text.SimpleDateFormat;
+
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -107,6 +109,12 @@ public class EditAlarm extends Activity implements OnItemClickListener
 	static final int TIME_DIALOG_ID = 1;
 	static final int DAYS_DIALOG_ID = 2;
 	public int selectedid;
+
+    private DBAdapter dbAdapter;
+    private Cursor cursor;
+    private boolean editAlarm;
+    private String alarmName;
+
 	@Override
 	public void onCreate(Bundle bundle)
 	{
@@ -178,6 +186,7 @@ public class EditAlarm extends Activity implements OnItemClickListener
 		mDateTime = new DateTime(this);
 
 		mTitle.setText(mAlarm.getTitle());
+
 		mTitle.addTextChangedListener(mTitleChangedListener);
 
 		mOccurence.setSelection(mAlarm.getOccurence());
@@ -199,10 +208,12 @@ public class EditAlarm extends Activity implements OnItemClickListener
 		mMinute = mCalendar.get(Calendar.MINUTE);
 
 		updateButtons();
+
+        dbAdapter = new DBAdapter(this);
+        dbAdapter.open();
+        alarmName = mAlarm.getTitle();
+        editAlarm = getIntent().getBooleanExtra("EDIT", false);
 	}
-
-
-
 
 	@Override
 	protected Dialog onCreateDialog(int id)
@@ -250,6 +261,13 @@ public class EditAlarm extends Activity implements OnItemClickListener
 		Intent intent = new Intent();
 
 		mAlarm.toIntent(intent);
+        // TODO: Get medicine ID
+        if(editAlarm)
+        {
+            dbAdapter.updateAlarm(alarmName, mAlarm);
+        }
+        else
+            dbAdapter.addAlarm(mAlarm, 0);
 		setResult(RESULT_OK, intent);
 		finish();
 	}
@@ -456,5 +474,38 @@ public class EditAlarm extends Activity implements OnItemClickListener
 		// TODO Auto-generated method stub
 
 	}
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        dbAdapter.open();
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        dbAdapter.open();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Close the database
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        dbAdapter.close();
+    }
 }
 

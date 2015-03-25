@@ -185,7 +185,7 @@ public class DBAdapter {
 
     // Remove a medicine
     public boolean removeMedicine(String _name) {
-        return db.delete(MEDICINE_TABLE, KEY_MEDICINE_NAME + "=" + _name, null) > 0;
+        return db.delete(MEDICINE_TABLE, KEY_MEDICINE_NAME + "=" + addQuotes(_name), null) > 0;
     }
 
     // get a cursor to all history items
@@ -246,10 +246,30 @@ public class DBAdapter {
         return db.update(ALARM_TABLE, newValues, KEY_ALARM_ID + "=" + _id, null) > 0;
     }
 
+    public boolean updateAlarm(String _name, Alarm _alarm)
+    {
+        // Create a new row of values to insert.
+        ContentValues newValues = new ContentValues();
+        DateTime dT = new DateTime(mContext);
+
+        // Assign values for each column.
+        newValues.put(KEY_ALARM_TITLE      , _alarm.getTitle());
+        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getDate());
+        newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
+        newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
+        newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
+        newValues.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
+        newValues.put(KEY_ALARM_ICON       , _alarm.getpId());
+        newValues.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
+
+        // Update the row.
+        return db.update(ALARM_TABLE, newValues, KEY_ALARM_TITLE + "=" + addQuotes(_name), null) > 0;
+    }
+
     // Remove an alarm from the database using its name
     public boolean removeAlarm(String _name)
     {
-        return db.delete(ALARM_TABLE, KEY_ALARM_TITLE + "=" + _name, null) > 0;
+        return db.delete(ALARM_TABLE, KEY_ALARM_TITLE + "=" + addQuotes(_name), null) > 0;
     }
 
     // Remove an alarm from the database using its id
@@ -321,7 +341,7 @@ public class DBAdapter {
         values.put(KEY_HISTORY_ALARMID, _historyItem.getAlarmId());
 
         // Insert the row.
-        return db.insert(ALARM_TABLE, null, values);
+        return db.insert(HISTORY_TABLE, null, values);
     }
 
     // Update a history item
@@ -342,7 +362,7 @@ public class DBAdapter {
     // Remove a history item from the database using its name
     public boolean removeHistory(String _name)
     {
-        return db.delete(ALARM_TABLE, KEY_ALARM_TITLE + "=" + _name, null) > 0;
+        return db.delete(HISTORY_TABLE, KEY_ALARM_TITLE + "=" + addQuotes(_name), null) > 0;
     }
 
     // get a cursor to all history items
@@ -358,5 +378,10 @@ public class DBAdapter {
                 _cursor.getInt(HISTORY_ALARMID_COLUMN),
                 _cursor.getLong(HISTORY_TIMEDUE_COLUMN),
                 _cursor.getLong(HISTORY_TIMETAKEN_COLUMN));
+    }
+
+    private String addQuotes(String msg)
+    {
+        return "\"" + msg + "\"";
     }
 }

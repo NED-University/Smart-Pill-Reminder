@@ -73,6 +73,27 @@ public class DBViewer extends Activity {
         dbAdapter.close();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Close the database
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Close the database
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Close the database
+        dbAdapter.open();
+    }
+
     private void populateAlarmList() {
         // Get all the alarms from the database.
         cursor = dbAdapter.getAllAlarmCursor();

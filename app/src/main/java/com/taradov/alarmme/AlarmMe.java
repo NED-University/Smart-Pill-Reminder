@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+
+import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
@@ -72,6 +74,9 @@ public class AlarmMe extends Activity
     private final int CONTEXT_MENU_DELETE = 1;
     private final int CONTEXT_MENU_DUPLICATE = 2;
 
+    private DBAdapter dbAdapter;
+    private Cursor cursor;
+
     @Override
     public void onCreate(Bundle bundle)
     {
@@ -88,14 +93,9 @@ public class AlarmMe extends Activity
         registerForContextMenu(mAlarmList);
 
         mCurrentAlarm = null;
-    }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        Log.i(TAG, "AlarmMe.onDestroy()");
-//    mAlarmListAdapter.save();
+        dbAdapter = new DBAdapter(this);
+        dbAdapter.open();
     }
 
     @Override
@@ -104,6 +104,7 @@ public class AlarmMe extends Activity
         super.onResume();
         Log.i(TAG, "AlarmMe.onResume()");
         mAlarmListAdapter.updateAlarms();
+        dbAdapter.open();
     }
 
     public void onAddAlarmClick(View view)
@@ -197,11 +198,15 @@ public class AlarmMe extends Activity
             Intent intent = new Intent(getBaseContext(), EditAlarm.class);
 
             mCurrentAlarm = mAlarmListAdapter.getItem(info.position);
+
             mCurrentAlarm.toIntent(intent);
+            intent.putExtra("EDIT", true);
             startActivityForResult(intent, EDIT_ALARM_ACTIVITY);
         }
         else if (index == CONTEXT_MENU_DELETE)
         {
+            // TODO: change code to delete alarm from DB using id
+            dbAdapter.removeAlarm(mAlarmListAdapter.getItem(info.position).getTitle());
             mAlarmListAdapter.delete(info.position);
         }
         else if (index == CONTEXT_MENU_DUPLICATE)
@@ -214,6 +219,7 @@ public class AlarmMe extends Activity
             newAlarm.fromIntent(intent);
             newAlarm.setTitle(alarm.getTitle() + " (copy)");
             mAlarmListAdapter.add(newAlarm);
+            dbAdapter.addAlarm(newAlarm, 0);
         }
 
         return true;
@@ -231,5 +237,30 @@ public class AlarmMe extends Activity
         }
     };
 
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        dbAdapter.open();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Close the database
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        dbAdapter.close();
+    }
 }
 
