@@ -71,14 +71,19 @@ public class DBAdapter {
     public static final String KEY_HISTORY_ALARMID      = "AlarmId";
     public static final String KEY_HISTORY_TIMEDUE      = "TimeDue";
     public static final String KEY_HISTORY_TIMETAKEN    = "TimeTaken";
+    public static final String KEY_HISTORY_QRCODE       = "QRCode";
+    public static final String KEY_HISTORY_VALIDATION   = "Validation";
 
     public static final int HISTORY_ID_COLUMN           = 0;
     public static final int HISTORY_ALARMID_COLUMN      = 1;
     public static final int HISTORY_TIMEDUE_COLUMN      = 2;
     public static final int HISTORY_TIMETAKEN_COLUMN    = 3;
+    public static final int HISTORY_QRCODE_COLUMN       = 4;
+    public static final int HISTORY_VALIDATION_COLUMN   = 5;
 
     public static final String[] ALL_HISTORY_TABLE_COLUMNS = new String[] { KEY_HISTORY_ID,
-            KEY_HISTORY_ALARMID, KEY_HISTORY_TIMEDUE, KEY_HISTORY_TIMETAKEN};
+            KEY_HISTORY_ALARMID, KEY_HISTORY_TIMEDUE, KEY_HISTORY_TIMETAKEN, KEY_HISTORY_QRCODE,
+            KEY_HISTORY_VALIDATION};
 
     public DBAdapter(Context _context) {
         this.mContext = _context;
@@ -119,7 +124,9 @@ public class DBAdapter {
                 KEY_HISTORY_ID         + " integer primary key autoincrement, " +
                 KEY_HISTORY_ALARMID    + " integer not null,"  +
                 KEY_HISTORY_TIMEDUE    + " long not null, " +
-                KEY_HISTORY_TIMETAKEN  + " text " +
+                KEY_HISTORY_TIMETAKEN  + " long, " +
+                KEY_HISTORY_QRCODE     + " text, " +
+                KEY_HISTORY_VALIDATION + " text " +
                 ");";
 
         @Override
@@ -188,7 +195,7 @@ public class DBAdapter {
         return db.delete(MEDICINE_TABLE, KEY_MEDICINE_NAME + "=" + addQuotes(_name), null) > 0;
     }
 
-    // get a cursor to all history items
+    // get a cursor to all medicine items
     public Cursor getAllMedicineCursor() {
         return db.query(MEDICINE_TABLE, ALL_MEDICINE_TABLE_COLUMNS,
                 null, null, null, null, null);
@@ -203,6 +210,13 @@ public class DBAdapter {
                 _cursor.getInt(MEDICINE_AUDIO_COLUMN));
     }
 
+    public Medicine getMedicineFromAlarmID(int _alarmID)
+    {
+        return createMedicineItem(db.rawQuery("SELECT * FROM " + MEDICINE_TABLE + " M, " +
+                ALARM_TABLE + " A WHERE A." + KEY_ALARM_MEDICINEID + "=M." + KEY_MEDICINE_ID +
+                " AND A." + KEY_ALARM_ID + "=" + _alarmID, null, null));
+    }
+
     // Insert a new alarm
     public long addAlarm(Alarm _alarm, int _medicineID)
     {
@@ -212,14 +226,14 @@ public class DBAdapter {
         // Assign values for each column.
         //values.put(KEY_ALARM_ID         , _alarm.getId());
         values.put(KEY_ALARM_TITLE      , _alarm.getTitle());
-        values.put(KEY_ALARM_FROMDATE, _alarm.getDate());
+        values.put(KEY_ALARM_FROMDATE   , _alarm.getDate());
         values.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         values.put(KEY_ALARM_TIME       , _alarm.getTime());
         values.put(KEY_ALARM_DAYS       , _alarm.getDays());
         values.put(KEY_ALARM_MEDICINEID , _medicineID);
         values.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         values.put(KEY_ALARM_ICON       , _alarm.getpId());
-        values.put(KEY_ALARM_ENABLED, _alarm.getEnabled());
+        values.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
 
         // Insert the row.
         return db.insert(ALARM_TABLE, null, values);
@@ -336,9 +350,11 @@ public class DBAdapter {
         ContentValues values = new ContentValues();
 
         // Assign values for each column.
+        values.put(KEY_HISTORY_ALARMID, _historyItem.getAlarmId());
         values.put(KEY_HISTORY_TIMEDUE   , _historyItem.getTimeDue());
         values.put(KEY_HISTORY_TIMETAKEN , _historyItem.getTimeTaken());
-        values.put(KEY_HISTORY_ALARMID, _historyItem.getAlarmId());
+        values.put(KEY_HISTORY_QRCODE, _historyItem.getQRCode());
+        values.put(KEY_HISTORY_VALIDATION, _historyItem.getValidation());
 
         // Insert the row.
         return db.insert(HISTORY_TABLE, null, values);
@@ -354,6 +370,8 @@ public class DBAdapter {
         newValues.put(KEY_HISTORY_TIMEDUE   , _historyItem.getTimeDue());
         newValues.put(KEY_HISTORY_TIMETAKEN , _historyItem.getTimeTaken());
         newValues.put(KEY_HISTORY_ALARMID, _historyItem.getAlarmId());
+        newValues.put(KEY_HISTORY_QRCODE, _historyItem.getQRCode());
+        newValues.put(KEY_HISTORY_VALIDATION, _historyItem.getValidation());
 
         // Update the row.
         return db.update(HISTORY_TABLE, newValues, KEY_HISTORY_ID + "=" + _id, null) > 0;
@@ -367,7 +385,7 @@ public class DBAdapter {
 
     // get a cursor to all history items
     public Cursor getAllHistoryCursor() {
-        return db.query(HISTORY_TABLE, ALL_HISTORY_TABLE_COLUMNS,
+        return db.query(HISTORY_TABLE, null,
                 null, null, null, null, null);
     }
 
@@ -377,11 +395,25 @@ public class DBAdapter {
                 _cursor.getInt(HISTORY_ID_COLUMN),
                 _cursor.getInt(HISTORY_ALARMID_COLUMN),
                 _cursor.getLong(HISTORY_TIMEDUE_COLUMN),
-                _cursor.getLong(HISTORY_TIMETAKEN_COLUMN));
+                _cursor.getLong(HISTORY_TIMETAKEN_COLUMN),
+                _cursor.getString(HISTORY_QRCODE_COLUMN),
+                _cursor.getString(HISTORY_VALIDATION_COLUMN)
+                );
     }
 
     private String addQuotes(String msg)
     {
         return "\"" + msg + "\"";
+    }
+
+    public HistoryItem getLastHistoryItem()
+    {
+        Cursor cursor = db.query(HISTORY_TABLE, null, null, null, null, null, KEY_HISTORY_ID + " DESC", "1");
+
+        if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
+            throw new SQLException("No history item found");
+        }
+
+        return createHistoryItem(cursor);
     }
 }

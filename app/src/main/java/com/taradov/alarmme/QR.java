@@ -32,6 +32,9 @@ public class QR extends Activity {
 	TextView tvStatus;
 	TextView tvResult;
 
+    private HistoryItem historyItem;
+    private DBAdapter dbAdapter;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,9 +44,6 @@ public class QR extends Activity {
 		tvResult = (TextView) findViewById(R.id.tvResult);
 
 		Button scanBtn = (Button) findViewById(R.id.btnScan);
-
-
-
 
 		//in some trigger function e.g. button press within your code you should add:
 		scanBtn.setOnClickListener(new OnClickListener() {
@@ -62,13 +62,17 @@ public class QR extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					Toast.makeText(getApplicationContext(), "ERROR:" + e, Toast.LENGTH_LONG).show();
-
 				}
-
 			}
 		});
 
+        historyItem = new HistoryItem(this);
+        historyItem.fromIntent(getIntent());
+
+        dbAdapter = new DBAdapter(this);
+        dbAdapter.open();
 	}
+
 	//In the same activity you�ll need the following to retrieve the results:
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode == 0) {
@@ -76,11 +80,62 @@ public class QR extends Activity {
 			if (resultCode == RESULT_OK) {
 				tvStatus.setText(intent.getStringExtra("SCAN_RESULT_FORMAT"));
 				tvResult.setText(intent.getStringExtra("SCAN_RESULT"));
-			} else if (resultCode == RESULT_CANCELED) {
+
+                historyItem.setTimeTaken(System.currentTimeMillis());
+                historyItem.setQRCode(intent.getStringExtra("SCAN_RESULT"));
+
+//                String requiredQRCode = dbAdapter.getMedicineFromAlarmID(historyItem.getAlarmId()).getQRCode();
+                String requiredQRCode = "Brufen";
+
+                if (requiredQRCode.equals(historyItem.getQRCode()))
+                {
+                    historyItem.setValidation(HistoryItem.TAKEN);
+                }
+                else
+                {
+                    historyItem.setValidation(HistoryItem.INCORRECT);
+                }
+
+                dbAdapter.updateHistory(historyItem.getAlarmId(), historyItem);
+            } else if (resultCode == RESULT_CANCELED) {
 				tvStatus.setText("Press a button to start a scan.");
 				tvResult.setText("Scan cancelled.");
 			}
 		}
 	}
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Close the database
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Close the database
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Close the database
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Close the database
+        dbAdapter.open();
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        dbAdapter.open();
+    }
 }

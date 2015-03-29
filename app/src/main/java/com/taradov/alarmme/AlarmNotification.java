@@ -45,169 +45,205 @@ import android.media.RingtoneManager;
 
 public class AlarmNotification extends Activity
 {
-  private final String TAG = "AlarmMe";
+    private final String TAG = "AlarmMe";
 
-  private Ringtone mRingtone;
-  private Vibrator mVibrator;
-  private final long[] mVibratePattern = { 0, 500, 500 };
-  private boolean mVibrate;
-  private Uri mAlarmSound;
-  private long mPlayTime;
-  private Timer mTimer = null;
-  private Alarm mAlarm;
-  private DateTime mDateTime;
-  private TextView mTextView;
-  private PlayTimerTask mTimerTask;
-  private ImageView mImageView;
+    private Ringtone mRingtone;
+    private Vibrator mVibrator;
+    private final long[] mVibratePattern = { 0, 500, 500 };
+    private boolean mVibrate;
+    private Uri mAlarmSound;
+    private long mPlayTime;
+    private Timer mTimer = null;
+    private Alarm mAlarm;
+    private DateTime mDateTime;
+    private TextView mTextView;
+    private PlayTimerTask mTimerTask;
+    private ImageView mImageView;
 
+    private HistoryItem mHistoryItem;
+    private DBAdapter dbAdapter;
 
-  @Override
-  protected void onCreate(Bundle bundle)
-  {
-    super.onCreate(bundle);
+    @Override
+    protected void onCreate(Bundle bundle)
+    {
+        super.onCreate(bundle);
 
-    getWindow().addFlags(
-      WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-      WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-      WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        dbAdapter = new DBAdapter(this);
+        dbAdapter.open();
 
-    setContentView(R.layout.notification);
+        getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-    mDateTime = new DateTime(this);
-    mTextView = (TextView)findViewById(R.id.alarm_title_text);
-    mImageView =(ImageView)findViewById(R.id.imageView1);
+        setContentView(R.layout.notification);
 
-    readPreferences();
+        mDateTime = new DateTime(this);
+        mTextView = (TextView)findViewById(R.id.alarm_title_text);
+        mImageView =(ImageView)findViewById(R.id.imageView1);
 
-    mRingtone = RingtoneManager.getRingtone(getApplicationContext(), mAlarmSound);
-    if (mVibrate)
-      mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        readPreferences();
 
-    start(getIntent());
-  }
+        mRingtone = RingtoneManager.getRingtone(getApplicationContext(), mAlarmSound);
+        if (mVibrate)
+            mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
-  @Override
-  protected void onDestroy()
-  {
-    super.onDestroy();
-    Log.i(TAG, "AlarmNotification.onDestroy()");
+        start(getIntent());
+    }
 
-    stop();
-  }
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        Log.i(TAG, "AlarmNotification.onDestroy()");
+        dbAdapter.close();
+        stop();
+    }
 
-  @Override
-  protected void onNewIntent(Intent intent)
-  {
-    super.onNewIntent(intent);
-    Log.i(TAG, "AlarmNotification.onNewIntent()");
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        Log.i(TAG, "AlarmNotification.onNewIntent()");
 
-    addNotification(mAlarm);
+        addNotification(mAlarm);
 
-    stop();
-    start(intent);
-  }
+        stop();
+        start(intent);
+    }
 
-  private void start(Intent intent)
-  {
-    mAlarm = new Alarm(this);
-    mAlarm.fromIntent(intent);
+    private void start(Intent intent)
+    {
+        mAlarm = new Alarm(this);
+        mHistoryItem = new HistoryItem(this);
 
-    Log.i(TAG, "AlarmNotification.start('" + mAlarm.getTitle() + "')");
+        mAlarm.fromIntent(intent);
+        mHistoryItem.setAlarmId((int)mAlarm.getId());
+        mHistoryItem.setTimeDue(mAlarm.getNextOccurence());
 
-    mTextView.setText(mAlarm.getTitle());
-   mImageView.setImageResource((int) mAlarm.getpId());
-    
+        dbAdapter.addHistory(mHistoryItem);
+        mHistoryItem = dbAdapter.getLastHistoryItem();
 
-    mTimerTask = new PlayTimerTask();
-    mTimer = new Timer();
-    mTimer.schedule(mTimerTask, mPlayTime);
-    mRingtone.play();
-    if (mVibrate)
-      mVibrator.vibrate(mVibratePattern, 0);
-  }
+        Log.i(TAG,"AlarmNotification.start('" + mAlarm.getTitle() + "')");
 
-  private void stop()
-  {
-    Log.i(TAG, "AlarmNotification.stop()");
+        mTextView.setText(mAlarm.getTitle());
+        mImageView.setImageResource((int) mAlarm.getpId());
 
-    mTimer.cancel();
-    mRingtone.stop();
-    if (mVibrate)
-      mVibrator.cancel();
-  }
+        mTimerTask = new PlayTimerTask();
+        mTimer = new Timer();
+        mTimer.schedule(mTimerTask, mPlayTime);
+        mRingtone.play();
+        if (mVibrate)
+            mVibrator.vibrate(mVibratePattern, 0);
+    }
 
-  public void onDismissClick(View view)
-  
-  {    
+    private void stop()
+    {
+        Log.i(TAG, "AlarmNotification.stop()");
+
+        mTimer.cancel();
+        mRingtone.stop();
+        if (mVibrate)
+            mVibrator.cancel();
+    }
+
+    public void onDismissClick(View view)
+    {
 //	  finish();
 //	  Intent intent= new Intent(AlarmNotification.this,QR.class);
 //	  startActivity(intent);
 ////	  finish();
-	  
-	  
-	  try {
 
-			Intent intent = new Intent(
-					"com.google.zxing.client.android.SCAN");
-			intent.putExtra("SCAN_MODE", "QR_CODE_MODE,PRODUCT_MODE");
-			startActivityForResult(intent, 0);
-			finish();
+        try {
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), "ERROR:" + e, 1).show();
+            Intent intent = new Intent(
+                    "com.google.zxing.client.android.SCAN");
+            intent.putExtra("SCAN_MODE", "QR_CODE_MODE,PRODUCT_MODE");
+            mHistoryItem.toIntent(intent);
+            startActivityForResult(intent, 0);
+            finish();
 
-		}
-
-  }
-
-  private void readPreferences()
-  {
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-    mAlarmSound = Uri.parse(prefs.getString("alarm_sound_pref", "DEFAULT_RINGTONE_URI"));
-    mVibrate = prefs.getBoolean("vibrate_pref", true);
-    mPlayTime = (long)Integer.parseInt(prefs.getString("alarm_play_time_pref", "60")) * 1000;
-  }
-
-  private void addNotification(Alarm alarm)
-  {
-    NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-    Notification notification;
-    PendingIntent activity;
-    Intent intent;
-
-    Log.i(TAG, "AlarmNotification.addNotification(" + alarm.getId() + ", '" + alarm.getTitle() + "', '" + mDateTime.formatDetails(alarm) + "')");
-
-    notification = new Notification(R.drawable.ic_notification, "Missed alarm", System.currentTimeMillis());
-    notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-    intent = new Intent(this.getApplicationContext(), AlarmMe.class);
-    intent.setAction(Intent.ACTION_MAIN);
-    intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-    activity = PendingIntent.getActivity(this, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    notification.setLatestEventInfo(this, "Missed alarm: " + alarm.getTitle(), mDateTime.formatDetails(alarm), activity);
-
-    notificationManager.notify((int)alarm.getId(), notification);            
-  }
-
-  @Override
-  public void onBackPressed()
-  {
-    finish();
-  }
-
-  private class PlayTimerTask extends TimerTask
-  {
-    @Override
-    public void run()
-    {
-      Log.i(TAG, "AlarmNotification.PalyTimerTask.run()");
-      addNotification(mAlarm);
-      finish();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "ERROR:" + e, Toast.LENGTH_LONG).show();
+        }
     }
-  }
+
+    private void readPreferences()
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        mAlarmSound = Uri.parse(prefs.getString("alarm_sound_pref", "DEFAULT_RINGTONE_URI"));
+        mVibrate = prefs.getBoolean("vibrate_pref", true);
+        mPlayTime = (long)Integer.parseInt(prefs.getString("alarm_play_time_pref", "60")) * 1000;
+    }
+
+    private void addNotification(Alarm alarm)
+    {
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification;
+        PendingIntent activity;
+        Intent intent;
+
+        Log.i(TAG, "AlarmNotification.addNotification(" + alarm.getId() + ", '" + alarm.getTitle() + "', '" + mDateTime.formatDetails(alarm) + "')");
+
+        notification = new Notification(R.drawable.ic_notification, "Missed alarm", System.currentTimeMillis());
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        intent = new Intent(this.getApplicationContext(), AlarmMe.class);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        activity = PendingIntent.getActivity(this, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notification.setLatestEventInfo(this, "Missed alarm: " + alarm.getTitle(), mDateTime.formatDetails(alarm), activity);
+
+        notificationManager.notify((int)alarm.getId(), notification);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
+
+    private class PlayTimerTask extends TimerTask
+    {
+        @Override
+        public void run()
+        {
+            Log.i(TAG, "AlarmNotification.PalyTimerTask.run()");
+            addNotification(mAlarm);
+            finish();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Close the database
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Close the database
+        dbAdapter.close();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Close the database
+        dbAdapter.open();
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        dbAdapter.open();
+    }
 }
 
