@@ -81,21 +81,6 @@ public class QR extends Activity {
 				tvStatus.setText(intent.getStringExtra("SCAN_RESULT_FORMAT"));
 				tvResult.setText(intent.getStringExtra("SCAN_RESULT"));
 
-                historyItem.setTimeTaken(System.currentTimeMillis());
-                historyItem.setQRCode(intent.getStringExtra("SCAN_RESULT"));
-
-//                String requiredQRCode = dbAdapter.getMedicineFromAlarmID(historyItem.getAlarmId()).getQRCode();
-                String requiredQRCode = "Brufen";
-
-                if (requiredQRCode.equals(historyItem.getQRCode()))
-                {
-                    historyItem.setValidation(HistoryItem.TAKEN);
-                }
-                else
-                {
-                    historyItem.setValidation(HistoryItem.INCORRECT);
-                }
-
                 dbAdapter.updateHistory(historyItem.getAlarmId(), historyItem);
             } else if (resultCode == RESULT_CANCELED) {
 				tvStatus.setText("Press a button to start a scan.");

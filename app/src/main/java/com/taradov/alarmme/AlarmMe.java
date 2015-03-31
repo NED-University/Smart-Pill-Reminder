@@ -167,6 +167,12 @@ public class AlarmMe extends Activity
             startActivity(intent);
             return true;
         }
+        else if(R.id.menu_patients==item.getItemId())
+        {
+            Intent intent=new Intent(getBaseContext(),EditPatient.class);
+            startActivity(intent);
+            return true;
+        }
         else
         {
             return super.onOptionsItemSelected(item);

@@ -39,6 +39,9 @@
             android:name=".EditAlarm"
             android:label="Edit alarm" />
         <activity
+            android:name=".EditPatient"
+            android:label="Edit patient" />
+        <activity
             android:name=".AlarmNotification"
             android:label="Alarm notification" />
         <activity

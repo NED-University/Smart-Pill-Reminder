@@ -170,6 +170,31 @@ public class AlarmNotification extends Activity
         }
     }
 
+    //In the same activity you�ll need the following to retrieve the results:
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 0) {
+
+            if (resultCode == RESULT_OK) {
+                mHistoryItem.setTimeTaken(System.currentTimeMillis());
+                mHistoryItem.setQRCode(intent.getStringExtra("SCAN_RESULT"));
+
+//                String requiredQRCode = dbAdapter.getMedicineFromAlarmID(mHistoryItem.getAlarmId()).getQRCode();
+                String requiredQRCode = "Brufen";
+
+                if (requiredQRCode.equals(mHistoryItem.getQRCode()))
+                {
+                    mHistoryItem.setValidation(HistoryItem.TAKEN);
+                }
+                else
+                {
+                    mHistoryItem.setValidation(HistoryItem.INCORRECT);
+                }
+
+                dbAdapter.updateHistory(mHistoryItem.getId(), mHistoryItem);
+            }
+        }
+    }
+
     private void readPreferences()
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
