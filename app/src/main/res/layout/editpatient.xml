@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="left|center"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/patientname"
+                    android:layout_width="120dp"
+                    android:text="@string/patientName" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/edit_patientname"
+                    android:layout_width="200dp" />
+                
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/patientFathername"
+                    android:layout_width="120dp"
+                    android:text="@string/patientFatherName" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/edit_patientFathername"
+                    android:layout_width="200dp" />
+               
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/Age"
+                    android:layout_width="120dp"
+                    android:text="@string/age" >
+                </TextView>
+
+               <Spinner
+                    android:id="@+id/spinner_age"
+                    android:layout_width="120dp"
+                    android:layout_weight="1"
+                    android:entries="@array/age"
+                    android:spinnerMode="dropdown" />
+                
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/Gender"
+                    android:layout_width="120dp"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/gender" >
+                </TextView>
+	
+                <RadioGroup
+                    android:id="@+id/gender_radioGroup"
+                    android:layout_width="120dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/Male_radio"
+                        android:checked="true"
+                        android:text="Male"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+
+                    <RadioButton
+                        android:id="@+id/Female_radio"
+                        android:text="Female"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+                </RadioGroup>
+                
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/Ethinicity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ethinicity" >
+                </TextView>
+
+                <Spinner
+                    android:id="@+id/spinner_ethinicity"
+                    android:layout_width="120dp"
+                    android:layout_weight="1"
+                    android:entries="@array/ethinicity"
+                    android:spinnerMode="dropdown" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="120dp"
+                    android:text="@string/address" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/edit_address"
+                    android:layout_width="200dp" />
+              
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/MaritalStatus"
+                    android:layout_width="120dp"
+                    android:text="@string/marital" >
+                </TextView>
+
+                <RadioGroup
+                    android:id="@+id/marital_radioGroup"
+                    android:layout_width="120dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/single_radio"
+                        android:checked="true"
+                        android:text="Single"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content" />
+
+                    <RadioButton
+                        android:id="@+id/Married_radio"
+                        android:text="Married"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+                </RadioGroup>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/Profession"
+                    android:layout_width="120dp"
+                    android:text="@string/profession" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/edit_profession"
+                    android:layout_width="120dp" />
+                
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/Infections"
+                    android:layout_width="120dp"
+                    android:text="@string/infections" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/infections_view"
+                    android:layout_width="120dp"
+                    android:clickable="true"
+                    android:onClick="onInfectionsClick"
+                    android:text="Tap to select Infection type"
+                    android:textStyle="italic" >
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/no_of_children"
+                    android:layout_width="120dp"
+                    android:text="@string/no_of_children" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/edit_no_of_children"
+                    android:layout_width="200dp" />
+                
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/child_suffering"
+                    android:layout_width="120dp"
+                    android:text="@string/child_suffering" >
+                </TextView>
+
+                <RadioGroup
+                    android:id="@+id/child_suffering_radioGroup"
+                    android:layout_width="120dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/yes_child_suffering_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:checked="true"
+                        android:text="Yes" />
+
+                    <RadioButton
+                        android:id="@+id/no_child_suffering_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="No" />
+                </RadioGroup>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/spouse_suffering"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/spouse_suffering" >
+                </TextView>
+
+                <RadioGroup
+                    android:id="@+id/spouse_suffering_radioGroup"
+                    android:layout_width="120dp"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/yes_spouse_suffering_radio"
+                        android:checked="true"
+                        android:text="Yes"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+
+                    <RadioButton
+                        android:id="@+id/no_spouse_suffering_radio"
+                        android:text="No"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+                </RadioGroup>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/HighRiskBehaviour"
+                    android:layout_width="120dp"
+                    android:text="@string/HighRiskBehaviour" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/HighRiskBehaviourView"
+                    android:layout_width="120dp"
+                    android:clickable="true"
+                    android:onClick="onBehaviourClick"
+                    android:text="Tap to select Risk Behaviour"
+                    android:textStyle="italic" >
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/history_travel"
+                    android:layout_width="120dp"
+                    android:text="@string/history_travel" >
+                </TextView>
+
+                <RadioGroup
+                    android:id="@+id/history_travel_radioGroup"
+                    android:layout_width="120dp"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/yes_history_travel_radio"
+                        android:checked="true"
+                        android:text="Yes"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+
+                    <RadioButton
+                        android:id="@+id/no_history_travel_radio"
+                        android:text="No"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+                </RadioGroup>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/history_friend"
+                    android:layout_width="120dp"
+                    android:text="@string/history_friend" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/history_friend_view"
+                    android:layout_width="120dp"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="onHistoryFriendClick"
+                    android:text="Tap to Select"
+                    android:textStyle="italic" >
+
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/clinical_features"
+                    android:layout_width="120dp"
+                    android:text="@string/clinical_features" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/checkedTextView4"
+                    android:layout_width="120dp"
+                    android:gravity="center"
+                    android:text="Tap to select "
+                    android:textStyle="italic" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView>
+                </TextView>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/diagnosis_date"
+                    android:layout_width="120dp"
+                    android:text="@string/diagnosis_date" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/diagnosis_date_view"
+                    android:layout_width="120dp"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="onClick"
+                    android:text="dd/mm/yy"
+                    android:textStyle="italic" >
+                </TextView>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+     <LinearLayout
+        style="@style/dark1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8sp" >
+
+        <Button
+            android:id="@+id/done"
+            style="@style/edit_button"
+            android:onClick="onDoneClick"
+            android:text="Done" />
+
+        <Button
+            android:id="@+id/cancel"
+            style="@style/edit_button"
+            android:onClick="onCancelClick"
+            android:text="Cancel" />
+    </LinearLayout>
+
+</LinearLayout>
