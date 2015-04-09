@@ -47,19 +47,6 @@ public class DBViewer extends Activity {
         dbAdapter = new DBAdapter(this);
         dbAdapter.open();
 
-//        Alarm testItem = new Alarm(this);
-//
-//        testItem.setTitle("Test");
-//        testItem.setDate(System.currentTimeMillis());
-//        testItem.setToDate(System.currentTimeMillis());
-//        testItem.setTime(System.currentTimeMillis());
-//        testItem.setDays(Alarm.EVERY_DAY);
-//        testItem.setInterval(5);
-//        testItem.setpId(R.drawable.asthma_inhaler_icon);
-//        testItem.setEnabled(true);
-//
-//        dbAdapter.addAlarm(testItem, 4);
-
         // TODO: Test functions
         populateAlarmList();
         populateMedicineList();

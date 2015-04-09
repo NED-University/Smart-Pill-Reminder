@@ -97,6 +97,12 @@ public class DateTime
       return mDateFormat.format(new Date(alarm.getToDate()));
   }
 
+    public String formatDiagnosisDate(Patient _patient)
+    {
+        return mDateFormat.format(new Date(_patient.getDiagnosisDate()));
+    }
+
+
   public String formatDays(Alarm alarm)
   {
     boolean[] days = getDays(alarm);

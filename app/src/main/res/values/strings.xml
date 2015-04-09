@@ -18,6 +18,7 @@
         <item>Balochi</item>
         <item>Pushton</item>
     </string-array>
+    <string name="action_settings">Action Settings</string>
     
     <string-array name="age">
         <item>15-24</item>
@@ -45,6 +46,8 @@
         <item>300</item>
     </string-array>
 
+    <array name="occurence"></array>
+    <string name="title_activity_dbviewer">Database Viewer</string>
     <string name="patientName">Patient\'s Name:</string>
     <string name="patientFatherName">Father\'s Name:</string>
     <string name="age">Age:</string>

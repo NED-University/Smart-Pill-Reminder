@@ -206,7 +206,7 @@ public class EditPatient extends Activity {
 	};
 	private void update() {
 
-		//Diagnosis_date_text.setText(mDateTime.formatDiagnosisDate(mPatient));
+		Diagnosis_date_text.setText(mDateTime.formatDiagnosisDate(mPatient));
 
 	}
 	// listeners for spinners
