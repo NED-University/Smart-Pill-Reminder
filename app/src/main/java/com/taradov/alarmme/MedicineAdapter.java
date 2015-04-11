@@ -33,7 +33,7 @@ public class MedicineAdapter extends ArrayAdapter<Medicine> {
         String name = medicine.getName();
         String color = String.valueOf(medicine.getColor());
         String audio = String.valueOf(medicine.getAudio());
-
+        String QRcode= medicine.getQRcode();
         if (convertView == null) {
             medicineView = new LinearLayout(getContext());
             String inflater = Context.LAYOUT_INFLATER_SERVICE;
@@ -47,11 +47,13 @@ public class MedicineAdapter extends ArrayAdapter<Medicine> {
         TextView nameView = (TextView)medicineView.findViewById(R.id.db_medicine_name);
         TextView colorView = (TextView)medicineView.findViewById(R.id.db_medicine_color);
         TextView audioView = (TextView)medicineView.findViewById(R.id.db_medicine_audio);
-
+        TextView QRcodeView = (TextView)medicineView.findViewById(R.id.db_medicine_QRcode);
         idView.setText(id);
         nameView.setText(name);
         colorView.setText(color);
         audioView.setText(audio);
+        QRcodeView.setText(QRcode);
+
 
         return medicineView;
     }

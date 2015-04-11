@@ -51,11 +51,13 @@ public class DBAdapter {
     public static final String KEY_MEDICINE_NAME    = "Name";
     public static final String KEY_MEDICINE_COLOR   = "Color";
     public static final String KEY_MEDICINE_AUDIO   = "Audio";
+    public static final String KEY_MEDICINE_QRCODE  = "QRcode";
 
     public static final int MEDICINE_ID_COLUMN      = 0;
     public static final int MEDICINE_NAME_COLUMN    = 1;
     public static final int MEDICINE_COLOR_COLUMN   = 2;
     public static final int MEDICINE_AUDIO_COLUMN   = 3;
+    public static final int MEDICINE_QRCODE_COLUMN   = 4;
 
     // Validation Table Constants
     private static final String HISTORY_TABLE = "MedicationHistory";
@@ -146,8 +148,9 @@ public class DBAdapter {
                 KEY_MEDICINE_ID     + " integer primary key autoincrement, " +
                 KEY_MEDICINE_NAME   + " text not null," +
                 KEY_MEDICINE_COLOR  + " integer," +
-                KEY_MEDICINE_AUDIO  + " integer " +
-                ");";
+                KEY_MEDICINE_AUDIO  + " integer, " +
+                KEY_MEDICINE_QRCODE + " text not null " +
+                       ");";
 
         private static final String CREATE_TABLE_VALIDATION =
                 "create table " + HISTORY_TABLE + " (" +
@@ -219,26 +222,28 @@ public class DBAdapter {
     }
 
     // Insert a new medicine
-    public long addMedicine(String _name, int _color, int _audio) {
+    public long addMedicine(String _name, int _color, int _audio,String _QRcode) {
         // Create a new row of values to insert.
         ContentValues values = new ContentValues();
         // Assign values for each column.
         values.put(KEY_MEDICINE_NAME, _name);
         values.put(KEY_MEDICINE_COLOR, _color);
         values.put(KEY_MEDICINE_COLOR, _audio);
+        values.put(KEY_MEDICINE_QRCODE, _QRcode);
 
         // Insert the row.
         return db.insert(MEDICINE_TABLE, null, values);
     }
 
     // Update a medicine entry
-    public boolean updateMedicine(long _id, String _name, int _color, int _audio) {
+    public boolean updateMedicine(long _id, String _name, int _color, int _audio,String _QRcode) {
         // Create a new row of values to insert.
         ContentValues newValues = new ContentValues();
         // Assign values for each column.
         newValues.put(KEY_MEDICINE_NAME, _name);
         newValues.put(KEY_MEDICINE_COLOR, _color);
         newValues.put(KEY_MEDICINE_AUDIO, _audio);
+        newValues.put(KEY_MEDICINE_QRCODE, _QRcode);
 
         // Insert the row.
         return db.update(MEDICINE_TABLE, newValues, KEY_MEDICINE_ID + "=" + _id, null) > 0;
@@ -261,7 +266,8 @@ public class DBAdapter {
                 _cursor.getInt(MEDICINE_ID_COLUMN),
                 _cursor.getString(MEDICINE_NAME_COLUMN),
                 _cursor.getInt(MEDICINE_COLOR_COLUMN),
-                _cursor.getInt(MEDICINE_AUDIO_COLUMN));
+                _cursor.getInt(MEDICINE_AUDIO_COLUMN)),
+                _cursor.getString(MEDICINE_QRCODE_COLUMN);
     }
 
     public Medicine getMedicineFromAlarmID(int _alarmID)
