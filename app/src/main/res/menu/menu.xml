@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_patients"
-        android:title="About" />
+        android:title="About Patient" />
 
     <item
         android:id="@+id/menu_settings"

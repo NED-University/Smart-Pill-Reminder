@@ -140,26 +140,30 @@ public class DBAdapter {
                 KEY_ALARM_MEDICINEID  + " integer not null, " +
                 KEY_ALARM_INTERVAL    + " integer not null, " +
                 KEY_ALARM_ICON        + " integer not null, " +
-                KEY_ALARM_ENABLED     + " integer not null " +
+                KEY_ALARM_ENABLED     + " integer not null, " +
+//                "FOREIGN KEY(" + KEY_ALARM_MEDICINEID + ") REFERENCES " +
+//                MEDICINE_TABLE + "(" + KEY_MEDICINE_ID + ")" +
                 ");";
 
         private static final String CREATE_TABLE_MEDICINE =
                 "create table " + MEDICINE_TABLE + " (" +
                 KEY_MEDICINE_ID     + " integer primary key autoincrement, " +
-                KEY_MEDICINE_NAME   + " text not null," +
-                KEY_MEDICINE_COLOR  + " integer," +
+                KEY_MEDICINE_NAME   + " text unique not null, " +
+                KEY_MEDICINE_COLOR  + " integer, " +
                 KEY_MEDICINE_AUDIO  + " integer, " +
-                KEY_MEDICINE_QRCODE + " text not null " +
-                       ");";
+                KEY_MEDICINE_QRCODE + " text unique not null " +
+                ");";
 
         private static final String CREATE_TABLE_VALIDATION =
                 "create table " + HISTORY_TABLE + " (" +
                 KEY_HISTORY_ID         + " integer primary key autoincrement, " +
-                KEY_HISTORY_ALARMID    + " integer not null,"  +
+                KEY_HISTORY_ALARMID    + " integer not null, "  +
                 KEY_HISTORY_TIMEDUE    + " long not null, " +
                 KEY_HISTORY_TIMETAKEN  + " long, " +
                 KEY_HISTORY_QRCODE     + " text, " +
-                KEY_HISTORY_VALIDATION + " text " +
+                KEY_HISTORY_VALIDATION + " text not null, " +
+//                "FOREIGN KEY(" + KEY_HISTORY_ALARMID + ") REFERENCES " +
+//                ALARM_TABLE +"(" + KEY_ALARM_ID + ")" +
                 ");";
 
         private static final String CREATE_TABLE_PATIENT =
@@ -181,11 +185,12 @@ public class DBAdapter {
                 KEY_PATIENT_TRAVELHISTORY   + " integer, " +
                 KEY_PATIENT_FRIENDHISTORY   + " integer, " +
                 KEY_PATIENT_CLINICALFEATURES+ " integer, " +
-                KEY_PATIENT_DIAGNOSISDATE   + " text " +
+                KEY_PATIENT_DIAGNOSISDATE   + " text not null" +
                 ");";
 
         @Override
         public void onCreate(SQLiteDatabase _db) {
+            _db.execSQL("PRAGMA foreign_keys = ON;");
             _db.execSQL(CREATE_TABLE_ALARM);
             _db.execSQL(CREATE_TABLE_MEDICINE);
             _db.execSQL(CREATE_TABLE_VALIDATION);
@@ -222,31 +227,31 @@ public class DBAdapter {
     }
 
     // Insert a new medicine
-    public long addMedicine(String _name, int _color, int _audio,String _QRcode) {
+    public long addMedicine(Medicine _medicine) {
         // Create a new row of values to insert.
         ContentValues values = new ContentValues();
         // Assign values for each column.
-        values.put(KEY_MEDICINE_NAME, _name);
-        values.put(KEY_MEDICINE_COLOR, _color);
-        values.put(KEY_MEDICINE_COLOR, _audio);
-        values.put(KEY_MEDICINE_QRCODE, _QRcode);
+        values.put(KEY_MEDICINE_NAME, _medicine.getName());
+        values.put(KEY_MEDICINE_COLOR, _medicine.getColor());
+        values.put(KEY_MEDICINE_AUDIO, _medicine.getAudio());
+        values.put(KEY_MEDICINE_QRCODE, _medicine.getQRcode());
 
         // Insert the row.
         return db.insert(MEDICINE_TABLE, null, values);
     }
 
     // Update a medicine entry
-    public boolean updateMedicine(long _id, String _name, int _color, int _audio,String _QRcode) {
+    public boolean updateMedicine(String _name, Medicine _medicine) {
         // Create a new row of values to insert.
         ContentValues newValues = new ContentValues();
         // Assign values for each column.
-        newValues.put(KEY_MEDICINE_NAME, _name);
-        newValues.put(KEY_MEDICINE_COLOR, _color);
-        newValues.put(KEY_MEDICINE_AUDIO, _audio);
-        newValues.put(KEY_MEDICINE_QRCODE, _QRcode);
+        newValues.put(KEY_MEDICINE_NAME, _medicine.getName());
+        newValues.put(KEY_MEDICINE_COLOR, _medicine.getColor());
+        newValues.put(KEY_MEDICINE_AUDIO, _medicine.getAudio());
+        newValues.put(KEY_MEDICINE_QRCODE, _medicine.getQRcode());
 
         // Insert the row.
-        return db.update(MEDICINE_TABLE, newValues, KEY_MEDICINE_ID + "=" + _id, null) > 0;
+        return db.update(MEDICINE_TABLE, newValues, KEY_MEDICINE_NAME + "=" + addQuotes(_name), null) > 0;
     }
 
     // Remove a medicine

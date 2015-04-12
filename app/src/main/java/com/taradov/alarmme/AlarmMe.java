@@ -96,6 +96,7 @@ public class AlarmMe extends Activity
 
         dbAdapter = new DBAdapter(this);
         dbAdapter.open();
+
     }
 
     @Override
