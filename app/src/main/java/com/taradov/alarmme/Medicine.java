@@ -2,6 +2,8 @@ package com.taradov.alarmme;
 
 import android.content.Context;
 
+import java.lang.String;
+
 /**
  * Created by Inshal on 21-Mar-15.
  */
@@ -12,14 +14,16 @@ public class Medicine {
     private String mName;
     private int mColor;
     private int mAudio;
+    private String QRcode;
 
-    public Medicine(Context _context, int _id, String _name, int _color, int _mAudio)
+    public Medicine(Context _context, int _id, String _name, int _color, int _mAudio, String _QRcode)
     {
         mContext = _context;
         mId = _id;
         mName = _name;
         mColor = _color;
         mAudio = _mAudio;
+        QRcode =_QRcode;
     }
 
     public void setId(int _id)
@@ -41,6 +45,11 @@ public class Medicine {
     {
         mAudio = _audio;
     }
+    public void setQRcode(String _QRcode)
+    {
+        QRcode = _QRcode;
+    }
+
 
     public int getId()
     {
@@ -61,4 +70,10 @@ public class Medicine {
     {
         return mAudio;
     }
+
+    public String getQRcode()
+    {
+        return QRcode;
+    }
 }
+
