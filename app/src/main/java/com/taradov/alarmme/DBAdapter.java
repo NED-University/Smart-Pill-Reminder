@@ -104,8 +104,8 @@ public class DBAdapter {
     public static final int PATIENT_ETHNICITY_COLUMN        = 5;
     public static final int PATIENT_ADDRESS_COLUMN          = 6;
     public static final int PATIENT_MARITALSTATUS_COLUMN    = 7;
-    public static final int PATIENT_INFECTIONS_COLUMN       = 8;
-    public static final int PATIENT_PROFESSION_COLUMN       = 9;
+    public static final int PATIENT_PROFESSION_COLUMN       = 8;
+    public static final int PATIENT_INFECTIONS_COLUMN       = 9;
     public static final int PATIENT_CHILDRENNO_COLUMN       = 10;
     public static final int PATIENT_CHILDRENSUFFER_COLUMN   = 11;
     public static final int PATIENT_SPOUSESUFFER_COLUMN     = 12;
@@ -178,7 +178,7 @@ public class DBAdapter {
                 KEY_PATIENT_TRAVELHISTORY   + " integer, " +
                 KEY_PATIENT_FRIENDHISTORY   + " integer, " +
                 KEY_PATIENT_CLINICALFEATURES+ " integer, " +
-                KEY_PATIENT_DIAGNOSISDATE   + " long " +
+                KEY_PATIENT_DIAGNOSISDATE   + " text " +
                 ");";
 
         @Override
@@ -560,7 +560,7 @@ public class DBAdapter {
         p.settravelHistory(_cursor.getInt(PATIENT_TRAVELHISTORY_COLUMN));
         p.setfriendHistory(_cursor.getInt(PATIENT_FRIENDHISTORY_COLUMN));
         p.setclinicalFeatures(_cursor.getInt(PATIENT_CLINICALFEATUR_COLUMN));
-        p.setDiagnosisDate(_cursor.getLong(PATIENT_DIAGNOSISDATE_COLUMN));
+        p.setDiagnosisDate(_cursor.getString(PATIENT_DIAGNOSISDATE_COLUMN));
 
         return p;
     }

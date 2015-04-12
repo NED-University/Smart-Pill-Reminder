@@ -8,19 +8,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -81,39 +77,39 @@ public class EditPatient extends Activity {
 
 		setContentView(R.layout.editpatient);
 
-		mPatient= new Patient(this);
-		mDateTime=new DateTime(this);
+		mPatient    =   new Patient(this);
+		mDateTime   =   new DateTime(this);
 
-		PatientName_text =(EditText) findViewById(R.id.edit_patientname);
-		FatherName_text=(EditText) findViewById(R.id.edit_patientFathername);
-		Addr_text=(EditText) findViewById(R.id.edit_address);
-		Prof_text=(EditText) findViewById(R.id.edit_profession);
-		ChildrenNo_text=(EditText) findViewById(R.id.edit_no_of_children);
+		PatientName_text    = (EditText) findViewById(R.id.edit_patientname);
+		FatherName_text     = (EditText) findViewById(R.id.edit_patientFathername);
+		Addr_text           = (EditText) findViewById(R.id.edit_address);
+		Prof_text           = (EditText) findViewById(R.id.edit_profession);
+		ChildrenNo_text     = (EditText) findViewById(R.id.edit_no_of_children);
 
-		gender_radio=(RadioGroup) findViewById(R.id.gender_radioGroup);
-		gender_radio.setOnCheckedChangeListener(mGenderSelectedListener);
-		marital_radio=(RadioGroup) findViewById(R.id.marital_radioGroup);
-		marital_radio.setOnCheckedChangeListener(mMaritalSelectedListener);
-		child_suffer_radio=(RadioGroup) findViewById(R.id.child_suffering_radioGroup);
-		child_suffer_radio.setOnCheckedChangeListener(mChildSufferSelectedListener);
-		spouse_suffer_radio=(RadioGroup) findViewById(R.id.spouse_suffering_radioGroup);
-		spouse_suffer_radio.setOnCheckedChangeListener(mSpouseSufferSelectedListener);
-		history_travel_radio=(RadioGroup) findViewById(R.id.history_travel_radioGroup);
-		history_travel_radio.setOnCheckedChangeListener(mHistoryTravelSelectedListener);
+		gender_radio        = (RadioGroup) findViewById(R.id.gender_radioGroup);
+		marital_radio       = (RadioGroup) findViewById(R.id.marital_radioGroup);
+        child_suffer_radio  = (RadioGroup) findViewById(R.id.child_suffering_radioGroup);
+        spouse_suffer_radio = (RadioGroup) findViewById(R.id.spouse_suffering_radioGroup);
+        history_travel_radio= (RadioGroup) findViewById(R.id.history_travel_radioGroup);
 
+        gender_radio.setOnCheckedChangeListener(mGenderSelectedListener);
+        marital_radio.setOnCheckedChangeListener(mMaritalSelectedListener);
+        child_suffer_radio.setOnCheckedChangeListener(mChildSufferSelectedListener);
+        spouse_suffer_radio.setOnCheckedChangeListener(mSpouseSufferSelectedListener);
+        history_travel_radio.setOnCheckedChangeListener(mHistoryTravelSelectedListener);
 
-		Ethinicity_spinner=(Spinner)findViewById(R.id.spinner_ethinicity);
-		Ethinicity_spinner.setOnItemSelectedListener(mEthinicitySelectedListener);
-		Age_spinner=(Spinner)findViewById(R.id.spinner_age);
-		Age_spinner.setOnItemSelectedListener(mAgeSelectedListener);
+		Ethinicity_spinner  = (Spinner)findViewById(R.id.spinner_ethinicity);
+		Age_spinner         = (Spinner)findViewById(R.id.spinner_age);
 
-
+        Ethinicity_spinner.setOnItemSelectedListener(mEthinicitySelectedListener);
+        Age_spinner.setOnItemSelectedListener(mAgeSelectedListener);
 
 		Diagnosis_date_text = (TextView) findViewById(R.id.diagnosis_date_view);
-		Infections = (TextView) findViewById(R.id.infections_view);
-		selectedInfectionItems=new ArrayList();
-		selectedBehaviourItems=new ArrayList();
-		selectedHistoryItems=new ArrayList();
+		Infections          = (TextView) findViewById(R.id.infections_view);
+
+        selectedInfectionItems  = new ArrayList();
+		selectedBehaviourItems  = new ArrayList();
+		selectedHistoryItems    = new ArrayList();
 		// Get current date by calender
 
 		final Calendar c = Calendar.getInstance();
@@ -121,25 +117,27 @@ public class EditPatient extends Activity {
 		mMonth = c.get(Calendar.MONTH);
 		mDay   = c.get(Calendar.DAY_OF_MONTH);
 
-		update();
+        setDate();
 
         dbAdapter = new DBAdapter(this);
         dbAdapter.open();
 
+        loadPrevious();
 	}
+
 	// Listeners for radio groups
 	private RadioGroup.OnCheckedChangeListener mGenderSelectedListener = new RadioGroup.OnCheckedChangeListener() {
 
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-			RadioButton Male_btn= (RadioButton) findViewById(R.id.Male_radio);
-			if(Male_btn.isChecked())
-				mPatient.setGender(checkedId);
-			else
-				mPatient.setGender(checkedId);
+//			RadioButton Male_btn= (RadioButton) findViewById(R.id.Male_radio);
+//			if(Male_btn.isChecked())
+//				mPatient.setGender(checkedId);
+//			else
+//				mPatient.setGender(checkedId);
 
-
+            mPatient.setGender(checkedId);
 		}
 	};
 
@@ -148,13 +146,13 @@ public class EditPatient extends Activity {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-			RadioButton yes_btn= (RadioButton) findViewById(R.id.yes_child_suffering_radio);
-			if(yes_btn.isChecked())
-				mPatient.setChildrenSuffer(checkedId);
-			else
-				mPatient.setChildrenSuffer(checkedId);
+//			RadioButton yes_btn= (RadioButton) findViewById(R.id.yes_child_suffering_radio);
+//			if(yes_btn.isChecked())
+//				mPatient.setChildrenSuffer(checkedId);
+//			else
+//				mPatient.setChildrenSuffer(checkedId);
 
-
+            mPatient.setChildrenSuffer(checkedId);
 		}
 	};
 
@@ -162,14 +160,14 @@ public class EditPatient extends Activity {
 
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
+//
+//			RadioButton Single_btn= (RadioButton) findViewById(R.id.single_radio);
+//			if(Single_btn.isChecked())
+//				mPatient.setMaritalStatus(checkedId);
+//			else
+//				mPatient.setMaritalStatus(checkedId);
 
-			RadioButton Single_btn= (RadioButton) findViewById(R.id.single_radio);
-			if(Single_btn.isChecked())
-				mPatient.setMaritalStatus(checkedId);
-			else
-				mPatient.setMaritalStatus(checkedId);
-
-
+            mPatient.setMaritalStatus(checkedId);
 		}
 	};
 
@@ -178,37 +176,31 @@ public class EditPatient extends Activity {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-			RadioButton yes_btn= (RadioButton) findViewById(R.id.yes_spouse_suffering_radio);
-			if(yes_btn.isChecked())
-				mPatient.setSpouseSuffer(checkedId);
-			else
-				mPatient.setSpouseSuffer(checkedId);
+//			RadioButton yes_btn= (RadioButton) findViewById(R.id.yes_spouse_suffering_radio);
+//			if(yes_btn.isChecked())
+//				mPatient.setSpouseSuffer(checkedId);
+//			else
+//				mPatient.setSpouseSuffer(checkedId);
 
-
+            mPatient.setSpouseSuffer(checkedId);
 		}
 	};
-
-
-
 
 	private RadioGroup.OnCheckedChangeListener mHistoryTravelSelectedListener = new RadioGroup.OnCheckedChangeListener() {
 
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-			RadioButton yes_btn= (RadioButton) findViewById(R.id.yes_history_travel_radio);
-			if(yes_btn.isChecked())
-				mPatient.settravelHistory(checkedId);
-			else
-				mPatient.settravelHistory(checkedId);
+//			RadioButton yes_btn= (RadioButton) findViewById(R.id.yes_history_travel_radio);
+//			if(yes_btn.isChecked())
+//				mPatient.settravelHistory(checkedId);
+//			else
+//				mPatient.settravelHistory(checkedId);
 
+            mPatient.settravelHistory(checkedId);
 		}
 	};
-	private void update() {
 
-		Diagnosis_date_text.setText(mDateTime.formatDiagnosisDate(mPatient));
-
-	}
 	// listeners for spinners
 
 	private AdapterView.OnItemSelectedListener mEthinicitySelectedListener = new AdapterView.OnItemSelectedListener()
@@ -217,7 +209,6 @@ public class EditPatient extends Activity {
 		public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 		{
 			mPatient.setEthinicity(position);
-			update();
 		}
 
 		@Override
@@ -232,7 +223,6 @@ public class EditPatient extends Activity {
 		public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
 		{
 			mPatient.setAge(position);
-			update();
 		}
 
 		@Override
@@ -369,8 +359,6 @@ public class EditPatient extends Activity {
 
 	public void onClick(View v) {
 		showDialog(DATE_PICKER_ID);
-
-
 	}
 
 
@@ -401,14 +389,19 @@ public class EditPatient extends Activity {
 			//			mCalendar = new GregorianCalendar(mYear, mMonth, mDay, mHour, mMinute);
 			//			mPatient.setDiagnosisDate(mCalendar.getTimeInMillis());
 
-			// Show selected date 
-			Diagnosis_date_text.setText(new StringBuilder().append(mMonth + 1)
-					.append("-").append(mDay).append("-").append(mYear)
-					.append(" "));
-
+			// Show selected date and save it
+            setDate();
 		}
 	};
 
+    private void setDate()
+    {
+        Diagnosis_date_text.setText(new StringBuilder().append(mMonth + 1)
+                .append("-").append(mDay).append("-").append(mYear)
+                .append(" "));
+
+        mPatient.setDiagnosisDate(Diagnosis_date_text.getText().toString());
+    }
 
 	public void onCancelClick(View v){
 		setResult(RESULT_CANCELED, null);  
@@ -436,6 +429,31 @@ public class EditPatient extends Activity {
 		mPatient.setProfession(Prof_text.getText().toString());
 		mPatient.setChildrenno(ChildrenNo_text.getText().toString());
 	}
+
+    private void loadPrevious()
+    {
+        Cursor cursor = dbAdapter.getAllPatientCursor();
+
+        if (cursor.moveToFirst())
+        {
+            mPatient.fromCursor(cursor);
+
+            PatientName_text.setText(mPatient.getPatientName());
+            FatherName_text.setText(mPatient.getFatherName());
+            Addr_text.setText(mPatient.getAddress());
+            Prof_text.setText(mPatient.getProfession());
+            ChildrenNo_text.setText(mPatient.getChildrenno());
+            gender_radio.check(mPatient.getGender());
+            marital_radio.check(mPatient.getMaritalStatus());
+            child_suffer_radio.check(mPatient.getChildrenSuffer());
+            spouse_suffer_radio.check(mPatient.getSpouseSuffer());
+            history_travel_radio.check(mPatient.getTravelHistory());
+            Ethinicity_spinner.setSelection(mPatient.getEthinicity());
+            Age_spinner.setSelection(mPatient.getAge());
+            Diagnosis_date_text.setText(mPatient.getDiagnosisDate());
+//            Infections.setText();
+        }
+    }
 
     @Override
     public void onResume()
