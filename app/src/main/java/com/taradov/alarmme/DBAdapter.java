@@ -378,7 +378,7 @@ public class DBAdapter {
         return createAlarm(cursor);
     }
 
-    public Alarm createAlarm(Cursor _cursor)
+    public static Alarm createAlarm(Cursor _cursor)
     {
         Alarm result = new Alarm(mContext);
 
