@@ -266,8 +266,8 @@ public class DBAdapter {
                 _cursor.getInt(MEDICINE_ID_COLUMN),
                 _cursor.getString(MEDICINE_NAME_COLUMN),
                 _cursor.getInt(MEDICINE_COLOR_COLUMN),
-                _cursor.getInt(MEDICINE_AUDIO_COLUMN)),
-                _cursor.getString(MEDICINE_QRCODE_COLUMN);
+                _cursor.getInt(MEDICINE_AUDIO_COLUMN),
+                _cursor.getString(MEDICINE_QRCODE_COLUMN));
     }
 
     public Medicine getMedicineFromAlarmID(int _alarmID)
