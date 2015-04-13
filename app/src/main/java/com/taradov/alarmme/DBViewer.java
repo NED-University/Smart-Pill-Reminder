@@ -33,16 +33,17 @@ public class DBViewer extends Activity {
         alarmList = new ArrayList<Alarm>();
         // initialize alarm array adapter
         alarmAdapter = new AlarmAdapter(this, R.layout.db_alarm_view, alarmList);
-        // bind the adapter to the list view
-        listView.setAdapter(alarmAdapter);
 
         medicineList = new ArrayList<Medicine>();
         // initialize alarm array adapter
-        medicineAdapter = new MedicineAdapter(this, R.layout.db_alarm_view, medicineList);
+        medicineAdapter = new MedicineAdapter(this, R.layout.db_medicine_view, medicineList);
 
         historyList = new ArrayList<HistoryItem>();
         // initialize alarm array adapter
-        historyAdapter = new HistoryAdapter(this, R.layout.db_alarm_view, historyList);
+        historyAdapter = new HistoryAdapter(this, R.layout.db_history_item_view, historyList);
+
+        // bind an adapter to the list view
+        listView.setAdapter(historyAdapter);
 
         dbAdapter = new DBAdapter(this);
         dbAdapter.open();

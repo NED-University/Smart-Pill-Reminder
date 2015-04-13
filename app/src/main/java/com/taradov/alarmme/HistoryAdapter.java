@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import java.sql.Date;
 import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.util.List;
 
 /**
@@ -39,6 +37,7 @@ public class HistoryAdapter extends ArrayAdapter<HistoryItem> {
         String alarmId = String.valueOf(historyItem.getAlarmId());
         String timeDue = df.format(new Date(historyItem.getTimeDue()));
         String timeTaken = df.format(new Date(historyItem.getTimeTaken()));
+        String validation = historyItem.getValidation();
 
         if (convertView == null) {
             historyView = new LinearLayout(getContext());
@@ -49,15 +48,17 @@ public class HistoryAdapter extends ArrayAdapter<HistoryItem> {
             historyView = (LinearLayout) convertView;
         }
 
-        //TextView idView = (TextView)historyView.findViewById(R.id.db_history_item_id);
+//        TextView idView = (TextView)historyView.findViewById(R.id.db_history_item_id);
         TextView alarmView = (TextView)historyView.findViewById(R.id.db_history_item_alarm);
         TextView timeDueView = (TextView)historyView.findViewById(R.id.db_history_item_due);
         TextView timeTakenView = (TextView)historyView.findViewById(R.id.db_history_item_taken);
+        TextView validationView = (TextView)historyView.findViewById(R.id.db_history_item_validation);
 
-        //idView.setText(id);
+//        idView.setText(id);
         alarmView.setText(alarmId);
         timeDueView.setText(timeDue);
         timeTakenView.setText(timeTaken);
+        validationView.setText(validation);
 
         return historyView;
     }
