@@ -42,5 +42,4 @@ dependencies {
     // Older versions e.g. 2.2 may also work if you need support for older Android versions.
     compile 'com.google.zxing:core:3.0.1'
     compile files('C:/Users/Inshal/Documents/GitHub/Smart-Pill-Reminder/libs/jexcelapi/jxl.jar')
-    compile files('C:/Users/JASIM-JAHIM/Documents/GitHub/Smart-Pill-Reminder/libs/jexcelapi/jxl.jar')
 }
