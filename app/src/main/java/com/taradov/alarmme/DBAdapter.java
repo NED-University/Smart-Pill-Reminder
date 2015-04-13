@@ -57,7 +57,7 @@ public class DBAdapter {
     public static final int MEDICINE_NAME_COLUMN    = 1;
     public static final int MEDICINE_COLOR_COLUMN   = 2;
     public static final int MEDICINE_AUDIO_COLUMN   = 3;
-    public static final int MEDICINE_QRCODE_COLUMN   = 4;
+    public static final int MEDICINE_QRCODE_COLUMN  = 4;
 
     // Validation Table Constants
     private static final String HISTORY_TABLE = "MedicationHistory";
@@ -140,8 +140,8 @@ public class DBAdapter {
                 KEY_ALARM_MEDICINEID  + " integer not null, " +
                 KEY_ALARM_INTERVAL    + " integer not null, " +
                 KEY_ALARM_ICON        + " integer not null, " +
-                KEY_ALARM_ENABLED     + " integer not null, " +
-//                "FOREIGN KEY(" + KEY_ALARM_MEDICINEID + ") REFERENCES " +
+                KEY_ALARM_ENABLED     + " integer not null" +
+//                ", FOREIGN KEY(" + KEY_ALARM_MEDICINEID + ") REFERENCES " +
 //                MEDICINE_TABLE + "(" + KEY_MEDICINE_ID + ")" +
                 ");";
 
@@ -161,8 +161,8 @@ public class DBAdapter {
                 KEY_HISTORY_TIMEDUE    + " long not null, " +
                 KEY_HISTORY_TIMETAKEN  + " long, " +
                 KEY_HISTORY_QRCODE     + " text, " +
-                KEY_HISTORY_VALIDATION + " text not null, " +
-//                "FOREIGN KEY(" + KEY_HISTORY_ALARMID + ") REFERENCES " +
+                KEY_HISTORY_VALIDATION + " text not null" +
+//                ", FOREIGN KEY(" + KEY_HISTORY_ALARMID + ") REFERENCES " +
 //                ALARM_TABLE +"(" + KEY_ALARM_ID + ")" +
                 ");";
 
