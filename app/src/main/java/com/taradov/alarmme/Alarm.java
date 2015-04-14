@@ -41,6 +41,7 @@ public class Alarm implements Comparable<Alarm>
     private int mInterval;
     private long pId;
     private boolean mEnabled;
+    private int mMedId;
 
     private int mOccurence;
     private long mNextOccurence;
@@ -61,6 +62,11 @@ public class Alarm implements Comparable<Alarm>
         mOccurence = ONCE;
         mDays = EVERY_DAY;
         update();
+    }
+
+    public int getMedId()
+    {
+        return mMedId;
     }
 
     public long getId()
@@ -111,6 +117,10 @@ public class Alarm implements Comparable<Alarm>
         return mInterval;
     }
 
+    public void setMedId (int _id)
+    {
+        mMedId = _id;
+    }
 
     public void setOccurence(int occurence)
     {
@@ -124,13 +134,13 @@ public class Alarm implements Comparable<Alarm>
         update();
     }
 
-    public long getDate()
+    public long getFromDate()
     {
 
         return mFromDate;
     }
 
-    public void setDate(long date)
+    public void setFromDate(long date)
     {
         mFromDate = date;
         update();

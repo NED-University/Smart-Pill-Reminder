@@ -13,4 +13,8 @@
         android:id="@+id/switch_medicine"
         android:title="Medicines" />
 
+    <item
+        android:id="@+id/export_button"
+        android:title="Export Database" />
+
 </menu>

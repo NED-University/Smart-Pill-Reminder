@@ -6,11 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,7 +32,7 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
 
         Alarm alarm = getItem(position);
         String title = alarm.getTitle();
-        String fromDate = dt.formatDate(alarm);
+        String fromDate = dt.formatFromDate(alarm);
         String toDate = dt.formatToDate(alarm);
 
         if (convertView == null) {

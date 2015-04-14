@@ -176,6 +176,12 @@ public class DBViewer extends Activity {
             titleView.setText(TITLE_HISTORY);
             return true;
         }
+        else if (id == R.id.export_button)
+        {
+            DatabaseExportHelper exporter = new DatabaseExportHelper(this, dbAdapter);
+            exporter.execute();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

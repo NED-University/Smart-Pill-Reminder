@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import com.taradov.alarmme.Alarm;
 
 public class DateTime
 {
@@ -84,12 +83,12 @@ public class DateTime
 
   public String formatTime(Alarm alarm)
   {
-    return mTimeFormat.format(new Date(alarm.getDate()));
+    return mTimeFormat.format(new Date(alarm.getFromDate()));
   }
 
-  public String formatDate(Alarm alarm)
+  public String formatFromDate(Alarm alarm)
   {
-    return mDateFormat.format(new Date(alarm.getDate()));
+    return mDateFormat.format(new Date(alarm.getFromDate()));
   }
 
   public String formatToDate(Alarm alarm)
@@ -120,7 +119,7 @@ public class DateTime
     }
 
 //    alarm.getNextOccurence();
-//    res += " (" + formatDate(alarm) + ")";
+//    res += " (" + formatFromDate(alarm) + ")";
 
     return res;
   }
@@ -130,7 +129,7 @@ public class DateTime
     String res = "???";
 
     if (alarm.getOccurence() == Alarm.ONCE)
-      res = formatDate(alarm);
+      res = formatFromDate(alarm);
     else if (alarm.getOccurence() == Alarm.WEEKLY)
       res = formatDays(alarm);
 

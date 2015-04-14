@@ -20,7 +20,7 @@ public class DBAdapter {
     private DBOpenHelper mdbHelper;
 
     // Alarm Table Constants
-    private static final String ALARM_TABLE = "Alarm";
+    public static final String ALARM_TABLE = "Alarm";
 
     public static final String KEY_ALARM_ID         = "Id";
     public static final String KEY_ALARM_TITLE      = "Title";
@@ -45,7 +45,7 @@ public class DBAdapter {
     public static final int ALARM_ENABLED_COLUMN    = 9;
 
     // Medicine Table Constants
-    private static final String MEDICINE_TABLE = "Medicine";
+    public static final String MEDICINE_TABLE = "Medicine";
 
     public static final String KEY_MEDICINE_ID      = "Id";
     public static final String KEY_MEDICINE_NAME    = "Name";
@@ -60,7 +60,7 @@ public class DBAdapter {
     public static final int MEDICINE_QRCODE_COLUMN  = 4;
 
     // Validation Table Constants
-    private static final String HISTORY_TABLE = "MedicationHistory";
+    public static final String HISTORY_TABLE = "MedicationHistory";
 
     public static final String KEY_HISTORY_ID           = "Id";
     public static final String KEY_HISTORY_ALARMID      = "AlarmId";
@@ -291,7 +291,7 @@ public class DBAdapter {
         // Assign values for each column.
         //values.put(KEY_ALARM_ID         , _alarm.getId());
         values.put(KEY_ALARM_TITLE      , _alarm.getTitle());
-        values.put(KEY_ALARM_FROMDATE   , _alarm.getDate());
+        values.put(KEY_ALARM_FROMDATE   , _alarm.getFromDate());
         values.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         values.put(KEY_ALARM_TIME       , _alarm.getTime());
         values.put(KEY_ALARM_DAYS       , _alarm.getDays());
@@ -313,7 +313,7 @@ public class DBAdapter {
 
         // Assign values for each column.
         newValues.put(KEY_ALARM_TITLE      , _alarm.getTitle());
-        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getDate());
+        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getFromDate());
         newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
         newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
@@ -333,7 +333,7 @@ public class DBAdapter {
 
         // Assign values for each column.
         newValues.put(KEY_ALARM_TITLE      , _alarm.getTitle());
-        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getDate());
+        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getFromDate());
         newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
         newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
@@ -395,7 +395,7 @@ public class DBAdapter {
 
         result.setId(_cursor.getInt(ALARM_ID_COLUMN));
         result.setTitle(_cursor.getString(ALARM_TITLE_COLUMN));
-        result.setDate(_cursor.getLong(ALARM_FROMDATE_COLUMN));
+        result.setFromDate(_cursor.getLong(ALARM_FROMDATE_COLUMN));
         result.setToDate(_cursor.getLong(ALARM_TODATE_COLUMN));
         result.setTime(_cursor.getLong(ALARM_TIME_COLUMN));
         result.setDays(_cursor.getInt(ALARM_DAYS_COLUMN));
