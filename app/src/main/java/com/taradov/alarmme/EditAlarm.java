@@ -19,43 +19,43 @@
 
 package com.taradov.alarmme;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.text.TextWatcher;
-import android.text.Editable;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.Toast;
-import android.content.Intent;
-import android.content.Context;
-import android.content.DialogInterface;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class EditAlarm extends Activity implements OnItemClickListener

@@ -19,29 +19,28 @@
 
 package com.taradov.alarmme;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import android.os.Bundle;
-import android.os.Vibrator;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
-import android.net.Uri;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.util.Log;
-import android.view.WindowManager;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
-import android.widget.TextView;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AlarmNotification extends Activity
 {

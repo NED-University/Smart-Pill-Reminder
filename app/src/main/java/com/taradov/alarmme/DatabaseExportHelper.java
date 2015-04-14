@@ -3,21 +3,19 @@ package com.taradov.alarmme;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.Boolean;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
-import jxl.*;
-import jxl.write.*;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
 /**
@@ -77,6 +75,8 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
                 workbook = Workbook.createWorkbook(file);
 
                 createAlarmTable(workbook);
+                createMedicineTable(workbook);
+                createHistoryTable(workbook);
 
                 workbook.write();
 
@@ -143,6 +143,91 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
             }
         } catch (RowsExceededException e)
         {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void createMedicineTable(WritableWorkbook workbook)
+    {
+        try {
+            WritableSheet sheet = workbook.createSheet(DBAdapter.MEDICINE_TABLE, 1);
+
+            int col = 0;
+
+            // Add labels for the first row
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_MEDICINE_ID));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_MEDICINE_NAME));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_MEDICINE_COLOR));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_MEDICINE_AUDIO));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_MEDICINE_QRCODE));
+
+            cursor = dbAdapter.getAllMedicineCursor();
+
+            if (cursor.moveToFirst()) {
+                // start from second row, first is for labels
+                int row = 1;
+                Medicine medicine = dbAdapter.createMedicineItem(cursor);
+
+                do {
+                    col = 0;
+
+                    sheet.addCell(new Label(col++, row, String.valueOf(medicine.getId())));
+                    sheet.addCell(new Label(col++, row, (medicine.getName())));
+                    sheet.addCell(new Label(col++, row, String.valueOf(medicine.getColor())));
+                    sheet.addCell(new Label(col++, row, String.valueOf(medicine.getAudio())));
+                    sheet.addCell(new Label(col++, row, (medicine.getQRcode())));
+
+                    row++;
+                } while (cursor.moveToNext());
+            }
+        } catch (RowsExceededException e)
+        {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void createHistoryTable(WritableWorkbook workbook)
+    {
+        try {
+            WritableSheet sheet = workbook.createSheet(DBAdapter.HISTORY_TABLE, 2);
+
+            int col = 0;
+
+            // Add labels for the first row
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_HISTORY_ID));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_HISTORY_ALARMID));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_HISTORY_TIMEDUE));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_HISTORY_TIMETAKEN));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_HISTORY_QRCODE));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_HISTORY_VALIDATION));
+
+
+            cursor = dbAdapter.getAllHistoryCursor();
+
+            if (cursor.moveToFirst()) {
+                // start from second row, first is for labels
+                int row = 1;
+                HistoryItem historyItem = dbAdapter.createHistoryItem(cursor);
+
+                DateFormat df = DateFormat.getDateTimeInstance();
+                do {
+                    col = 0;
+
+                    sheet.addCell(new Label(col++, row, String.valueOf(historyItem.getId())));
+                    sheet.addCell(new Label(col++, row, String.valueOf(historyItem.getAlarmId())));
+                    sheet.addCell(new Label(col++, row, df.format(new Date(historyItem.getTimeDue()))));
+                    sheet.addCell(new Label(col++, row, df.format(new Date(historyItem.getTimeTaken()))));
+                    sheet.addCell(new Label(col++, row, historyItem.getQRCode()));
+                    sheet.addCell(new Label(col++, row, historyItem.getValidation()));
+
+                    row++;
+                } while (cursor.moveToNext());
+            }
+        } catch (RowsExceededException e) {
             e.printStackTrace();
         } catch (WriteException e) {
             e.printStackTrace();

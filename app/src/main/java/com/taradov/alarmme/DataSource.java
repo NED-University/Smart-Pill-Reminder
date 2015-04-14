@@ -19,17 +19,14 @@
 
 package com.taradov.alarmme;
 
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.FileInputStream;
+import android.content.Context;
+import android.util.Log;
+
 import java.io.DataInputStream;
-import java.io.FileOutputStream;
 import java.io.DataOutputStream;
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import android.util.Log;
-import android.content.Context;
 
 public class DataSource
 {

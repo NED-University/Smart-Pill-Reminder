@@ -1,6 +1,5 @@
 package com.taradov.alarmme;
 
-import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +19,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.taradov.alarmme.ColorPicker;
-import com.taradov.alarmme.Alarm;
+import java.util.ArrayList;
 
 
 public class ColorPickerActivity extends Activity {

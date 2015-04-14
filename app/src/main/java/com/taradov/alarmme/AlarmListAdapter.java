@@ -21,15 +21,15 @@ package com.taradov.alarmme;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.LayoutInflater;
-import android.content.Intent;
-import android.content.Context;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.BaseAdapter;
 
 class AlarmListAdapter extends BaseAdapter
 {

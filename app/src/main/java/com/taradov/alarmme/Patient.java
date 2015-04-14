@@ -3,12 +3,6 @@ package com.taradov.alarmme;
 import android.content.Context;
 import android.database.Cursor;
 
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Patient {
 
 	private String  patientName;

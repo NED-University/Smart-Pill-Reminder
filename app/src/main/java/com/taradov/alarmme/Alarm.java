@@ -19,15 +19,13 @@
 
 package com.taradov.alarmme;
 
-import java.lang.System;
-import java.lang.Comparable;
-import java.io.IOException;
+import android.content.Context;
+import android.content.Intent;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
-
-import android.content.Intent;
-import android.content.Context;
 
 public class Alarm implements Comparable<Alarm>
 {

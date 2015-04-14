@@ -1,9 +1,5 @@
 package com.taradov.alarmme;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.Calendar;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -20,6 +16,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class EditPatient extends Activity {
 

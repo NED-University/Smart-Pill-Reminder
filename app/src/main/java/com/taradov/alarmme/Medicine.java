@@ -2,8 +2,6 @@ package com.taradov.alarmme;
 
 import android.content.Context;
 
-import java.lang.String;
-
 /**
  * Created by Inshal on 21-Mar-15.
  */
