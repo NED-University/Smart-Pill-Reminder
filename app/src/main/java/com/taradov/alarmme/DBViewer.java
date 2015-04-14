@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -19,8 +20,13 @@ public class DBViewer extends Activity {
     private MedicineAdapter medicineAdapter;
     private ArrayList<HistoryItem> historyList;
     private HistoryAdapter historyAdapter;
+    private TextView titleView;
     DBAdapter dbAdapter;
     Cursor cursor;
+
+    public static final String TITLE_HISTORY = "History";
+    public static final String TITLE_MEDICINES = "Medicines";
+    public static final String TITLE_ALARMS = "Alarms";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,7 @@ public class DBViewer extends Activity {
         setContentView(R.layout.activity_dbviewer);
 
         listView = (ListView)findViewById(R.id.db_list_view);
+        titleView = (TextView) findViewById(R.id.database_title);
 
         // initialize array list of alarms
         alarmList = new ArrayList<Alarm>();
@@ -44,11 +51,11 @@ public class DBViewer extends Activity {
 
         // bind an adapter to the list view
         listView.setAdapter(historyAdapter);
+        titleView.setText(TITLE_HISTORY);
 
         dbAdapter = new DBAdapter(this);
         dbAdapter.open();
 
-        // TODO: Test functions
         populateAlarmList();
         populateMedicineList();
         populateHistoryList();
@@ -151,12 +158,25 @@ public class DBViewer extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.switch_alarms)
+        {
+            listView.setAdapter(alarmAdapter);
+            titleView.setText(TITLE_ALARMS);
+            return true;
+        }
+        else if (id == R.id.switch_medicine)
+        {
+            listView.setAdapter(medicineAdapter);
+            titleView.setText(TITLE_MEDICINES);
+            return true;
+        }
+        else if (id == R.id.switch_history)
+        {
+            listView.setAdapter(historyAdapter);
+            titleView.setText(TITLE_HISTORY);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-    //TODO: Create option to switch adapters through settings menu
 }
