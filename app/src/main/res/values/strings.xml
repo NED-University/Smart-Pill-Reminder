@@ -47,6 +47,7 @@
     </string-array>
 
     <array name="occurence"></array>
+
     <string name="title_activity_dbviewer">Database Viewer</string>
     <string name="patientName">Patient\'s Name:</string>
     <string name="patientFatherName">Father\'s Name:</string>

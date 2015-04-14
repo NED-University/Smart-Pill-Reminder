@@ -5,11 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,30 +27,30 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LinearLayout alarmView;
+        GridLayout alarmView;
         DateTime dt = new DateTime(context);
 
         Alarm alarm = getItem(position);
         String title = alarm.getTitle();
-        String fromDate = dt.formatDate(alarm);
+        String fromDate = dt.formatFromDate(alarm);
         String toDate = dt.formatToDate(alarm);
 
         if (convertView == null) {
-            alarmView = new LinearLayout(getContext());
+            alarmView = new GridLayout(getContext());
             String inflater = Context.LAYOUT_INFLATER_SERVICE;
             LayoutInflater vi = (LayoutInflater)getContext().getSystemService(inflater);
             vi.inflate(resource, alarmView, true);
         } else {
-            alarmView = (LinearLayout) convertView;
+            alarmView = (GridLayout) convertView;
         }
 
         TextView toDateView = (TextView)alarmView.findViewById(R.id.db_alarm_to_date);
         TextView fromDateView = (TextView)alarmView.findViewById(R.id.db_alarm_from_date);
         TextView titleView = (TextView)alarmView.findViewById(R.id.db_alarm_title);
 
-        toDateView.setText(toDate);
-        fromDateView.setText(fromDate);
-        titleView.setText(title);
+        toDateView.setText("ToDate: " + toDate);
+        fromDateView.setText("FromDate: " + fromDate);
+        titleView.setText("Name: " + title);
 
         return alarmView;
     }

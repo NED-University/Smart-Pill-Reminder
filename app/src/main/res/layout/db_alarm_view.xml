@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:columnCount="1">
 
     <TextView
         android:id="@+id/db_alarm_title"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:padding="10dp"
         android:scrollbars="vertical"
         android:fadingEdge="vertical"
@@ -17,7 +18,7 @@
     <TextView
         android:id="@+id/db_alarm_from_date"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:padding="10dp"
         android:scrollbars="vertical"
         android:fadingEdge="vertical"
@@ -26,9 +27,10 @@
     <TextView
         android:id="@+id/db_alarm_to_date"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:padding="10dp"
         android:scrollbars="vertical"
         android:fadingEdge="vertical"
         />
-</LinearLayout>
+
+</GridLayout>

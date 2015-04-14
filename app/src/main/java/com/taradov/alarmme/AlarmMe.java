@@ -19,12 +19,6 @@
 
 package com.taradov.alarmme;
 
-import java.lang.System;
-import java.util.Arrays;
-import java.util.GregorianCalendar;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-
 import android.database.Cursor;
 import android.os.Bundle;
 import android.app.Activity;
@@ -36,22 +30,9 @@ import android.view.MenuInflater;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ImageView;
-import android.widget.Toast;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.content.Intent;
-import android.content.Context;
-import android.content.BroadcastReceiver;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import com.taradov.alarmme.Alarm;
-import com.taradov.alarmme.AlarmReceiver;
-import com.taradov.alarmme.AlarmListAdapter;
-import com.taradov.alarmme.About;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 
 //  Toast.makeText(getApplicationContext(), "Delete" + index, Toast.LENGTH_SHORT).show();
 
@@ -96,6 +77,7 @@ public class AlarmMe extends Activity
 
         dbAdapter = new DBAdapter(this);
         dbAdapter.open();
+
     }
 
     @Override
@@ -169,8 +151,13 @@ public class AlarmMe extends Activity
         }
         else if(R.id.menu_patients==item.getItemId())
         {
-            Intent intent=new Intent(getBaseContext(),EditPatient.class);
+            Intent intent=new Intent(getBaseContext(), EditPatient.class);
             startActivity(intent);
+            return true;
+        }
+        else if(R.id.menu_dbviewer==item.getItemId())
+        {
+            startActivity(new Intent(getBaseContext(), DBViewer.class));
             return true;
         }
         else

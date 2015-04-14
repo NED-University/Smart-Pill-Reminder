@@ -19,8 +19,6 @@
 
 package com.taradov.alarmme;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.util.Log;
@@ -32,7 +30,6 @@ import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
 
 class AlarmListAdapter extends BaseAdapter
 {
@@ -176,10 +173,10 @@ class AlarmListAdapter extends BaseAdapter
 			intent = new Intent(mContext, AlarmReceiver.class);
 			alarm.toIntent(intent);
 			sender = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getDate(), sender);
+			mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), sender);
 			//mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,updateTime.getTimeInMillis() ,5*1000 , sender);
 
-			Log.i(TAG, "AlarmListAdapter.setAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getDate()+")");
+			Log.i(TAG, "AlarmListAdapter.setAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getFromDate()+")");
 			}
 			
 			
@@ -190,9 +187,9 @@ class AlarmListAdapter extends BaseAdapter
 				intent = new Intent(mContext, AlarmReceiver.class);
 				alarm.toIntent(intent);
 				sender = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				// mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getDate(), sender);
-				mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,alarm.getDate() ,1000*60*60 , sender);
-				Log.i(TAG, "AlarmListAdapter.setRepeatingAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getDate()+")");
+				// mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), sender);
+				mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,alarm.getFromDate() ,1000*60*60 , sender);
+				Log.i(TAG, "AlarmListAdapter.setRepeatingAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getFromDate()+")");
 
 			}
 			if (position==2)
@@ -202,9 +199,9 @@ class AlarmListAdapter extends BaseAdapter
 				intent = new Intent(mContext, AlarmReceiver.class);
 				alarm.toIntent(intent);
 				sender = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				// mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getDate(), sender);
-				mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,alarm.getDate() ,2000*60*60 , sender);
-				Log.i(TAG, "AlarmListAdapter.setRepeatingAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getDate()+")");
+				// mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), sender);
+				mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,alarm.getFromDate() ,2000*60*60 , sender);
+				Log.i(TAG, "AlarmListAdapter.setRepeatingAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getFromDate()+")");
 
 			}	
 			

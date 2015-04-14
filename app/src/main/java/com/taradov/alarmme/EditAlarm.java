@@ -19,19 +19,13 @@
 
 package com.taradov.alarmme;
 
-import java.util.Date;
-import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.text.SimpleDateFormat;
 
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.AlertDialog;
@@ -39,12 +33,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.text.TextWatcher;
 import android.text.Editable;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -52,7 +44,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
-import android.widget.ListView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ArrayAdapter;
@@ -65,11 +56,6 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.content.Context;
 import android.content.DialogInterface;
-
-
-
-import com.taradov.alarmme.Alarm;
-import com.taradov.alarmme.DateTime;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class EditAlarm extends Activity implements OnItemClickListener
@@ -200,7 +186,7 @@ public class EditAlarm extends Activity implements OnItemClickListener
 		mAlarmEnabled.setOnCheckedChangeListener(mAlarmEnabledChangeListener); 
 
 		mCalendar = new GregorianCalendar();
-		mCalendar.setTimeInMillis(mAlarm.getDate());
+		mCalendar.setTimeInMillis(mAlarm.getFromDate());
 		mYear = mCalendar.get(Calendar.YEAR);
 		mMonth = mCalendar.get(Calendar.MONTH);
 		mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
@@ -287,7 +273,7 @@ public class EditAlarm extends Activity implements OnItemClickListener
 			mDay = dayOfMonth;
 
 			mCalendar = new GregorianCalendar(mYear, mMonth, mDay, mHour, mMinute);
-			mAlarm.setDate(mCalendar.getTimeInMillis());
+			mAlarm.setFromDate(mCalendar.getTimeInMillis());
 
 			updateButtons();
 		}
@@ -301,7 +287,7 @@ public class EditAlarm extends Activity implements OnItemClickListener
 			mMinute = minute;
 
 			mCalendar = new GregorianCalendar(mYear, mMonth, mDay, mHour, mMinute);
-			mAlarm.setDate(mCalendar.getTimeInMillis());
+			mAlarm.setFromDate(mCalendar.getTimeInMillis());
 
 			updateButtons();
 		}
@@ -367,7 +353,7 @@ public class EditAlarm extends Activity implements OnItemClickListener
 	private void updateButtons()
 	{
 		if (Alarm.ONCE == mAlarm.getOccurence())
-			mDateButton.setText(mDateTime.formatDate(mAlarm));
+			mDateButton.setText(mDateTime.formatFromDate(mAlarm));
 		else if (Alarm.WEEKLY == mAlarm.getOccurence())
 			mDateButton.setText(mDateTime.formatDays(mAlarm));
 		mTimeButton.setText(mDateTime.formatTime(mAlarm));
@@ -409,6 +395,7 @@ public class EditAlarm extends Activity implements OnItemClickListener
 		public MenuItem(Context context, int textViewResourceId, String[] objects) {
 
 			super(context, textViewResourceId, objects);
+
 
 		}
 

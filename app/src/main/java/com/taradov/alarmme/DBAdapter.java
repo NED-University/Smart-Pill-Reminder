@@ -20,7 +20,7 @@ public class DBAdapter {
     private DBOpenHelper mdbHelper;
 
     // Alarm Table Constants
-    private static final String ALARM_TABLE = "Alarm";
+    public static final String ALARM_TABLE = "Alarm";
 
     public static final String KEY_ALARM_ID         = "Id";
     public static final String KEY_ALARM_TITLE      = "Title";
@@ -45,20 +45,22 @@ public class DBAdapter {
     public static final int ALARM_ENABLED_COLUMN    = 9;
 
     // Medicine Table Constants
-    private static final String MEDICINE_TABLE = "Medicine";
+    public static final String MEDICINE_TABLE = "Medicine";
 
     public static final String KEY_MEDICINE_ID      = "Id";
     public static final String KEY_MEDICINE_NAME    = "Name";
     public static final String KEY_MEDICINE_COLOR   = "Color";
     public static final String KEY_MEDICINE_AUDIO   = "Audio";
+    public static final String KEY_MEDICINE_QRCODE  = "QRcode";
 
     public static final int MEDICINE_ID_COLUMN      = 0;
     public static final int MEDICINE_NAME_COLUMN    = 1;
     public static final int MEDICINE_COLOR_COLUMN   = 2;
     public static final int MEDICINE_AUDIO_COLUMN   = 3;
+    public static final int MEDICINE_QRCODE_COLUMN  = 4;
 
     // Validation Table Constants
-    private static final String HISTORY_TABLE = "MedicationHistory";
+    public static final String HISTORY_TABLE = "MedicationHistory";
 
     public static final String KEY_HISTORY_ID           = "Id";
     public static final String KEY_HISTORY_ALARMID      = "AlarmId";
@@ -104,8 +106,8 @@ public class DBAdapter {
     public static final int PATIENT_ETHNICITY_COLUMN        = 5;
     public static final int PATIENT_ADDRESS_COLUMN          = 6;
     public static final int PATIENT_MARITALSTATUS_COLUMN    = 7;
-    public static final int PATIENT_INFECTIONS_COLUMN       = 8;
-    public static final int PATIENT_PROFESSION_COLUMN       = 9;
+    public static final int PATIENT_PROFESSION_COLUMN       = 8;
+    public static final int PATIENT_INFECTIONS_COLUMN       = 9;
     public static final int PATIENT_CHILDRENNO_COLUMN       = 10;
     public static final int PATIENT_CHILDRENSUFFER_COLUMN   = 11;
     public static final int PATIENT_SPOUSESUFFER_COLUMN     = 12;
@@ -138,25 +140,30 @@ public class DBAdapter {
                 KEY_ALARM_MEDICINEID  + " integer not null, " +
                 KEY_ALARM_INTERVAL    + " integer not null, " +
                 KEY_ALARM_ICON        + " integer not null, " +
-                KEY_ALARM_ENABLED     + " integer not null " +
+                KEY_ALARM_ENABLED     + " integer not null" +
+//                ", FOREIGN KEY(" + KEY_ALARM_MEDICINEID + ") REFERENCES " +
+//                MEDICINE_TABLE + "(" + KEY_MEDICINE_ID + ")" +
                 ");";
 
         private static final String CREATE_TABLE_MEDICINE =
                 "create table " + MEDICINE_TABLE + " (" +
                 KEY_MEDICINE_ID     + " integer primary key autoincrement, " +
-                KEY_MEDICINE_NAME   + " text not null," +
-                KEY_MEDICINE_COLOR  + " integer," +
-                KEY_MEDICINE_AUDIO  + " integer " +
+                KEY_MEDICINE_NAME   + " text unique not null, " +
+                KEY_MEDICINE_COLOR  + " integer, " +
+                KEY_MEDICINE_AUDIO  + " integer, " +
+                KEY_MEDICINE_QRCODE + " text unique not null " +
                 ");";
 
         private static final String CREATE_TABLE_VALIDATION =
                 "create table " + HISTORY_TABLE + " (" +
                 KEY_HISTORY_ID         + " integer primary key autoincrement, " +
-                KEY_HISTORY_ALARMID    + " integer not null,"  +
+                KEY_HISTORY_ALARMID    + " integer not null, "  +
                 KEY_HISTORY_TIMEDUE    + " long not null, " +
                 KEY_HISTORY_TIMETAKEN  + " long, " +
                 KEY_HISTORY_QRCODE     + " text, " +
-                KEY_HISTORY_VALIDATION + " text " +
+                KEY_HISTORY_VALIDATION + " text not null" +
+//                ", FOREIGN KEY(" + KEY_HISTORY_ALARMID + ") REFERENCES " +
+//                ALARM_TABLE +"(" + KEY_ALARM_ID + ")" +
                 ");";
 
         private static final String CREATE_TABLE_PATIENT =
@@ -178,11 +185,12 @@ public class DBAdapter {
                 KEY_PATIENT_TRAVELHISTORY   + " integer, " +
                 KEY_PATIENT_FRIENDHISTORY   + " integer, " +
                 KEY_PATIENT_CLINICALFEATURES+ " integer, " +
-                KEY_PATIENT_DIAGNOSISDATE   + " long " +
+                KEY_PATIENT_DIAGNOSISDATE   + " text not null" +
                 ");";
 
         @Override
         public void onCreate(SQLiteDatabase _db) {
+            _db.execSQL("PRAGMA foreign_keys = ON;");
             _db.execSQL(CREATE_TABLE_ALARM);
             _db.execSQL(CREATE_TABLE_MEDICINE);
             _db.execSQL(CREATE_TABLE_VALIDATION);
@@ -219,29 +227,31 @@ public class DBAdapter {
     }
 
     // Insert a new medicine
-    public long addMedicine(String _name, int _color, int _audio) {
+    public long addMedicine(Medicine _medicine) {
         // Create a new row of values to insert.
         ContentValues values = new ContentValues();
         // Assign values for each column.
-        values.put(KEY_MEDICINE_NAME, _name);
-        values.put(KEY_MEDICINE_COLOR, _color);
-        values.put(KEY_MEDICINE_COLOR, _audio);
+        values.put(KEY_MEDICINE_NAME, _medicine.getName());
+        values.put(KEY_MEDICINE_COLOR, _medicine.getColor());
+        values.put(KEY_MEDICINE_AUDIO, _medicine.getAudio());
+        values.put(KEY_MEDICINE_QRCODE, _medicine.getQRcode());
 
         // Insert the row.
         return db.insert(MEDICINE_TABLE, null, values);
     }
 
     // Update a medicine entry
-    public boolean updateMedicine(long _id, String _name, int _color, int _audio) {
+    public boolean updateMedicine(String _name, Medicine _medicine) {
         // Create a new row of values to insert.
         ContentValues newValues = new ContentValues();
         // Assign values for each column.
-        newValues.put(KEY_MEDICINE_NAME, _name);
-        newValues.put(KEY_MEDICINE_COLOR, _color);
-        newValues.put(KEY_MEDICINE_AUDIO, _audio);
+        newValues.put(KEY_MEDICINE_NAME, _medicine.getName());
+        newValues.put(KEY_MEDICINE_COLOR, _medicine.getColor());
+        newValues.put(KEY_MEDICINE_AUDIO, _medicine.getAudio());
+        newValues.put(KEY_MEDICINE_QRCODE, _medicine.getQRcode());
 
         // Insert the row.
-        return db.update(MEDICINE_TABLE, newValues, KEY_MEDICINE_ID + "=" + _id, null) > 0;
+        return db.update(MEDICINE_TABLE, newValues, KEY_MEDICINE_NAME + "=" + addQuotes(_name), null) > 0;
     }
 
     // Remove a medicine
@@ -261,7 +271,8 @@ public class DBAdapter {
                 _cursor.getInt(MEDICINE_ID_COLUMN),
                 _cursor.getString(MEDICINE_NAME_COLUMN),
                 _cursor.getInt(MEDICINE_COLOR_COLUMN),
-                _cursor.getInt(MEDICINE_AUDIO_COLUMN));
+                _cursor.getInt(MEDICINE_AUDIO_COLUMN),
+                _cursor.getString(MEDICINE_QRCODE_COLUMN));
     }
 
     public Medicine getMedicineFromAlarmID(int _alarmID)
@@ -280,7 +291,7 @@ public class DBAdapter {
         // Assign values for each column.
         //values.put(KEY_ALARM_ID         , _alarm.getId());
         values.put(KEY_ALARM_TITLE      , _alarm.getTitle());
-        values.put(KEY_ALARM_FROMDATE   , _alarm.getDate());
+        values.put(KEY_ALARM_FROMDATE   , _alarm.getFromDate());
         values.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         values.put(KEY_ALARM_TIME       , _alarm.getTime());
         values.put(KEY_ALARM_DAYS       , _alarm.getDays());
@@ -302,7 +313,7 @@ public class DBAdapter {
 
         // Assign values for each column.
         newValues.put(KEY_ALARM_TITLE      , _alarm.getTitle());
-        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getDate());
+        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getFromDate());
         newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
         newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
@@ -322,7 +333,7 @@ public class DBAdapter {
 
         // Assign values for each column.
         newValues.put(KEY_ALARM_TITLE      , _alarm.getTitle());
-        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getDate());
+        newValues.put(KEY_ALARM_FROMDATE   , _alarm.getFromDate());
         newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
         newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
@@ -384,7 +395,7 @@ public class DBAdapter {
 
         result.setId(_cursor.getInt(ALARM_ID_COLUMN));
         result.setTitle(_cursor.getString(ALARM_TITLE_COLUMN));
-        result.setDate(_cursor.getLong(ALARM_FROMDATE_COLUMN));
+        result.setFromDate(_cursor.getLong(ALARM_FROMDATE_COLUMN));
         result.setToDate(_cursor.getLong(ALARM_TODATE_COLUMN));
         result.setTime(_cursor.getLong(ALARM_TIME_COLUMN));
         result.setDays(_cursor.getInt(ALARM_DAYS_COLUMN));
@@ -560,7 +571,7 @@ public class DBAdapter {
         p.settravelHistory(_cursor.getInt(PATIENT_TRAVELHISTORY_COLUMN));
         p.setfriendHistory(_cursor.getInt(PATIENT_FRIENDHISTORY_COLUMN));
         p.setclinicalFeatures(_cursor.getInt(PATIENT_CLINICALFEATUR_COLUMN));
-        p.setDiagnosisDate(_cursor.getLong(PATIENT_DIAGNOSISDATE_COLUMN));
+        p.setDiagnosisDate(_cursor.getString(PATIENT_DIAGNOSISDATE_COLUMN));
 
         return p;
     }

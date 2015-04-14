@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/menu_dbviewer"
+        android:title="Database Viewer" />
+
+    <item
         android:id="@+id/menu_patients"
-        android:title="About" />
+        android:title="About Patient" />
 
     <item
         android:id="@+id/menu_settings"
@@ -11,5 +15,6 @@
     <item
         android:id="@+id/menu_about"
         android:title="About" />
+
 </menu>
 

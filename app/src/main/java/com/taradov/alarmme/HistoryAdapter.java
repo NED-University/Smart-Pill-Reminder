@@ -5,13 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.sql.Date;
 import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ public class HistoryAdapter extends ArrayAdapter<HistoryItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LinearLayout historyView;
+        GridLayout historyView;
 
         DateFormat df = DateFormat.getDateTimeInstance();
 
@@ -39,25 +38,28 @@ public class HistoryAdapter extends ArrayAdapter<HistoryItem> {
         String alarmId = String.valueOf(historyItem.getAlarmId());
         String timeDue = df.format(new Date(historyItem.getTimeDue()));
         String timeTaken = df.format(new Date(historyItem.getTimeTaken()));
+        String validation = historyItem.getValidation();
 
         if (convertView == null) {
-            historyView = new LinearLayout(getContext());
+            historyView = new GridLayout(getContext());
             String inflater = Context.LAYOUT_INFLATER_SERVICE;
             LayoutInflater vi = (LayoutInflater)getContext().getSystemService(inflater);
             vi.inflate(resource, historyView, true);
         } else {
-            historyView = (LinearLayout) convertView;
+            historyView = (GridLayout) convertView;
         }
 
-        //TextView idView = (TextView)historyView.findViewById(R.id.db_history_item_id);
+//        TextView idView = (TextView)historyView.findViewById(R.id.db_history_item_id);
         TextView alarmView = (TextView)historyView.findViewById(R.id.db_history_item_alarm);
         TextView timeDueView = (TextView)historyView.findViewById(R.id.db_history_item_due);
         TextView timeTakenView = (TextView)historyView.findViewById(R.id.db_history_item_taken);
+        TextView validationView = (TextView)historyView.findViewById(R.id.db_history_item_validation);
 
-        //idView.setText(id);
-        alarmView.setText(alarmId);
-        timeDueView.setText(timeDue);
-        timeTakenView.setText(timeTaken);
+//        idView.setText(id);
+        alarmView.setText("Alarm: " + alarmId);
+        timeDueView.setText("TimeDue: " + timeDue);
+        timeTakenView.setText("TimeTaken: " + timeTaken);
+        validationView.setText("Status: " + validation);
 
         return historyView;
     }
