@@ -19,25 +19,44 @@
 
 package com.taradov.alarmme;
 
-import android.app.Activity;
-import android.content.Intent;
+import java.lang.System;
+import java.util.Arrays;
+import java.util.GregorianCalendar;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+
 import android.database.Cursor;
 import android.os.Bundle;
+import android.app.Activity;
 import android.util.Log;
+import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.Toast;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.AdapterView;
+import android.content.Intent;
+import android.content.Context;
+import android.content.BroadcastReceiver;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+
+import com.taradov.alarmme.Alarm;
+import com.taradov.alarmme.AlarmReceiver;
+import com.taradov.alarmme.AlarmListAdapter;
+import com.taradov.alarmme.About;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 
 //  Toast.makeText(getApplicationContext(), "Delete" + index, Toast.LENGTH_SHORT).show();
 
-public class AlarmMe extends Activity
-{
+public class AlarmMe extends Activity {
     private final String TAG = "AlarmMe";
 
     private ListView mAlarmList;
@@ -59,14 +78,13 @@ public class AlarmMe extends Activity
     private Cursor cursor;
 
     @Override
-    public void onCreate(Bundle bundle)
-    {
+    public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.main);
 
         Log.i(TAG, "AlarmMe.onCreate()");
 
-        mAlarmList = (ListView)findViewById(R.id.alarm_list);
+        mAlarmList = (ListView) findViewById(R.id.alarm_list);
 
         mAlarmListAdapter = new AlarmListAdapter(this);
         mAlarmList.setAdapter(mAlarmListAdapter);
@@ -77,20 +95,17 @@ public class AlarmMe extends Activity
 
         dbAdapter = new DBAdapter(this);
         dbAdapter.open();
-
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         Log.i(TAG, "AlarmMe.onResume()");
         mAlarmListAdapter.updateAlarms();
         dbAdapter.open();
     }
 
-    public void onAddAlarmClick(View view)
-    {
+    public void onAddAlarmClick(View view) {
         Intent intent = new Intent(getBaseContext(), EditAlarm.class);
 
         mCurrentAlarm = new Alarm(this);
@@ -100,78 +115,54 @@ public class AlarmMe extends Activity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == NEW_ALARM_ACTIVITY)
-        {
-            if (resultCode == RESULT_OK)
-            {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NEW_ALARM_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
                 mCurrentAlarm.fromIntent(data);
                 mAlarmListAdapter.add(mCurrentAlarm);
             }
             mCurrentAlarm = null;
-        }
-        else if (requestCode == EDIT_ALARM_ACTIVITY)
-        {
-            if (resultCode == RESULT_OK)
-            {
+        } else if (requestCode == EDIT_ALARM_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
                 mCurrentAlarm.fromIntent(data);
                 mAlarmListAdapter.update(mCurrentAlarm);
             }
             mCurrentAlarm = null;
-        }
-        else if (requestCode == PREFERENCES_ACTIVITY)
-        {
+        } else if (requestCode == PREFERENCES_ACTIVITY) {
             mAlarmListAdapter.onSettingsUpdated();
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if (R.id.menu_settings == item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (R.id.menu_settings == item.getItemId()) {
             Intent intent = new Intent(getBaseContext(), Preferences.class);
             startActivityForResult(intent, PREFERENCES_ACTIVITY);
             return true;
-        }
-        else if (R.id.menu_about == item.getItemId())
-        {
+        } else if (R.id.menu_about == item.getItemId()) {
             Intent intent = new Intent(getBaseContext(), About.class);
             startActivity(intent);
             return true;
-        }
-        else if(R.id.menu_patients==item.getItemId())
-        {
-            Intent intent=new Intent(getBaseContext(), EditPatient.class);
+        } else if (R.id.menu_patients == item.getItemId()) {
+            Intent intent = new Intent(getBaseContext(), EditPatient.class);
             startActivity(intent);
             return true;
-        }
-        else if(R.id.menu_dbviewer==item.getItemId())
-        {
-            startActivity(new Intent(getBaseContext(), DBViewer.class));
-            return true;
-        }
-        else
-        {
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-    {
-        if (v.getId() == R.id.alarm_list)
-        {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.alarm_list) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
             menu.setHeaderTitle(mAlarmListAdapter.getItem(info.position).getTitle());
             menu.add(Menu.NONE, CONTEXT_MENU_EDIT, Menu.NONE, "Edit");
@@ -181,13 +172,11 @@ public class AlarmMe extends Activity
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item)
-    {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int index = item.getItemId();
 
-        if (index == CONTEXT_MENU_EDIT)
-        {
+        if (index == CONTEXT_MENU_EDIT) {
             Intent intent = new Intent(getBaseContext(), EditAlarm.class);
 
             mCurrentAlarm = mAlarmListAdapter.getItem(info.position);
@@ -195,15 +184,11 @@ public class AlarmMe extends Activity
             mCurrentAlarm.toIntent(intent);
             intent.putExtra("EDIT", true);
             startActivityForResult(intent, EDIT_ALARM_ACTIVITY);
-        }
-        else if (index == CONTEXT_MENU_DELETE)
-        {
+        } else if (index == CONTEXT_MENU_DELETE) {
             // TODO: change code to delete alarm from DB using id
             dbAdapter.removeAlarm(mAlarmListAdapter.getItem(info.position).getTitle());
             mAlarmListAdapter.delete(info.position);
-        }
-        else if (index == CONTEXT_MENU_DUPLICATE)
-        {
+        } else if (index == CONTEXT_MENU_DUPLICATE) {
             Alarm alarm = mAlarmListAdapter.getItem(info.position);
             Alarm newAlarm = new Alarm(this);
             Intent intent = new Intent();
@@ -212,16 +197,14 @@ public class AlarmMe extends Activity
             newAlarm.fromIntent(intent);
             newAlarm.setTitle(alarm.getTitle() + " (copy)");
             mAlarmListAdapter.add(newAlarm);
-            dbAdapter.addAlarm(newAlarm);
+            dbAdapter.addAlarm(newAlarm, 0);
         }
 
         return true;
     }
 
-    private AdapterView.OnItemClickListener mListOnItemClickListener = new AdapterView.OnItemClickListener()
-    {
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-        {
+    private AdapterView.OnItemClickListener mListOnItemClickListener = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent = new Intent(getBaseContext(), EditAlarm.class);
 
             mCurrentAlarm = mAlarmListAdapter.getItem(position);
@@ -231,8 +214,7 @@ public class AlarmMe extends Activity
     };
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
         dbAdapter.open();
     }

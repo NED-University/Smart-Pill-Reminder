@@ -1,20 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" tools:context="com.taradov.alarmme.DBViewer">
-
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.taradov.alarmme.DBViewer">
     <item
-        android:id="@+id/switch_alarms"
-        android:title="Alarms" />
-
-    <item
-        android:id="@+id/switch_history"
-        android:title="History" />
-
-    <item
-        android:id="@+id/switch_medicine"
-        android:title="Medicines" />
-
-    <item
-        android:id="@+id/export_button"
-        android:title="Export Database" />
-
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
 </menu>

@@ -1,53 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:columnCount="1">
+    android:layout_height="fill_parent">
 
-    <!--<TextView-->
-        <!--android:id="@+id/db_medicine_id"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="fill_parent"-->
-        <!--android:padding="10dp"-->
-        <!--android:scrollbars="vertical"-->
-        <!--android:fadingEdge="vertical"-->
-        <!--/>-->
+    <TextView
+        android:id="@+id/db_medicine_id"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical" />
 
     <TextView
         android:id="@+id/db_medicine_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:padding="10dp"
         android:scrollbars="vertical"
-        android:fadingEdge="vertical"
-        />
+        android:fadingEdge="vertical" />
 
     <TextView
         android:id="@+id/db_medicine_color"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:padding="10dp"
         android:scrollbars="vertical"
-        android:fadingEdge="vertical"
-        />
+        android:fadingEdge="vertical" />
 
     <TextView
         android:id="@+id/db_medicine_audio"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:padding="10dp"
         android:scrollbars="vertical"
-        android:fadingEdge="vertical"
-        />
-
-    <TextView
-        android:id="@+id/db_medicine_QRcode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:scrollbars="vertical"
-        android:fadingEdge="vertical"
-        />
-</GridLayout>
+        android:fadingEdge="vertical" />
+</LinearLayout>

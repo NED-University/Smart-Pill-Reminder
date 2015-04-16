@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,8 +20,7 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
     int resource;
     Context context;
 
-    public AlarmAdapter(Context _context, int _resource, List<Alarm> _items)
-    {
+    public AlarmAdapter(Context _context, int _resource, List<Alarm> _items) {
         super(_context, _resource, _items);
         resource = _resource;
         context = _context;
@@ -27,30 +28,30 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        GridLayout alarmView;
+        LinearLayout alarmView;
         DateTime dt = new DateTime(context);
 
         Alarm alarm = getItem(position);
         String title = alarm.getTitle();
-        String fromDate = dt.formatFromDate(alarm);
+        String fromDate = dt.formatDate(alarm);
         String toDate = dt.formatToDate(alarm);
 
         if (convertView == null) {
-            alarmView = new GridLayout(getContext());
+            alarmView = new LinearLayout(getContext());
             String inflater = Context.LAYOUT_INFLATER_SERVICE;
-            LayoutInflater vi = (LayoutInflater)getContext().getSystemService(inflater);
+            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(inflater);
             vi.inflate(resource, alarmView, true);
         } else {
-            alarmView = (GridLayout) convertView;
+            alarmView = (LinearLayout) convertView;
         }
 
-        TextView toDateView = (TextView)alarmView.findViewById(R.id.db_alarm_to_date);
-        TextView fromDateView = (TextView)alarmView.findViewById(R.id.db_alarm_from_date);
-        TextView titleView = (TextView)alarmView.findViewById(R.id.db_alarm_title);
+        TextView toDateView = (TextView) alarmView.findViewById(R.id.db_alarm_to_date);
+        TextView fromDateView = (TextView) alarmView.findViewById(R.id.db_alarm_from_date);
+        TextView titleView = (TextView) alarmView.findViewById(R.id.db_alarm_title);
 
-        toDateView.setText("ToDate: " + toDate);
-        fromDateView.setText("FromDate: " + fromDate);
-        titleView.setText("Name: " + title);
+        toDateView.setText(toDate);
+        fromDateView.setText(fromDate);
+        titleView.setText(title);
 
         return alarmView;
     }

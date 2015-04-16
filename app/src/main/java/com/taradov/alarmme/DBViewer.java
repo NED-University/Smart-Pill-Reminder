@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -20,42 +19,48 @@ public class DBViewer extends Activity {
     private MedicineAdapter medicineAdapter;
     private ArrayList<HistoryItem> historyList;
     private HistoryAdapter historyAdapter;
-    private TextView titleView;
     DBAdapter dbAdapter;
     Cursor cursor;
-
-    public static final String TITLE_HISTORY = "History";
-    public static final String TITLE_MEDICINES = "Medicines";
-    public static final String TITLE_ALARMS = "Alarms";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dbviewer);
 
-        listView = (ListView)findViewById(R.id.db_list_view);
-        titleView = (TextView) findViewById(R.id.database_title);
+        listView = (ListView) findViewById(R.id.db_list_view);
 
         // initialize array list of alarms
         alarmList = new ArrayList<Alarm>();
         // initialize alarm array adapter
         alarmAdapter = new AlarmAdapter(this, R.layout.db_alarm_view, alarmList);
+        // bind the adapter to the list view
+        listView.setAdapter(alarmAdapter);
 
         medicineList = new ArrayList<Medicine>();
         // initialize alarm array adapter
-        medicineAdapter = new MedicineAdapter(this, R.layout.db_medicine_view, medicineList);
+        medicineAdapter = new MedicineAdapter(this, R.layout.db_alarm_view, medicineList);
 
         historyList = new ArrayList<HistoryItem>();
         // initialize alarm array adapter
-        historyAdapter = new HistoryAdapter(this, R.layout.db_history_item_view, historyList);
-
-        // bind an adapter to the list view
-        listView.setAdapter(historyAdapter);
-        titleView.setText(TITLE_HISTORY);
+        historyAdapter = new HistoryAdapter(this, R.layout.db_alarm_view, historyList);
 
         dbAdapter = new DBAdapter(this);
         dbAdapter.open();
 
+//        Alarm testItem = new Alarm(this);
+//
+//        testItem.setTitle("Test");
+//        testItem.setDate(System.currentTimeMillis());
+//        testItem.setToDate(System.currentTimeMillis());
+//        testItem.setTime(System.currentTimeMillis());
+//        testItem.setDays(Alarm.EVERY_DAY);
+//        testItem.setInterval(5);
+//        testItem.setpId(R.drawable.asthma_inhaler_icon);
+//        testItem.setEnabled(true);
+//
+//        dbAdapter.addAlarm(testItem, 4);
+
+        // TODO: Test functions
         populateAlarmList();
         populateMedicineList();
         populateHistoryList();
@@ -103,7 +108,7 @@ public class DBViewer extends Activity {
         if (cursor.moveToFirst())
             do {
                 alarmList.add(0, dbAdapter.createAlarm(cursor));
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         alarmAdapter.notifyDataSetChanged();
     }
 
@@ -121,7 +126,7 @@ public class DBViewer extends Activity {
         if (cursor.moveToFirst())
             do {
                 medicineList.add(0, dbAdapter.createMedicineItem(cursor));
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         medicineAdapter.notifyDataSetChanged();
     }
 
@@ -139,7 +144,7 @@ public class DBViewer extends Activity {
         if (cursor.moveToFirst())
             do {
                 historyList.add(0, dbAdapter.createHistoryItem(cursor));
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         historyAdapter.notifyDataSetChanged();
     }
 
@@ -158,31 +163,12 @@ public class DBViewer extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.switch_alarms)
-        {
-            listView.setAdapter(alarmAdapter);
-            titleView.setText(TITLE_ALARMS);
-            return true;
-        }
-        else if (id == R.id.switch_medicine)
-        {
-            listView.setAdapter(medicineAdapter);
-            titleView.setText(TITLE_MEDICINES);
-            return true;
-        }
-        else if (id == R.id.switch_history)
-        {
-            listView.setAdapter(historyAdapter);
-            titleView.setText(TITLE_HISTORY);
-            return true;
-        }
-        else if (id == R.id.export_button)
-        {
-            DatabaseExportHelper exporter = new DatabaseExportHelper(this, dbAdapter);
-            exporter.execute();
+        if (id == R.id.action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO: Create option to switch adapters through settings menu
 }
