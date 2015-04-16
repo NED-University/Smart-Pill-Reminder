@@ -26,6 +26,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -58,6 +59,7 @@ public class AlarmNotification extends Activity
     private TextView mTextView;
     private PlayTimerTask mTimerTask;
     private ImageView mImageView;
+    private MediaPlayer mp;
 
     private HistoryItem mHistoryItem;
     private DBAdapter dbAdapter;
@@ -127,6 +129,8 @@ public class AlarmNotification extends Activity
 
         mTextView.setText(mAlarm.getTitle());
         mImageView.setImageResource((int) mAlarm.getpId());
+        mp = MediaPlayer.create(this, mAlarm.getAudio());
+        mp.setLooping(false);
 
         mTimerTask = new PlayTimerTask();
         mTimer = new Timer();
@@ -144,6 +148,8 @@ public class AlarmNotification extends Activity
         mRingtone.stop();
         if (mVibrate)
             mVibrator.cancel();
+        if (mp.isPlaying())
+            mp.stop();
     }
 
     public void onDismissClick(View view)
@@ -169,6 +175,16 @@ public class AlarmNotification extends Activity
         }
     }
 
+    public void OnPlayClick(View view)
+    {
+        mRingtone.stop();
+        if (mVibrate)
+            mVibrator.cancel();
+
+        if (!mp.isPlaying())
+            mp.start();
+    }
+
     //In the same activity you�ll need the following to retrieve the results:
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 0) {
@@ -178,7 +194,7 @@ public class AlarmNotification extends Activity
                 mHistoryItem.setQRCode(intent.getStringExtra("SCAN_RESULT"));
 
 //                String requiredQRCode = dbAdapter.getMedicineFromAlarmID(mHistoryItem.getAlarmId()).getQRCode();
-                String requiredQRCode = "Brufen";
+                String requiredQRCode = getResources().getString(R.string.constant_qrcode);
 
                 if (requiredQRCode.equals(mHistoryItem.getQRCode()))
                 {

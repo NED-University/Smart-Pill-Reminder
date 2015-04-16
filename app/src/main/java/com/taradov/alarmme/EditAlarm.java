@@ -253,7 +253,7 @@ public class EditAlarm extends Activity implements OnItemClickListener
             dbAdapter.updateAlarm(alarmName, mAlarm);
         }
         else
-            dbAdapter.addAlarm(mAlarm, 0);
+            dbAdapter.addAlarm(mAlarm);
 		setResult(RESULT_OK, intent);
 		finish();
 	}

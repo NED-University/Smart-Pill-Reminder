@@ -109,7 +109,7 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_TODATE));
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_TIME));
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_DAYS));
-            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_MEDICINEID));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_AUDIO));
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_INTERVAL));
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_ICON));
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_ENABLED));
@@ -130,8 +130,8 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
                     sheet.addCell(new Label(col++, row, dT.formatToDate(alarm)));
                     sheet.addCell(new Label(col++, row, dT.formatTime(alarm)));
                     sheet.addCell(new Label(col++, row, dT.formatDays(alarm)));
-                    // TODO: Get human readable form of medicine id
-                    sheet.addCell(new Label(col++, row, String.valueOf(alarm.getMedId())));
+                    // TODO: Get human readable form of audio
+                    sheet.addCell(new Label(col++, row, String.valueOf(alarm.getAudio())));
                     // TODO: Get human readable form of interval
                     sheet.addCell(new Label(col++, row, String.valueOf(alarm.getInterval())));
                     // TODO: Get human readable form of picture id

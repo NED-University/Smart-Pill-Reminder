@@ -39,7 +39,7 @@ public class Alarm implements Comparable<Alarm>
     private int mInterval;
     private long pId;
     private boolean mEnabled;
-    private int mMedId;
+    private int mAudio;
 
     private int mOccurence;
     private long mNextOccurence;
@@ -62,9 +62,9 @@ public class Alarm implements Comparable<Alarm>
         update();
     }
 
-    public int getMedId()
+    public int getAudio()
     {
-        return mMedId;
+        return mAudio;
     }
 
     public long getId()
@@ -115,9 +115,9 @@ public class Alarm implements Comparable<Alarm>
         return mInterval;
     }
 
-    public void setMedId (int _id)
+    public void setAudio(int _audio)
     {
-        mMedId = _id;
+        mAudio = _audio;
     }
 
     public void setOccurence(int occurence)

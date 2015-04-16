@@ -19,7 +19,7 @@
         <item>Pushton</item>
     </string-array>
     <string name="action_settings">Action Settings</string>
-    
+    <string name="constant_qrcode">Brufen</string>
     <string-array name="age">
         <item>15-24</item>
         <item>25-34</item>

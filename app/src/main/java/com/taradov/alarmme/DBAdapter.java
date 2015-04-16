@@ -28,7 +28,7 @@ public class DBAdapter {
     public static final String KEY_ALARM_TODATE     = "ToDate";
     public static final String KEY_ALARM_TIME       = "Time";
     public static final String KEY_ALARM_DAYS       = "Days";
-    public static final String KEY_ALARM_MEDICINEID = "MedicineId";
+    public static final String KEY_ALARM_AUDIO      = "Audio";
     public static final String KEY_ALARM_INTERVAL   = "Interval";
     public static final String KEY_ALARM_ICON       = "Icon";
     public static final String KEY_ALARM_ENABLED    = "Enabled";
@@ -39,7 +39,7 @@ public class DBAdapter {
     public static final int ALARM_TODATE_COLUMN     = 3;
     public static final int ALARM_TIME_COLUMN       = 4;
     public static final int ALARM_DAYS_COLUMN       = 5;
-    public static final int ALARM_MEDICINEID_COLUMN = 6;
+    public static final int ALARM_AUDIO_COLUMN      = 6;
     public static final int ALARM_INTERVAL_COLUMN   = 7;
     public static final int ALARM_ICON_COLUMN       = 8;
     public static final int ALARM_ENABLED_COLUMN    = 9;
@@ -137,11 +137,11 @@ public class DBAdapter {
                 KEY_ALARM_TODATE      + " long, " +
                 KEY_ALARM_TIME        + " long not null, " +
                 KEY_ALARM_DAYS        + " integer not null, " +
-                KEY_ALARM_MEDICINEID  + " integer not null, " +
+                KEY_ALARM_AUDIO       + " long, " +
                 KEY_ALARM_INTERVAL    + " integer not null, " +
                 KEY_ALARM_ICON        + " integer not null, " +
                 KEY_ALARM_ENABLED     + " integer not null" +
-//                ", FOREIGN KEY(" + KEY_ALARM_MEDICINEID + ") REFERENCES " +
+//                ", FOREIGN KEY(" + KEY_ALARM_AUDIO + ") REFERENCES " +
 //                MEDICINE_TABLE + "(" + KEY_MEDICINE_ID + ")" +
                 ");";
 
@@ -278,12 +278,12 @@ public class DBAdapter {
     public Medicine getMedicineFromAlarmID(int _alarmID)
     {
         return createMedicineItem(db.rawQuery("SELECT * FROM " + MEDICINE_TABLE + " M, " +
-                ALARM_TABLE + " A WHERE A." + KEY_ALARM_MEDICINEID + "=M." + KEY_MEDICINE_ID +
+                ALARM_TABLE + " A WHERE A." + KEY_ALARM_AUDIO + "=M." + KEY_MEDICINE_ID +
                 " AND A." + KEY_ALARM_ID + "=" + _alarmID, null, null));
     }
 
     // Insert a new alarm
-    public long addAlarm(Alarm _alarm, int _medicineID)
+    public long addAlarm(Alarm _alarm)
     {
         // Create a new row of values to insert.
         ContentValues values = new ContentValues();
@@ -295,7 +295,7 @@ public class DBAdapter {
         values.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         values.put(KEY_ALARM_TIME       , _alarm.getTime());
         values.put(KEY_ALARM_DAYS       , _alarm.getDays());
-        values.put(KEY_ALARM_MEDICINEID , _medicineID);
+        values.put(KEY_ALARM_AUDIO      , _alarm.getAudio());
         values.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         values.put(KEY_ALARM_ICON       , _alarm.getpId());
         values.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
@@ -317,6 +317,7 @@ public class DBAdapter {
         newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
         newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
+        newValues.put(KEY_ALARM_AUDIO      , _alarm.getAudio());
         newValues.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         newValues.put(KEY_ALARM_ICON       , _alarm.getpId());
         newValues.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
@@ -337,6 +338,7 @@ public class DBAdapter {
         newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
         newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
+        newValues.put(KEY_ALARM_AUDIO      , _alarm.getAudio());
         newValues.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         newValues.put(KEY_ALARM_ICON       , _alarm.getpId());
         newValues.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
@@ -399,9 +401,7 @@ public class DBAdapter {
         result.setToDate(_cursor.getLong(ALARM_TODATE_COLUMN));
         result.setTime(_cursor.getLong(ALARM_TIME_COLUMN));
         result.setDays(_cursor.getInt(ALARM_DAYS_COLUMN));
-
-        // TODO: Assign MedicineID to each Alarm
-        //result.set(_cursor.get(ALARM_MEDICINEID_COLUMN));
+        result.setAudio(_cursor.getInt(ALARM_AUDIO_COLUMN));
         result.setInterval(_cursor.getInt(ALARM_INTERVAL_COLUMN));
         result.setpId(_cursor.getInt(ALARM_ICON_COLUMN));
         result.setEnabled((_cursor.getInt(ALARM_ENABLED_COLUMN) == 1));

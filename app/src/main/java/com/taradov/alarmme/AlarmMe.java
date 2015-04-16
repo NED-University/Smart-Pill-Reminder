@@ -212,7 +212,7 @@ public class AlarmMe extends Activity
             newAlarm.fromIntent(intent);
             newAlarm.setTitle(alarm.getTitle() + " (copy)");
             mAlarmListAdapter.add(newAlarm);
-            dbAdapter.addAlarm(newAlarm, 0);
+            dbAdapter.addAlarm(newAlarm);
         }
 
         return true;
