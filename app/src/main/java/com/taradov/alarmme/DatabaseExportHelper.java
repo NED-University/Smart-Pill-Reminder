@@ -28,7 +28,8 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
     private Context mContext;
     private DBAdapter dbAdapter;
     private Cursor cursor;
-    private DateTime dT;
+    private DateTime dateTime;
+    private DateFormat dateFormat;
 
     public final String fileName = "database.xls";
 
@@ -37,7 +38,8 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
         mContext = _context;
         dialog = new ProgressDialog(_context);
         dbAdapter = _db;
-        dT = new DateTime(mContext);
+        dateTime = new DateTime(mContext);
+        dateFormat = DateFormat.getDateTimeInstance();
     }
 
     // to show Loading dialog box
@@ -127,10 +129,10 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
 
                     sheet.addCell(new Label(col++, row, String.valueOf(alarm.getId())));
                     sheet.addCell(new Label(col++, row, alarm.getTitle()));
-                    sheet.addCell(new Label(col++, row, dT.formatDate(alarm)));
-                    sheet.addCell(new Label(col++, row, dT.formatDate(alarm)));
-                    sheet.addCell(new Label(col++, row, dT.formatTime(alarm)));
-                    sheet.addCell(new Label(col++, row, dT.formatDays(alarm)));
+                    sheet.addCell(new Label(col++, row, dateTime.formatFromDate(alarm)));
+                    sheet.addCell(new Label(col++, row, dateTime.formatToDate(alarm)));
+                    sheet.addCell(new Label(col++, row, dateTime.formatTime(alarm)));
+                    sheet.addCell(new Label(col++, row, dateTime.formatDays(alarm)));
                     // TODO: Get human readable form of audio
                     sheet.addCell(new Label(col++, row, String.valueOf(alarm.getAudio())));
                     // TODO: Get human readable form of interval
@@ -175,10 +177,10 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
                     col = 0;
 
                     sheet.addCell(new Label(col++, row, String.valueOf(medicine.getId())));
-                    sheet.addCell(new Label(col++, row, (medicine.getName())));
+                    sheet.addCell(new Label(col++, row, medicine.getName()));
                     sheet.addCell(new Label(col++, row, String.valueOf(medicine.getColor())));
                     sheet.addCell(new Label(col++, row, String.valueOf(medicine.getAudio())));
-                    sheet.addCell(new Label(col++, row, (medicine.getQRcode())));
+                    sheet.addCell(new Label(col++, row, medicine.getQRcode()));
 
                     row++;
                 } while (cursor.moveToNext());
@@ -214,14 +216,14 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
                 int row = 1;
                 HistoryItem historyItem = dbAdapter.createHistoryItem(cursor);
 
-                DateFormat df = DateFormat.getDateTimeInstance();
+
                 do {
                     col = 0;
 
                     sheet.addCell(new Label(col++, row, String.valueOf(historyItem.getId())));
                     sheet.addCell(new Label(col++, row, String.valueOf(historyItem.getAlarmId())));
-                    sheet.addCell(new Label(col++, row, df.format(new Date(historyItem.getTimeDue()))));
-                    sheet.addCell(new Label(col++, row, df.format(new Date(historyItem.getTimeTaken()))));
+                    sheet.addCell(new Label(col++, row, formatDate(historyItem.getTimeDue())));
+                    sheet.addCell(new Label(col++, row, formatDate(historyItem.getTimeTaken())));
                     sheet.addCell(new Label(col++, row, historyItem.getQRCode()));
                     sheet.addCell(new Label(col++, row, historyItem.getValidation()));
 
@@ -305,6 +307,11 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
         } catch (WriteException e) {
             e.printStackTrace();
         }
+    }
+
+    private String formatDate(long date)
+    {
+        return (date != 0) ? dateFormat.format(new Date(date)) : "";
     }
 
     // close dialog and give msg

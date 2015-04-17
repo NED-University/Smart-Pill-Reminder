@@ -167,7 +167,6 @@ public class AlarmNotification extends Activity {
             finish();
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             //Toast.makeText(getApplicationContext(), "ERROR:" + e, 1).show();
 
