@@ -19,16 +19,17 @@
 
 package com.taradov.alarmme;
 
-import android.content.Context;
-import android.content.Intent;
-
+import java.lang.System;
+import java.lang.Comparable;
+import java.io.IOException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Calendar;
 
-public class Alarm implements Comparable<Alarm>
-{
+import android.content.Intent;
+import android.content.Context;
+
+public class Alarm implements Comparable<Alarm> {
     private Context mContext;
     private long mId;
     private String mTitle;
@@ -41,6 +42,11 @@ public class Alarm implements Comparable<Alarm>
     private boolean mEnabled;
     private int mAudio;
 
+    private int Red;
+    private int Green;
+    private int Blue;
+    private int alpha ;
+
     private int mOccurence;
     private long mNextOccurence;
 
@@ -50,68 +56,64 @@ public class Alarm implements Comparable<Alarm>
     public static final int NEVER = 0;
     public static final int EVERY_DAY = 0x7f;
 
-    public Alarm(Context context)
-    {
+    public Alarm(Context context) {
         mContext = context;
         mId = 0;
         mTitle = "";
         mFromDate = System.currentTimeMillis();
+        mToDate = System.currentTimeMillis();
         mEnabled = true;
         mOccurence = ONCE;
         mDays = EVERY_DAY;
+        Red=255;
+        Green=0;
+        Blue=0;
+        alpha=255;
         update();
     }
 
-    public int getAudio()
+	public int getAudio()
     {
         return mAudio;
     }
 
-    public long getId()
-    {
+    public long getId() {
         return mId;
     }
 
-    public void setId(long id)
-    {
+    public void setId(long id) {
         mId = id;
     }
 
-    public long getpId(){
+    public long getpId() {
         return pId;
     }
 
-    public void setpId(long picid){
-        pId=picid;
+    public void setpId(long picid) {
+        pId = picid;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return mTitle;
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         mTitle = title;
     }
 
-    public long getTime()
-    {
+    public long getTime() {
         return mTime;
     }
 
-    public void setTime(long time)
-    {
+    public void setTime(long time) {
         mTime = time;
     }
 
-    public int getOccurence()
-    {
+    public int getOccurence() {
         return mOccurence;
     }
 
-    public int getInterval()
-    {
+    public int getInterval() {
         return mInterval;
     }
 
@@ -120,75 +122,90 @@ public class Alarm implements Comparable<Alarm>
         mAudio = _audio;
     }
 
-    public void setOccurence(int occurence)
-    {
+    public void setOccurence(int occurence) {
         mOccurence = occurence;
         update();
     }
 
-    public void setInterval(int interval)
-    {
-        mInterval=interval;
+    public void setInterval(int interval) {
+        mInterval = interval;
         update();
     }
 
-    public long getFromDate()
-    {
+    public long getFromDate() {
 
         return mFromDate;
     }
 
-    public void setFromDate(long date)
-    {
+    public void setFromDate(long date) {
         mFromDate = date;
         update();
     }
 
-    public long getToDate()
-    {
+    public long getToDate() {
 
         return mToDate;
     }
 
-    public void setToDate(long date)
-    {
+    public void setToDate(long date) {
         mToDate = date;
         update();
     }
 
-    public boolean getEnabled()
-    {
+    public boolean getEnabled() {
         return mEnabled;
     }
 
-    public void setEnabled(boolean enabled)
-    {
+    public void setEnabled(boolean enabled) {
         mEnabled = enabled;
     }
 
-    public int getDays()
-    {
+    public int getDays() {
         return mDays;
     }
 
-    public void setDays(int days)
-    {
+    public void setDays(int days) {
         mDays = days;
         update();
     }
 
-    public long getNextOccurence()
-    {
+    public void setRed(int r){
+        Red=r;
+    }
+    public int getRed(){
+        return Red;
+    }
+    public void setGreen(int g){
+        Green=g;
+    }
+    public int getGreen(){
+        return Green;
+    }
+    public void setBlue(int b){
+        Blue=b;
+    }
+    public int getBlue(){
+        return Blue;
+    }
+
+    public void setAlpha(int a){
+        alpha=a;
+    }
+    public int getAlpha(){
+        return alpha;
+    }
+
+
+
+    public long getNextOccurence() {
         return mNextOccurence;
     }
 
-    public boolean getOutdated()
-    {
+    public boolean getOutdated() {
         return mNextOccurence < System.currentTimeMillis();
     }
 
-    public int compareTo(Alarm aThat)
-    {
+    public int compareTo(Alarm aThat) {
         final long thisNext = getNextOccurence();
         final long thatNext = aThat.getNextOccurence();
         final int BEFORE = -1;
@@ -206,49 +223,44 @@ public class Alarm implements Comparable<Alarm>
             return EQUAL;
     }
 
-    public void update()
-    {
+    public void update() {
         Calendar now = Calendar.getInstance();
 
-        if (mOccurence == WEEKLY)
+        // if (mOccurence == WEEKLY)
         {
             Calendar alarm = Calendar.getInstance();
 
             alarm.setTimeInMillis(mFromDate);
             alarm.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
 
-            if (mDays != NEVER)
-            {
-                while (true)
-                {
+            if (mDays != NEVER) {
+                while (true) {
                     int day = (alarm.get(Calendar.DAY_OF_WEEK) + 5) % 7;
 
-                    if (alarm.getTimeInMillis() > now.getTimeInMillis() && (mDays & (1 << day)) > 0)
+                    if (alarm.getTimeInMillis() >= now.getTimeInMillis() && (mDays & (1 << day)) > 0)
                         break;
 
                     alarm.add(Calendar.DAY_OF_MONTH, 1);
                 }
-            }
-            else
-            {
+            } else {
                 alarm.add(Calendar.YEAR, 10);
             }
 
             mNextOccurence = alarm.getTimeInMillis();
         }
-        else
-        {
-            mNextOccurence = mFromDate;
-        }
+//        else
+//        {
+//            mNextOccurence = mFromDate;
+//        }
 
         mFromDate = mNextOccurence;
     }
 
-    public void toIntent(Intent intent)
-    {
+    public void toIntent(Intent intent) {
         intent.putExtra("com.taradov.alarmme.id", mId);
         intent.putExtra("com.taradov.alarmme.title", mTitle);
         intent.putExtra("com.taradov.alarmme.date", mFromDate);
+        intent.putExtra("com.taradov.alarmme.todate", mToDate);
         intent.putExtra("com.taradov.alarmme.alarm", mEnabled);
         intent.putExtra("com.taradov.alarmme.occurence", mOccurence);
         intent.putExtra("com.taradov.alarmme.interval", mInterval);
@@ -256,26 +268,26 @@ public class Alarm implements Comparable<Alarm>
         intent.putExtra("com.taradov.alarmme.pId", pId);
     }
 
-    public void fromIntent(Intent intent)
-    {
+    public void fromIntent(Intent intent) {
         mId = intent.getLongExtra("com.taradov.alarmme.id", 0);
         mTitle = intent.getStringExtra("com.taradov.alarmme.title");
         mTitle = intent.getStringExtra("com.taradov.alarmme.title");
         mTitle = intent.getStringExtra("com.taradov.alarmme.title");
         mFromDate = intent.getLongExtra("com.taradov.alarmme.date", 0);
+        mToDate = intent.getLongExtra("com.taradov.alarmme.todate", 0);
         mEnabled = intent.getBooleanExtra("com.taradov.alarmme.alarm", true);
         mOccurence = intent.getIntExtra("com.taradov.alarmme.occurence", 0);
         mInterval = intent.getIntExtra("com.taradov.alarmme.interval", 0);
         mDays = intent.getIntExtra("com.taradov.alarmme.days", 0);
-        pId=intent.getLongExtra("com.taradov.alarmme.pId",-1);
+        pId = intent.getLongExtra("com.taradov.alarmme.pId", -1);
         update();
     }
 
-    public void serialize(DataOutputStream dos) throws IOException
-    {
+    public void serialize(DataOutputStream dos) throws IOException {
         dos.writeLong(mId);
         dos.writeUTF(mTitle);
         dos.writeLong(mFromDate);
+        dos.writeLong(mToDate);
         dos.writeBoolean(mEnabled);
         dos.writeInt(mOccurence);
         dos.writeInt(mInterval);
@@ -283,11 +295,11 @@ public class Alarm implements Comparable<Alarm>
         dos.writeLong(pId);
     }
 
-    public void deserialize(DataInputStream dis) throws IOException
-    {
+    public void deserialize(DataInputStream dis) throws IOException {
         mId = dis.readLong();
         mTitle = dis.readUTF();
         mFromDate = dis.readLong();
+        mToDate = dis.readLong();
         mEnabled = dis.readBoolean();
         mOccurence = dis.readInt();
         mInterval = dis.readInt();

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:columnCount="1">
+
+    <TextView
+        android:id="@+id/db_patient_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_fathername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_ethnicity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_maritalstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_profession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_infections"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_childrenno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_childrensuffer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_spousesuffer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_riskbehaviour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_travelhistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_friendhistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_cd4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_viralload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+    <TextView
+        android:id="@+id/db_patient_diagnosisdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        />
+
+</GridLayout>

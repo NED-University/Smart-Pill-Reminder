@@ -32,6 +32,8 @@ public class HistoryAdapter extends ArrayAdapter<HistoryItem> {
 
         DateFormat df = DateFormat.getDateTimeInstance();
 
+        // TODO: Add QRCode entry
+
         HistoryItem historyItem = getItem(position);
         String id = String.valueOf(historyItem.getId());
         String alarmId = String.valueOf(historyItem.getAlarmId());

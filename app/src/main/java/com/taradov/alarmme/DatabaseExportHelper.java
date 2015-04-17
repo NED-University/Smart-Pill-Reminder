@@ -77,6 +77,7 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
                 createAlarmTable(workbook);
                 createMedicineTable(workbook);
                 createHistoryTable(workbook);
+                createPatientTable(workbook);
 
                 workbook.write();
 
@@ -126,8 +127,8 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
 
                     sheet.addCell(new Label(col++, row, String.valueOf(alarm.getId())));
                     sheet.addCell(new Label(col++, row, alarm.getTitle()));
-                    sheet.addCell(new Label(col++, row, dT.formatFromDate(alarm)));
-                    sheet.addCell(new Label(col++, row, dT.formatToDate(alarm)));
+                    sheet.addCell(new Label(col++, row, dT.formatDate(alarm)));
+                    sheet.addCell(new Label(col++, row, dT.formatDate(alarm)));
                     sheet.addCell(new Label(col++, row, dT.formatTime(alarm)));
                     sheet.addCell(new Label(col++, row, dT.formatDays(alarm)));
                     // TODO: Get human readable form of audio
@@ -228,6 +229,78 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
                 } while (cursor.moveToNext());
             }
         } catch (RowsExceededException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void createPatientTable(WritableWorkbook workbook)
+    {
+        try {
+            WritableSheet sheet = workbook.createSheet(DBAdapter.PATIENT_TABLE, 4);
+
+            int col = 0;
+
+            // Add labels for the first row
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_ID              ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_NAME            ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_FATHERNAME      ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_AGE             ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_GENDER          ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_ETHNICITY       ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_ADDRESS         ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_MARITALSTATUS   ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_PROFESSION      ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_INFECTIONS      ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_CHILDRENNO      ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_CHILDRENSUFFER  ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_SPOUSESUFFER    ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_RISK            ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_TRAVELHISTORY   ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_FRIENDHISTORY   ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_CLINICALFEATURES));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_CD4             ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_VIRALLOAD       ));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_PATIENT_DIAGNOSISDATE   ));
+
+            cursor = dbAdapter.getAllPatientCursor();
+
+            if (cursor.moveToFirst()) {
+                // start from second row, first is for labels
+                int row = 1;
+                Patient patient = dbAdapter.createPatient(cursor);
+
+                do {
+                    col = 0;
+
+                    sheet.addCell(new Label(col++, row, String.valueOf(patient.getPatId())));
+                    sheet.addCell(new Label(col++, row, patient.getPatientName()));
+                    sheet.addCell(new Label(col++, row, patient.getFatherName()));
+                    sheet.addCell(new Label(col++, row, patient.getAge()));
+                    sheet.addCell(new Label(col++, row, patient.getGender()));
+                    sheet.addCell(new Label(col++, row, patient.getEthnicity()));
+                    sheet.addCell(new Label(col++, row, patient.getAddress()));
+                    sheet.addCell(new Label(col++, row, patient.getMaritalStatus()));
+                    sheet.addCell(new Label(col++, row, patient.getProfession()));
+                    sheet.addCell(new Label(col++, row, patient.getInfection()));
+                    sheet.addCell(new Label(col++, row, patient.getChildrenno()));
+                    sheet.addCell(new Label(col++, row, patient.getChildrenSuffer()));
+                    sheet.addCell(new Label(col++, row, patient.getSpouseSuffer()));
+                    sheet.addCell(new Label(col++, row, patient.getRiskBehaviour()));
+                    sheet.addCell(new Label(col++, row, patient.getTravelHistory()));
+                    sheet.addCell(new Label(col++, row, patient.getFriendHistory()));
+//                    sheet.addCell(new Label(col++, row, patient.getClinicalFeatures));
+                    col++;
+                    sheet.addCell(new Label(col++, row, patient.getcd4()));
+                    sheet.addCell(new Label(col++, row, patient.getViralLoad()));
+                    sheet.addCell(new Label(col++, row, patient.getDiagnosisDate()));
+
+                    row++;
+                } while (cursor.moveToNext());
+            }
+        } catch (RowsExceededException e)
+        {
             e.printStackTrace();
         } catch (WriteException e) {
             e.printStackTrace();

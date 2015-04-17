@@ -77,7 +77,7 @@ public class DBAdapter {
     public static final int HISTORY_VALIDATION_COLUMN   = 5;
 
     // Validation Table Constants
-    private static final String PATIENT_TABLE = "Patient";
+    public static final String PATIENT_TABLE = "Patient";
 
     public static final String KEY_PATIENT_ID               = "Id";
     public static final String KEY_PATIENT_NAME             = "Name";
@@ -96,6 +96,8 @@ public class DBAdapter {
     public static final String KEY_PATIENT_TRAVELHISTORY    = "TravelHistory";
     public static final String KEY_PATIENT_FRIENDHISTORY    = "FriendHistory";
     public static final String KEY_PATIENT_CLINICALFEATURES = "ClinicalFeatures";
+    public static final String KEY_PATIENT_CD4              = "CD4";
+    public static final String KEY_PATIENT_VIRALLOAD        = "ViralLoad";
     public static final String KEY_PATIENT_DIAGNOSISDATE    = "DiagnosisDate";
 
     public static final int PATIENT_ID_COLUMN               = 0;
@@ -114,8 +116,10 @@ public class DBAdapter {
     public static final int PATIENT_RISK_COLUMN             = 13;
     public static final int PATIENT_TRAVELHISTORY_COLUMN    = 14;
     public static final int PATIENT_FRIENDHISTORY_COLUMN    = 15;
-    public static final int PATIENT_CLINICALFEATUR_COLUMN   = 16;
-    public static final int PATIENT_DIAGNOSISDATE_COLUMN    = 17;
+    public static final int PATIENT_CLINICALFEATURE_COLUMN  = 16;
+    public static final int PATIENT_CD4_COLUMN              = 17;
+    public static final int PATIENT_VIRALLOAD_COLUMN        = 18;
+    public static final int PATIENT_DIAGNOSISDATE_COLUMN    = 19;
 
     public DBAdapter(Context _context) {
         this.mContext = _context;
@@ -141,8 +145,6 @@ public class DBAdapter {
                 KEY_ALARM_INTERVAL    + " integer not null, " +
                 KEY_ALARM_ICON        + " integer not null, " +
                 KEY_ALARM_ENABLED     + " integer not null" +
-//                ", FOREIGN KEY(" + KEY_ALARM_AUDIO + ") REFERENCES " +
-//                MEDICINE_TABLE + "(" + KEY_MEDICINE_ID + ")" +
                 ");";
 
         private static final String CREATE_TABLE_MEDICINE =
@@ -162,31 +164,53 @@ public class DBAdapter {
                 KEY_HISTORY_TIMETAKEN  + " long, " +
                 KEY_HISTORY_QRCODE     + " text, " +
                 KEY_HISTORY_VALIDATION + " text not null" +
-//                ", FOREIGN KEY(" + KEY_HISTORY_ALARMID + ") REFERENCES " +
-//                ALARM_TABLE +"(" + KEY_ALARM_ID + ")" +
                 ");";
+
+//        private static final String CREATE_TABLE_PATIENT =
+//                "create table " + PATIENT_TABLE + " (" +
+//                KEY_PATIENT_ID              + " integer primary key autoincrement, " +
+//                KEY_PATIENT_NAME            + " text not null, " +
+//                KEY_PATIENT_FATHERNAME      + " text, " +
+//                KEY_PATIENT_AGE             + " integer, " +
+//                KEY_PATIENT_GENDER          + " integer, " +
+//                KEY_PATIENT_ETHNICITY       + " integer, " +
+//                KEY_PATIENT_ADDRESS         + " text, " +
+//                KEY_PATIENT_MARITALSTATUS   + " integer, " +
+//                KEY_PATIENT_PROFESSION      + " text, " +
+//                KEY_PATIENT_INFECTIONS      + " integer, " +
+//                KEY_PATIENT_CHILDRENNO      + " text, " +
+//                KEY_PATIENT_CHILDRENSUFFER  + " integer, " +
+//                KEY_PATIENT_SPOUSESUFFER    + " integer, " +
+//                KEY_PATIENT_RISK            + " integer, " +
+//                KEY_PATIENT_TRAVELHISTORY   + " integer, " +
+//                KEY_PATIENT_FRIENDHISTORY   + " integer, " +
+//                KEY_PATIENT_CLINICALFEATURES+ " integer, " +
+//                KEY_PATIENT_DIAGNOSISDATE   + " text not null" +
+//                ");";
 
         private static final String CREATE_TABLE_PATIENT =
                 "create table " + PATIENT_TABLE + " (" +
-                KEY_PATIENT_ID              + " integer primary key autoincrement, " +
-                KEY_PATIENT_NAME            + " text not null, " +
-                KEY_PATIENT_FATHERNAME      + " text, " +
-                KEY_PATIENT_AGE             + " integer, " +
-                KEY_PATIENT_GENDER          + " integer, " +
-                KEY_PATIENT_ETHNICITY       + " integer, " +
-                KEY_PATIENT_ADDRESS         + " text, " +
-                KEY_PATIENT_MARITALSTATUS   + " integer, " +
-                KEY_PATIENT_PROFESSION      + " text, " +
-                KEY_PATIENT_INFECTIONS      + " integer, " +
-                KEY_PATIENT_CHILDRENNO      + " text, " +
-                KEY_PATIENT_CHILDRENSUFFER  + " integer, " +
-                KEY_PATIENT_SPOUSESUFFER    + " integer, " +
-                KEY_PATIENT_RISK            + " integer, " +
-                KEY_PATIENT_TRAVELHISTORY   + " integer, " +
-                KEY_PATIENT_FRIENDHISTORY   + " integer, " +
-                KEY_PATIENT_CLINICALFEATURES+ " integer, " +
-                KEY_PATIENT_DIAGNOSISDATE   + " text not null" +
-                ");";
+                        KEY_PATIENT_ID              + " integer primary key autoincrement, " +
+                        KEY_PATIENT_NAME            + " text not null, " +
+                        KEY_PATIENT_FATHERNAME      + " text, " +
+                        KEY_PATIENT_AGE             + " text, " +
+                        KEY_PATIENT_GENDER          + " text, " +
+                        KEY_PATIENT_ETHNICITY       + " text, " +
+                        KEY_PATIENT_ADDRESS         + " text, " +
+                        KEY_PATIENT_MARITALSTATUS   + " text, " +
+                        KEY_PATIENT_PROFESSION      + " text, " +
+                        KEY_PATIENT_INFECTIONS      + " text, " +
+                        KEY_PATIENT_CHILDRENNO      + " text, " +
+                        KEY_PATIENT_CHILDRENSUFFER  + " text, " +
+                        KEY_PATIENT_SPOUSESUFFER    + " text, " +
+                        KEY_PATIENT_RISK            + " text, " +
+                        KEY_PATIENT_TRAVELHISTORY   + " text, " +
+                        KEY_PATIENT_FRIENDHISTORY   + " text, " +
+                        KEY_PATIENT_CLINICALFEATURES+ " text, " +
+                        KEY_PATIENT_CD4             + " text, " +
+                        KEY_PATIENT_VIRALLOAD       + " text, " +
+                        KEY_PATIENT_DIAGNOSISDATE   + " text not null" +
+                        ");";
 
         @Override
         public void onCreate(SQLiteDatabase _db) {
@@ -493,7 +517,7 @@ public class DBAdapter {
         values.put(KEY_PATIENT_FATHERNAME       , _patient.getFatherName());
         values.put(KEY_PATIENT_AGE              , _patient.getAge());
         values.put(KEY_PATIENT_GENDER           , _patient.getGender());
-        values.put(KEY_PATIENT_ETHNICITY        , _patient.getEthinicity());
+        values.put(KEY_PATIENT_ETHNICITY        , _patient.getEthnicity());
         values.put(KEY_PATIENT_ADDRESS          , _patient.getAddress());
         values.put(KEY_PATIENT_MARITALSTATUS    , _patient.getMaritalStatus());
         values.put(KEY_PATIENT_PROFESSION       , _patient.getProfession());
@@ -504,7 +528,9 @@ public class DBAdapter {
         values.put(KEY_PATIENT_RISK             , _patient.getRiskBehaviour());
         values.put(KEY_PATIENT_TRAVELHISTORY    , _patient.getTravelHistory());
         values.put(KEY_PATIENT_FRIENDHISTORY    , _patient.getFriendHistory());
-        values.put(KEY_PATIENT_CLINICALFEATURES , _patient.getClinicalFeatures());
+//        values.put(KEY_PATIENT_CLINICALFEATURES , _patient.getClinicalFeatures());
+        values.put(KEY_PATIENT_CD4              , _patient.getcd4());
+        values.put(KEY_PATIENT_VIRALLOAD        , _patient.getViralLoad());
         values.put(KEY_PATIENT_DIAGNOSISDATE    , _patient.getDiagnosisDate());
 
         // Insert the row.
@@ -521,7 +547,7 @@ public class DBAdapter {
         newValues.put(KEY_PATIENT_FATHERNAME       , _patient.getFatherName());
         newValues.put(KEY_PATIENT_AGE              , _patient.getAge());
         newValues.put(KEY_PATIENT_GENDER           , _patient.getGender());
-        newValues.put(KEY_PATIENT_ETHNICITY        , _patient.getEthinicity());
+        newValues.put(KEY_PATIENT_ETHNICITY        , _patient.getEthnicity());
         newValues.put(KEY_PATIENT_ADDRESS          , _patient.getAddress());
         newValues.put(KEY_PATIENT_MARITALSTATUS    , _patient.getMaritalStatus());
         newValues.put(KEY_PATIENT_PROFESSION       , _patient.getProfession());
@@ -532,7 +558,9 @@ public class DBAdapter {
         newValues.put(KEY_PATIENT_RISK             , _patient.getRiskBehaviour());
         newValues.put(KEY_PATIENT_TRAVELHISTORY    , _patient.getTravelHistory());
         newValues.put(KEY_PATIENT_FRIENDHISTORY    , _patient.getFriendHistory());
-        newValues.put(KEY_PATIENT_CLINICALFEATURES , _patient.getClinicalFeatures());
+//        newValues.put(KEY_PATIENT_CLINICALFEATURES , _patient.getClinicalFeatures());
+        newValues.put(KEY_PATIENT_CD4              , _patient.getcd4());
+        newValues.put(KEY_PATIENT_VIRALLOAD        , _patient.getViralLoad());
         newValues.put(KEY_PATIENT_DIAGNOSISDATE    , _patient.getDiagnosisDate());
 
         // Insert the row.
@@ -555,22 +583,25 @@ public class DBAdapter {
     {
         Patient p = new Patient(mContext);
 
+        p.setPatId(_cursor.getInt(PATIENT_ID_COLUMN));
         p.setPatientName(_cursor.getString(PATIENT_NAME_COLUMN));
         p.setFatherName(_cursor.getString(PATIENT_FATHERNAME_COLUMN));
-        p.setAge(_cursor.getInt(PATIENT_AGE_COLUMN));
-        p.setGender(_cursor.getInt(PATIENT_GENDER_COLUMN));
-        p.setEthinicity(_cursor.getInt(PATIENT_ETHNICITY_COLUMN));
+        p.setAge(_cursor.getString(PATIENT_AGE_COLUMN));
+        p.setGender(_cursor.getString(PATIENT_GENDER_COLUMN));
+        p.setEthnicity(_cursor.getString(PATIENT_ETHNICITY_COLUMN));
         p.setAddress(_cursor.getString(PATIENT_ADDRESS_COLUMN));
-        p.setMaritalStatus(_cursor.getInt(PATIENT_MARITALSTATUS_COLUMN));
-        p.setInfections(_cursor.getInt(PATIENT_INFECTIONS_COLUMN));
+        p.setMaritalStatus(_cursor.getString(PATIENT_MARITALSTATUS_COLUMN));
+        p.setInfections(_cursor.getString(PATIENT_INFECTIONS_COLUMN));
         p.setProfession(_cursor.getString(PATIENT_PROFESSION_COLUMN));
         p.setChildrenno(_cursor.getString(PATIENT_CHILDRENNO_COLUMN));
-        p.setChildrenSuffer(_cursor.getInt(PATIENT_CHILDRENSUFFER_COLUMN));
-        p.setSpouseSuffer(_cursor.getInt(PATIENT_SPOUSESUFFER_COLUMN));
-        p.setRiskBehaviour(_cursor.getInt(PATIENT_RISK_COLUMN));
-        p.settravelHistory(_cursor.getInt(PATIENT_TRAVELHISTORY_COLUMN));
-        p.setfriendHistory(_cursor.getInt(PATIENT_FRIENDHISTORY_COLUMN));
-        p.setclinicalFeatures(_cursor.getInt(PATIENT_CLINICALFEATUR_COLUMN));
+        p.setChildrenSuffer(_cursor.getString(PATIENT_CHILDRENSUFFER_COLUMN));
+        p.setSpouseSuffer(_cursor.getString(PATIENT_SPOUSESUFFER_COLUMN));
+        p.setRiskBehaviour(_cursor.getString(PATIENT_RISK_COLUMN));
+        p.settravelHistory(_cursor.getString(PATIENT_TRAVELHISTORY_COLUMN));
+        p.setfriendHistory(_cursor.getString(PATIENT_FRIENDHISTORY_COLUMN));
+//        p.setclinicalFeatures(_cursor.getInt(PATIENT_CLINICALFEATURE_COLUMN));
+        p.setcd4(_cursor.getString(PATIENT_CD4_COLUMN));
+        p.setViralLoad(_cursor.getString(PATIENT_VIRALLOAD_COLUMN));
         p.setDiagnosisDate(_cursor.getString(PATIENT_DIAGNOSISDATE_COLUMN));
 
         return p;

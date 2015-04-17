@@ -29,98 +29,57 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class QR extends Activity {
-	TextView tvStatus;
-	TextView tvResult;
+    TextView tvStatus;
+    TextView tvResult;
 
-    private HistoryItem historyItem;
-    private DBAdapter dbAdapter;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.qr);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.qr);
+        tvStatus = (TextView) findViewById(R.id.tvStatus);
+        tvResult = (TextView) findViewById(R.id.tvResult);
 
-		tvStatus = (TextView) findViewById(R.id.tvStatus);
-		tvResult = (TextView) findViewById(R.id.tvResult);
+        Button scanBtn = (Button) findViewById(R.id.btnScan);
 
-		Button scanBtn = (Button) findViewById(R.id.btnScan);
 
-		//in some trigger function e.g. button press within your code you should add:
-		scanBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+        //in some trigger function e.g. button press within your code you should add:
+        scanBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
 
-				try {
+                try {
 
-					Intent intent = new Intent(
-							"com.google.zxing.client.android.SCAN");
-					intent.putExtra("SCAN_MODE", "QR_CODE_MODE,PRODUCT_MODE");
-					startActivityForResult(intent, 0);
+                    Intent intent = new Intent(
+                            "com.google.zxing.client.android.SCAN");
+                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE,PRODUCT_MODE");
+                    startActivityForResult(intent, 0);
 
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					Toast.makeText(getApplicationContext(), "ERROR:" + e, Toast.LENGTH_LONG).show();
-				}
-			}
-		});
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "ERROR:" + e, Toast.LENGTH_LONG).show();
 
-        historyItem = new HistoryItem(this);
-        historyItem.fromIntent(getIntent());
+                }
 
-        dbAdapter = new DBAdapter(this);
-        dbAdapter.open();
-	}
+            }
+        });
 
-	//In the same activity you�ll need the following to retrieve the results:
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		if (requestCode == 0) {
+    }
 
-			if (resultCode == RESULT_OK) {
-				tvStatus.setText(intent.getStringExtra("SCAN_RESULT_FORMAT"));
-				tvResult.setText(intent.getStringExtra("SCAN_RESULT"));
+    //In the same activity you�ll need the following to retrieve the results:
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 0) {
 
-                dbAdapter.updateHistory(historyItem.getAlarmId(), historyItem);
+            if (resultCode == RESULT_OK) {
+                tvStatus.setText(intent.getStringExtra("SCAN_RESULT_FORMAT"));
+                tvResult.setText(intent.getStringExtra("SCAN_RESULT"));
             } else if (resultCode == RESULT_CANCELED) {
-				tvStatus.setText("Press a button to start a scan.");
-				tvResult.setText("Scan cancelled.");
-			}
-		}
-	}
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Close the database
-        dbAdapter.close();
+                tvStatus.setText("Press a button to start a scan.");
+                tvResult.setText("Scan cancelled.");
+            }
+        }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        // Close the database
-        dbAdapter.close();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Close the database
-        dbAdapter.close();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Close the database
-        dbAdapter.open();
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        dbAdapter.open();
-    }
 }

@@ -20,6 +20,8 @@ public class DBViewer extends Activity {
     private MedicineAdapter medicineAdapter;
     private ArrayList<HistoryItem> historyList;
     private HistoryAdapter historyAdapter;
+    private ArrayList<Patient> patientList;
+    private PatientAdapter patientAdapter;
     private TextView titleView;
     DBAdapter dbAdapter;
     Cursor cursor;
@@ -27,6 +29,7 @@ public class DBViewer extends Activity {
     public static final String TITLE_HISTORY = "History";
     public static final String TITLE_MEDICINES = "Medicines";
     public static final String TITLE_ALARMS = "Alarms";
+    public static final String TITLE_PATIENT = "Patient";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,10 @@ public class DBViewer extends Activity {
         // initialize alarm array adapter
         historyAdapter = new HistoryAdapter(this, R.layout.db_history_item_view, historyList);
 
+        patientList = new ArrayList<Patient>();
+        // initialize alarm array adapter
+        patientAdapter = new PatientAdapter(this, R.layout.db_patient_view, patientList);
+
         // bind an adapter to the list view
         listView.setAdapter(historyAdapter);
         titleView.setText(TITLE_HISTORY);
@@ -59,6 +66,7 @@ public class DBViewer extends Activity {
         populateAlarmList();
         populateMedicineList();
         populateHistoryList();
+        populatePatientList();
     }
 
     @Override
@@ -143,6 +151,24 @@ public class DBViewer extends Activity {
         historyAdapter.notifyDataSetChanged();
     }
 
+    private void populatePatientList() {
+        // Get all the alarms from the database.
+        cursor = dbAdapter.getAllPatientCursor();
+        startManagingCursor(cursor);
+        // Update the array.
+        updatePatientArray();
+    }
+
+    private void updatePatientArray() {
+        cursor.requery();
+        patientList.clear();
+        if (cursor.moveToFirst())
+            do {
+                patientList.add(0, dbAdapter.createPatient(cursor));
+            } while(cursor.moveToNext());
+        patientAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -174,6 +200,12 @@ public class DBViewer extends Activity {
         {
             listView.setAdapter(historyAdapter);
             titleView.setText(TITLE_HISTORY);
+            return true;
+        }
+        else if (id == R.id.switch_patient)
+        {
+            listView.setAdapter(patientAdapter);
+            titleView.setText(TITLE_PATIENT);
             return true;
         }
         else if (id == R.id.export_button)

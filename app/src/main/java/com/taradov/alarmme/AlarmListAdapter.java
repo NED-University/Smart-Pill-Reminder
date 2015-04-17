@@ -21,212 +21,232 @@ package com.taradov.alarmme;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.view.LayoutInflater;
+import android.content.Intent;
+import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.BaseAdapter;
 
-class AlarmListAdapter extends BaseAdapter
-{
-	private final String TAG = "AlarmMe";
+class AlarmListAdapter extends BaseAdapter {
+    private final String TAG = "AlarmMe";
 
-	private Context mContext;
-	private DataSource mDataSource;
-	private LayoutInflater mInflater;
-	private DateTime mDateTime;
-	private int mColorOutdated;
-	private int mColorActive;
-	private AlarmManager mAlarmManager; 
+    private Context mContext;
+    private DataSource mDataSource;
+    private LayoutInflater mInflater;
+    private DateTime mDateTime;
+    private int mColorOutdated;
+    private int mColorActive;
+    private AlarmManager mAlarmManager;
 
-	public AlarmListAdapter(Context context)
-	{
-		mContext = context;
-		mDataSource = DataSource.getInstance(context);
+    private DBAdapter dbAdapter;
 
-		Log.i(TAG, "AlarmListAdapter.create()");
+    public AlarmListAdapter(Context context) {
+        mContext = context;
+        mDataSource = DataSource.getInstance(context);
+        //dbAdapter.open();
 
-		mInflater = LayoutInflater.from(context);
-		mDateTime = new DateTime(context);
+        Log.i(TAG, "AlarmListAdapter.create()");
 
-		mColorOutdated = mContext.getResources().getColor(R.color.alarm_title_outdated);
-		mColorActive = mContext.getResources().getColor(R.color.alarm_title_active);
+        mInflater = LayoutInflater.from(context);
+        mDateTime = new DateTime(context);
 
-		mAlarmManager = (AlarmManager)context.getSystemService(mContext.ALARM_SERVICE);
+        mColorOutdated = mContext.getResources().getColor(R.color.alarm_title_outdated);
+        mColorActive = mContext.getResources().getColor(R.color.alarm_title_active);
 
-		dataSetChanged();
-	}
+        mAlarmManager = (AlarmManager) context.getSystemService(mContext.ALARM_SERVICE);
 
-	public void save()
-	{
-		mDataSource.save();
-	}
+        dataSetChanged();
 
-	public void update(Alarm alarm)
-	{
-		mDataSource.update(alarm);
-		dataSetChanged();
-	}
+    }
 
-	public void updateAlarms()
-	{
-		Log.i(TAG, "AlarmListAdapter.updateAlarms()");
-		for (int i = 0; i < mDataSource.size(); i++)
-			mDataSource.update(mDataSource.get(i));
-		dataSetChanged();
-	}
+    public void save() {
+        mDataSource.save();
+    }
 
-	public void add(Alarm alarm)
-	{
-		mDataSource.add(alarm);
-		dataSetChanged();
-	}
+    public void update(Alarm alarm) {
+        mDataSource.update(alarm);
+        dataSetChanged();
+    }
 
-	public void delete(int index)
-	{
-		cancelAlarm(mDataSource.get(index));
-		mDataSource.remove(index);
-		dataSetChanged();
-	}
+    public void updateAlarms() {
+        Log.i(TAG, "AlarmListAdapter.updateAlarms()");
+        for (int i = 0; i < mDataSource.size(); i++)
+            mDataSource.update(mDataSource.get(i));
+        dataSetChanged();
+    }
 
-	public void onSettingsUpdated()
-	{
-		mDateTime.update();
-		dataSetChanged();
-	}
+    public void add(Alarm alarm) {
+        mDataSource.add(alarm);
+        dataSetChanged();
+    }
 
-	public int getCount()
-	{
-		return mDataSource.size();
-	}
+    public void delete(int index) {
+        cancelAlarm(mDataSource.get(index));
+        mDataSource.remove(index);
+        dataSetChanged();
+    }
 
-	public Alarm getItem(int position)
-	{
-		return mDataSource.get(position);
-	}
+    public void onSettingsUpdated() {
+        mDateTime.update();
+        dataSetChanged();
+    }
 
-	public long getItemId(int position)
-	{
-		return position;
-	}
+    public int getCount() {
+        return mDataSource.size();
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		ViewHolder holder;
-		Alarm alarm = mDataSource.get(position);
+    public Alarm getItem(int position) {
+        return mDataSource.get(position);
+    }
 
-		if (convertView == null)
-		{
-			convertView = mInflater.inflate(R.layout.list_item, null);
+    public long getItemId(int position) {
+        return position;
+    }
 
-			holder = new ViewHolder();
-			holder.title = (TextView)convertView.findViewById(R.id.item_title);
-			holder.details = (TextView)convertView.findViewById(R.id.item_details);
-			holder.image=(ImageView)convertView.findViewById(R.id.item_image);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        Alarm alarm = mDataSource.get(position);
+
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.list_item, null);
+
+            holder = new ViewHolder();
+            holder.title = (TextView) convertView.findViewById(R.id.item_title);
+            holder.details = (TextView) convertView.findViewById(R.id.item_details);
+            holder.image = (ImageView) convertView.findViewById(R.id.item_image);
 
 
-			convertView.setTag(holder);
-		}
-		else
-		{
-			holder = (ViewHolder)convertView.getTag();
-		}
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-		holder.title.setText(alarm.getTitle().toString());
-		holder.details.setText(mDateTime.formatDetails(alarm) + (alarm.getEnabled() ? "" : " [disabled]"));
-		holder.image.setImageResource((int) alarm.getpId());
-		if (alarm.getOutdated())
-			holder.title.setTextColor(mColorOutdated);
-		else
-			holder.title.setTextColor(mColorActive);
+        holder.title.setText(alarm.getTitle().toString());
+        holder.details.setText(mDateTime.formatDetails(alarm) + (alarm.getEnabled() ? "" : " [disabled]"));
+        holder.image.setImageResource((int) alarm.getpId());
+        if (alarm.getOutdated())
+            holder.title.setTextColor(mColorOutdated);
+        else
+            holder.title.setTextColor(mColorActive);
 
-		return convertView;
-	}
+        return convertView;
+    }
 
-	private void dataSetChanged()
-	{
-		for (int i = 0; i < mDataSource.size(); i++)
-			setAlarm(mDataSource.get(i));
+    private void dataSetChanged() {
+        for (int i = 0; i < mDataSource.size(); i++)
+            setAlarm(mDataSource.get(i));
 
-		notifyDataSetChanged();
-	}
+        notifyDataSetChanged();
+    }
 
-	private void setAlarm(Alarm alarm)
-	{
-		PendingIntent sender;
-		Intent intent;
+    private void setAlarm(Alarm alarm) {
+        PendingIntent sender;
+        Intent intent;
 
 
-		if (alarm.getEnabled() && !alarm.getOutdated())
-		{
+        if (alarm.getEnabled() && !alarm.getOutdated()) {
 
-			//Calendar updateTime = Calendar.getInstance();
+            //Calendar updateTime = Calendar.getInstance();
 
-			//updateTime.set(Calendar.SECOND, 5);
+            //updateTime.set(Calendar.SECOND, 5);
 
-			int position= alarm.getInterval();
-			if (position==0){
-			intent = new Intent(mContext, AlarmReceiver.class);
-			alarm.toIntent(intent);
-			sender = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), sender);
-			//mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,updateTime.getTimeInMillis() ,5*1000 , sender);
+            int position = alarm.getInterval();
+            if (position == 0) {
+                intent = new Intent(mContext, AlarmReceiver.class);
+                alarm.toIntent(intent);
+                long now = System.currentTimeMillis();
+                Bundle b = intent.getExtras();
+                long end = b.getLong("com.taradov.alarmme.todate");
+//
+//                if(now>end){
+//                    Intent intentstart = new Intent(mContext, AlarmReceiver.class);
+//                    PendingIntent senderstart = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intentstart, 0);
+//                    //AlarmManager am = (AlarmManager)context.getSystemService(mContext.ALARM_SERVICE);
+//                    mAlarmManager.cancel(senderstart);
+//                }
+//                else {
 
-			Log.i(TAG, "AlarmListAdapter.setAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getFromDate()+")");
-			}
-			
-			
-			if (position==1)
-			{
-				
+                if (!(now > end)) {
+                    sender = PendingIntent.getBroadcast(mContext, (int) alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), sender);
+                }
+                //mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,updateTime.getTimeInMillis() ,5*1000 , sender);
 
-				intent = new Intent(mContext, AlarmReceiver.class);
-				alarm.toIntent(intent);
-				sender = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				// mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), sender);
-				mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,alarm.getFromDate() ,1000*60*60 , sender);
-				Log.i(TAG, "AlarmListAdapter.setRepeatingAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getFromDate()+")");
+                Log.i(TAG, "AlarmListAdapter.setAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getFromDate() + ")");
+            }
 
-			}
-			if (position==2)
-			{
-				
 
-				intent = new Intent(mContext, AlarmReceiver.class);
-				alarm.toIntent(intent);
-				sender = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				// mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), sender);
-				mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP,alarm.getFromDate() ,2000*60*60 , sender);
-				Log.i(TAG, "AlarmListAdapter.setRepeatingAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getFromDate()+")");
+            if (position == 1) {
 
-			}	
-			
-			
-			
-			
-			
-		}
-	}
 
-	private void cancelAlarm(Alarm alarm)
-	{
-		PendingIntent sender;
-		Intent intent;
+                intent = new Intent(mContext, AlarmReceiver.class);
+                alarm.toIntent(intent);
+                long now = System.currentTimeMillis();
+                Bundle b = intent.getExtras();
+                long end = b.getLong("com.taradov.alarmme.todate");
 
-		intent = new Intent(mContext, AlarmReceiver.class);
-		sender = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		mAlarmManager.cancel(sender);
-	}
+//                if(now>end){
+//                    Intent intentstart = new Intent(mContext, AlarmReceiver.class);
+//                    PendingIntent senderstart = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intentstart, 0);
+//                    //AlarmManager am = (AlarmManager)context.getSystemService(mContext.ALARM_SERVICE);
+//                    mAlarmManager.cancel(senderstart);
+//                }
+//                else {
+                if (!(now > end)) {
+                    sender = PendingIntent.getBroadcast(mContext, (int) alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    // mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), sender);
+                    mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), 1000 * 60 * 60, sender);
+                }
+                Log.i(TAG, "AlarmListAdapter.setRepeatingAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getFromDate() + ")");
 
-	static class ViewHolder
-	{
-		TextView title;
-		TextView details;
-		ImageView image;
-	}
+            }
+            if (position == 2) {
+
+
+                intent = new Intent(mContext, AlarmReceiver.class);
+                alarm.toIntent(intent);
+                long now = System.currentTimeMillis();
+                Bundle b = intent.getExtras();
+                long end = b.getLong("com.taradov.alarmme.todate");
+
+//                if(now>end){
+//                    Intent intentstart = new Intent(mContext, AlarmReceiver.class);
+//                    PendingIntent senderstart = PendingIntent.getBroadcast(mContext, (int)alarm.getId(), intentstart, 0);
+//                    //AlarmManager am = (AlarmManager)context.getSystemService(mContext.ALARM_SERVICE);
+//                    mAlarmManager.cancel(senderstart);
+//                }
+//                else {
+                if (!(now > end)) {
+                    sender = PendingIntent.getBroadcast(mContext, (int) alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    // mAlarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), sender);
+                    mAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, alarm.getFromDate(), 2000 * 60 * 60, sender);
+                }
+                Log.i(TAG, "AlarmListAdapter.setRepeatingAlarm(" + alarm.getId() + ", '" + alarm.getTitle() + "', " + alarm.getFromDate() + ")");
+
+            }
+
+
+        }
+    }
+
+    private void cancelAlarm(Alarm alarm) {
+        PendingIntent sender;
+        Intent intent;
+
+        intent = new Intent(mContext, AlarmReceiver.class);
+        sender = PendingIntent.getBroadcast(mContext, (int) alarm.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mAlarmManager.cancel(sender);
+    }
+
+    static class ViewHolder {
+        TextView title;
+        TextView details;
+        ImageView image;
+    }
 }
 

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">SmartPillReminder</string>
 
-    <string name="app_name">AlarmMe</string>
+    <string-array name="occurence">
+        <item>Once</item>
+        <item>Weekly</item>
+    </string-array>
 
     <string-array name="interval">
         <item>Once</item>
         <item>Twice a day</item>
         <item>Three times a day</item>
     </string-array>
+
     <string-array name="gender">
         <item>Male</item>
         <item>Female</item>
     </string-array>
-    <string-array name="ethinicity">
-        <item>Sindhi</item>
-        <item>Punjabi</item>
-        <item>Balochi</item>
-        <item>Pushton</item>
-    </string-array>
-    <string name="action_settings">Action Settings</string>
+
     <string name="constant_qrcode">Brufen</string>
+
     <string-array name="age">
         <item>15-24</item>
         <item>25-34</item>
@@ -29,6 +29,14 @@
         <item>65-74</item>
         <item>75-84</item>
     </string-array>
+
+    <string-array name="ethinicity">
+        <item>Sindhi</item>
+        <item>Punjabi</item>
+        <item>Balochi</item>
+        <item>Pushton</item>
+    </string-array>
+
     <string-array name="pref_alarm_play_time_entries">
         <item>10 seconds</item>
         <item>30 seconds</item>
@@ -37,6 +45,7 @@
         <item>3 minutes</item>
         <item>5 minutes</item>
     </string-array>
+
     <string-array name="pref_alarm_play_time_values">
         <item>10</item>
         <item>30</item>
@@ -46,9 +55,33 @@
         <item>300</item>
     </string-array>
 
-    <array name="occurence"></array>
 
-    <string name="title_activity_dbviewer">Database Viewer</string>
+    <string-array name="infection_items">
+    <item>HIV</item>
+    <item>HCV</item>
+    <item>HBV</item>
+    <item>TB</item>
+</string-array>
+
+    <string-array name="behaviour_items">
+        <item>Drug Use</item>
+        <item>Promiscuity</item>
+        <item>Homosexuality</item>
+        <item>contact with sex workers</item>
+    </string-array>
+
+    <string-array name="history_items">
+        <item>Travel</item>
+        <item>Acquaintance with HIV</item>
+        <item>Relationship with patient</item>
+
+    </string-array>
+
+    <string name="title_activity_dbviewer">DBViewer</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
     <string name="patientName">Patient\'s Name:</string>
     <string name="patientFatherName">Father\'s Name:</string>
     <string name="age">Age:</string>
@@ -56,14 +89,18 @@
     <string name="ethinicity">Ethinicity: </string>
     <string name="address">Residential Address:</string>
     <string name="marital">Marital Status:</string>
-	<string name="profession">Profession:</string>
-	<string name="infections">Infections:</string>
-	<string name="no_of_children">No of Children:</string>
-	<string name="child_suffering">Any Child Suffering: </string>
-	<string name="spouse_suffering">Spouse Suffering:</string>
-	<string name="HighRiskBehaviour">High Risk Behaviour: </string>
-	<string name="history_travel">Travel History</string>
-	<string name="history_friend">Friend/partner History: </string>
-	<string name="clinical_features">Clinical Features</string>
-	<string name="diagnosis_date">Date of Diagnosis</string>
+    <string name="profession">Profession:</string>
+    <string name="infections">Infections:</string>
+    <string name="no_of_children">No of Children:</string>
+    <string name="child_suffering">Any Child Suffering: </string>
+    <string name="spouse_suffering">Spouse Suffering:</string>
+    <string name="HighRiskBehaviour">High Risk Behaviour: </string>
+    <string name="history_travel">Travel History</string>
+    <string name="history_friend">Friend/partner History: </string>
+    <string name="CD4">CD4 : </string>
+    <string name="viralLoad">Viral Load : </string>
+    <string name="clinical_features">Clinical Features</string>
+    <string name="diagnosis_date">Date of Diagnosis</string>
+
 </resources>
+

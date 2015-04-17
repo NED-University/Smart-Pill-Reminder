@@ -3,31 +3,31 @@
     style="@style/dark"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8sp" >
+            android:padding="8sp">
 
             <TextView
                 style="@style/widget"
                 android:text="Medicine Name" />
 
-          
+
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
-                <MultiAutoCompleteTextView
+                <AutoCompleteTextView
                     android:id="@+id/editText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="8sp" >
+                android:paddingTop="8sp">
 
                 <CheckBox
                     android:id="@+id/alarm_checkbox"
@@ -60,24 +60,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="8sp" >
-
-                <Button
-                    android:id="@+id/date_button"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="2"
-                    android:onClick="onDateClick" />
-
-                <Button
-                    android:id="@+id/time_button"
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:onClick="onTimeClick" />
-
+                android:paddingTop="8sp">
                 <Button
                     android:id="@+id/color_picker"
                     android:layout_width="0sp"
@@ -86,29 +69,162 @@
                     android:layout_weight="1"
                     android:onClick="onColorClick"
                     android:text="Color+" />
+
+                <ImageView
+                    android:id="@+id/selected_color"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:scaleType="center" />
             </LinearLayout>
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:paddingTop="8sp" >
+
+                <TextView
+                    android:id="@+id/fromdate_lb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:clickable="true"
+                    android:onClick="onClick"
+                    android:text="From Date:  "
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:id="@+id/fromdate_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/fromdate_lb"
+                    android:clickable="true"
+                    android:drawablePadding="5dip"
+                    android:drawableRight="@drawable/pencil"
+                    android:onClick="onClick"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/todate_lb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fromdate_lb"
+                    android:layout_marginBottom="20dp"
+                    android:clickable="true"
+                    android:onClick="onClick"
+                    android:text="To Date:  "
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:id="@+id/todate_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fromdate_lb"
+                    android:layout_toRightOf="@id/todate_lb"
+                    android:clickable="true"
+                    android:drawablePadding="5dip"
+                    android:drawableRight="@drawable/pencil"
+                    android:onClick="onClick"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/attime_lb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/todate_lb"
+                    android:layout_marginBottom="20dp"
+                    android:clickable="true"
+                    android:onClick="onClick"
+                    android:text="At Time:  "
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:id="@+id/attime_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/todate_lb"
+                    android:layout_toRightOf="@id/attime_lb"
+                    android:clickable="true"
+                    android:drawablePadding="5dip"
+                    android:drawableRight="@drawable/pencil"
+                    android:onClick="onClick"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/atday_lb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/attime_lb"
+                    android:layout_marginBottom="20dp"
+                    android:clickable="true"
+                    android:onClick="onDateClick"
+                    android:text="Days:  "
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:id="@+id/atday_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/attime_lb"
+                    android:layout_toRightOf="@+id/atday_lb"
+                    android:clickable="true"
+                    android:drawablePadding="5dip"
+                    android:drawableRight="@drawable/pencil"
+                    android:onClick="onDateClick"
+                    android:textColor="#000000" />
+            </RelativeLayout>
+
+
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:paddingTop="8sp">-->
+
+                <!--<Button-->
+                    <!--android:id="@+id/date_button"-->
+                    <!--android:layout_width="0sp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_weight="2"-->
+                    <!--android:onClick="onDateClick" />-->
+
+                <!--<Button-->
+                    <!--android:id="@+id/time_button"-->
+                    <!--android:layout_width="0sp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:onClick="onTimeClick" />-->
+
+
+            <!--</LinearLayout>-->
+
+            <!---->
+
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
-                
-                <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/TextView_Pwd1"
-        android:text="Repeat"
-        android:textStyle="bold" />
+                android:orientation="vertical">
 
-                
-                    <Spinner
-                        android:id="@+id/interval_spinner"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="1"
-                        android:entries="@array/interval"
-                        android:spinnerMode="dropdown" />
-                
+                <TextView
+                    android:id="@+id/TextView_Pwd1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Repeat"
+                    android:textStyle="bold" />
+
+
+                <Spinner
+                    android:id="@+id/interval_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:entries="@array/interval"
+                    android:spinnerMode="dropdown" />
+
             </LinearLayout>
 
             <GridView
@@ -118,7 +234,7 @@
                 android:columnWidth="70dp"
                 android:gravity="center_horizontal|top"
                 android:horizontalSpacing="25dp"
-                android:numColumns="3"
+                android:numColumns="6"
                 android:paddingTop="30dp"
                 android:scrollbars="none"
                 android:stretchMode="columnWidth"
@@ -131,7 +247,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8sp" >
+        android:padding="8sp">
 
         <Button
             android:id="@+id/done"
