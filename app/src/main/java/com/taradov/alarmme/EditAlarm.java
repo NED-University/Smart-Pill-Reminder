@@ -479,9 +479,9 @@ public class EditAlarm extends Activity implements OnItemClickListener {
 //        mTimeButton.setText(mDateTime.formatTime(mAlarm));
 //        mToDateButton.setText(mDateTime.formatToDate(mAlarm));
 
-        fromdateText.setText(mDateTime.formatDate(mAlarm));
+        fromdateText.setText(mDateTime.formatFromDate(mAlarm));
         atdayText.setText(mDateTime.formatDays(mAlarm));
-        todateText.setText(mDateTime.formatDate(mAlarm));
+        todateText.setText(mDateTime.formatToDate(mAlarm));
         attimeText.setText(mDateTime.formatTime(mAlarm));
     }
 

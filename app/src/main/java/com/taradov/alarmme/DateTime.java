@@ -88,8 +88,14 @@ public class DateTime {
         return mTimeFormat.format(new Date(alarm.getFromDate()));
     }
 
-    public String formatDate(Alarm alarm) {
-        return mDateFormat.format(new Date(alarm.getFromDate()));
+    public String formatFromDate(Alarm alarm) {
+        return (alarm.getFromDate() == 0) ? "" :
+                mDateFormat.format(new Date(alarm.getFromDate()));
+    }
+
+    public String formatToDate(Alarm alarm) {
+        return (alarm.getToDate() == 0) ? "" :
+                mDateFormat.format(new Date(alarm.getToDate()));
     }
 
     public String formatSysDate() {
@@ -126,7 +132,7 @@ public class DateTime {
         String res = "???";
 
         if (alarm.getOccurence() == Alarm.ONCE)
-            res = formatDate(alarm);
+            res = formatFromDate(alarm);
         else if (alarm.getOccurence() == Alarm.WEEKLY)
             res = formatDays(alarm);
 

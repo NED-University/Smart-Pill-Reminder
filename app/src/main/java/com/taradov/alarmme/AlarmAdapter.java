@@ -32,8 +32,8 @@ public class AlarmAdapter extends ArrayAdapter<Alarm> {
 
         Alarm alarm = getItem(position);
         String title = alarm.getTitle();
-        String fromDate = dt.formatDate(alarm);
-        String toDate = dt.formatDate(alarm);
+        String fromDate = dt.formatFromDate(alarm);
+        String toDate = dt.formatToDate(alarm);
 
         if (convertView == null) {
             alarmView = new GridLayout(getContext());

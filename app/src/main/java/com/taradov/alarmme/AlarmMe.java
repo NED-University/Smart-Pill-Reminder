@@ -181,9 +181,7 @@ public class AlarmMe extends Activity {
 
         if (index == CONTEXT_MENU_EDIT) {
             Intent intent = new Intent(getBaseContext(), EditAlarm.class);
-
             mCurrentAlarm = mAlarmListAdapter.getItem(info.position);
-
             mCurrentAlarm.toIntent(intent);
             intent.putExtra("EDIT", true);
             startActivityForResult(intent, EDIT_ALARM_ACTIVITY);
@@ -212,6 +210,8 @@ public class AlarmMe extends Activity {
 
             mCurrentAlarm = mAlarmListAdapter.getItem(position);
             mCurrentAlarm.toIntent(intent);
+            intent.putExtra("EDIT", true);
+            
             AlarmMe.this.startActivityForResult(intent, EDIT_ALARM_ACTIVITY);
         }
     };
