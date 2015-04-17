@@ -66,7 +66,7 @@ public class EditAlarm extends Activity implements OnItemClickListener {
     private CheckBox mAlarmEnabled;
     private Spinner mOccurence;
     private Spinner mInterval;
-//    private Button mDateButton;
+    //    private Button mDateButton;
 //    private Button mToDateButton;
 //    private Button mTimeButton;
 //    private Button mDayButton;
@@ -338,14 +338,11 @@ public class EditAlarm extends Activity implements OnItemClickListener {
     }
 
     public void onColorClick(View view) {
-
-            //		Intent intent = new Intent(EditAlarm.this,ColorPickerActivity.class);
-            //		startActivity(intent);
-            showColorPickerDialogDemo();
-
-
-
+//        Intent intent = new Intent(EditAlarm.this,ColorPickerActivity.class);
+//        startActivity(intent);
+        showColorPickerDialogDemo();
     }
+
     private void showColorPickerDialogDemo() {
         int initialColor = Color.WHITE;
 
@@ -371,12 +368,11 @@ public class EditAlarm extends Activity implements OnItemClickListener {
         Toast.makeText(this, rgbString, Toast.LENGTH_SHORT).show();
     }
 
-
     public void onDoneClick(View view) {
         Intent intent = new Intent();
 
         mAlarm.toIntent(intent);
-        // TODO: Get medicine ID
+
         if (editAlarm) {
             dbAdapter.updateAlarm(alarmName, mAlarm);
         } else
@@ -431,7 +427,6 @@ public class EditAlarm extends Activity implements OnItemClickListener {
     private TextWatcher mTitleChangedListener = new TextWatcher() {
         public void afterTextChanged(Editable s) {
             mAlarm.setTitle(mTitle.getText().toString());
-
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -485,10 +480,7 @@ public class EditAlarm extends Activity implements OnItemClickListener {
 //        mToDateButton.setText(mDateTime.formatToDate(mAlarm));
 
         fromdateText.setText(mDateTime.formatDate(mAlarm));
-
-
         atdayText.setText(mDateTime.formatDays(mAlarm));
-
         todateText.setText(mDateTime.formatDate(mAlarm));
         attimeText.setText(mDateTime.formatTime(mAlarm));
     }
@@ -536,11 +528,8 @@ public class EditAlarm extends Activity implements OnItemClickListener {
             tv.setText(menu_text[position]);
             tv.setCompoundDrawablesWithIntrinsicBounds(0, menu_icon[position], 0, 0);
             return row;
-
         }
-
     }
-
 
     public class ImageAdapter extends BaseAdapter {
         Context mContext;
@@ -551,23 +540,19 @@ public class EditAlarm extends Activity implements OnItemClickListener {
         }
 
         public int getCount() {
-            // TODO Auto-generated method stub
             return 6; // THE NUMBER OF COUNTRIES SHOULD BE ADDED HERE IF
             // INCREASED!!!!!!!!!!
         }
 
         public Object getItem(int position) {
-            // TODO Auto-generated method stub
             return null;
         }
 
         public long getItemId(int position) {
-            // TODO Auto-generated method stub
             return 0;
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
             View v;
             if (convertView == null) {
                 LayoutInflater li = getLayoutInflater();
@@ -576,7 +561,6 @@ public class EditAlarm extends Activity implements OnItemClickListener {
                 tv.setText(menu_text[position]);
                 ImageView iv = (ImageView) v.findViewById(R.id.icon_image);
                 iv.setImageResource(menu_icon[position]);
-
 
             } else {
                 v = convertView;
@@ -587,7 +571,6 @@ public class EditAlarm extends Activity implements OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-        // TODO Auto-generated method stub
 
     }
 
