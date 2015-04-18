@@ -25,8 +25,6 @@ import java.util.TimerTask;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.net.Uri;
 import android.app.Activity;
 import android.app.Notification;
@@ -36,7 +34,6 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.TextView;
 import android.content.Intent;
 import android.content.Context;
@@ -60,7 +57,7 @@ public class AlarmNotification extends Activity {
     private TextView mTextView;
     private PlayTimerTask mTimerTask;
     private ImageView mImageView;
-    private MediaPlayer mp;
+    private MediaPlayer mMediaPlayer;
 
     private HistoryItem mHistoryItem;
     private DBAdapter dbAdapter;
@@ -86,6 +83,10 @@ public class AlarmNotification extends Activity {
         readPreferences();
 
         mRingtone = RingtoneManager.getRingtone(getApplicationContext(), mAlarmSound);
+
+        mMediaPlayer = MediaPlayer.create(this, RingtoneManager.getValidRingtoneUri(getApplicationContext()));
+        mMediaPlayer.setLooping(true);
+
         if (mVibrate)
             mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -126,13 +127,13 @@ public class AlarmNotification extends Activity {
 
         mTextView.setText(mAlarm.getTitle());
         mImageView.setImageResource((int) mAlarm.getpId());
-        mp = MediaPlayer.create(this, mAlarm.getAudio());
-        mp.setLooping(false);
+
 
         mTimerTask = new PlayTimerTask();
         mTimer = new Timer();
         mTimer.schedule(mTimerTask, mPlayTime);
-        mRingtone.play();
+//        mRingtone.play();
+        mMediaPlayer.start();
         if (mVibrate)
             mVibrator.vibrate(mVibratePattern, 0);
     }
@@ -141,11 +142,11 @@ public class AlarmNotification extends Activity {
         Log.i(TAG, "AlarmNotification.stop()");
 
         mTimer.cancel();
-        mRingtone.stop();
+//        mRingtone.stop();
         if (mVibrate)
             mVibrator.cancel();
-        if (mp.isPlaying())
-            mp.stop();
+        if (mMediaPlayer.isPlaying())
+            mMediaPlayer.stop();
     }
 
     public void onDismissClick(View view)
@@ -176,12 +177,16 @@ public class AlarmNotification extends Activity {
 
     public void OnPlayClick(View view)
     {
-        mRingtone.stop();
+//        mRingtone.stop();
+        mMediaPlayer.stop();
         if (mVibrate)
             mVibrator.cancel();
 
-        if (!mp.isPlaying())
-            mp.start();
+        mMediaPlayer = MediaPlayer.create(this, mAlarm.getAudioId());
+        mMediaPlayer.setLooping(false);
+
+        if (!mMediaPlayer.isPlaying())
+            mMediaPlayer.start();
     }
 
     //In the same activity you�ll need the following to retrieve the results:

@@ -134,7 +134,7 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
                     sheet.addCell(new Label(col++, row, dateTime.formatTime(alarm)));
                     sheet.addCell(new Label(col++, row, dateTime.formatDays(alarm)));
                     // TODO: Get human readable form of audio
-                    sheet.addCell(new Label(col++, row, String.valueOf(alarm.getAudio())));
+                    sheet.addCell(new Label(col++, row, String.valueOf(alarm.getAudioPos())));
                     // TODO: Get human readable form of interval
                     sheet.addCell(new Label(col++, row, String.valueOf(alarm.getInterval())));
                     // TODO: Get human readable form of picture id

@@ -225,6 +225,21 @@
                     android:entries="@array/interval"
                     android:spinnerMode="dropdown" />
 
+                <TextView
+                    android:id="@+id/TextView_Pwd2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Audio"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/audio_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/audio"
+                    android:spinnerMode="dropdown" />
+
             </LinearLayout>
 
             <GridView

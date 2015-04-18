@@ -66,7 +66,8 @@ public class EditAlarm extends Activity implements OnItemClickListener {
     private CheckBox mAlarmEnabled;
     private Spinner mOccurence;
     private Spinner mInterval;
-    //    private Button mDateButton;
+    private Spinner mAudio;
+//    private Button mDateButton;
 //    private Button mToDateButton;
 //    private Button mTimeButton;
 //    private Button mDayButton;
@@ -83,7 +84,6 @@ public class EditAlarm extends Activity implements OnItemClickListener {
     private ImageView mColorImageView;
 
     private String[] menu_text = {"","","","","",""};
-
     public String[] medicine={"Blue Pill","Red Pill","Yellow Pill"};
 
     private Integer[] menu_icon = {
@@ -124,8 +124,6 @@ public class EditAlarm extends Activity implements OnItemClickListener {
     private boolean editAlarm;
     private String alarmName;
 
-
-
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -142,10 +140,8 @@ public class EditAlarm extends Activity implements OnItemClickListener {
         mTitle.setThreshold(1);
         mTitle.setAdapter(adapter);
 
-
         TextView textView = new TextView(this);
         textView.setText("New text");
-
 
         menu.setOnItemClickListener(new OnItemClickListener() {
 
@@ -213,16 +209,18 @@ public class EditAlarm extends Activity implements OnItemClickListener {
         mAlarmEnabled = (CheckBox) findViewById(R.id.alarm_checkbox);
         //mOccurence = (Spinner)findViewById(R.id.occurence_spinner);
         mInterval = (Spinner) findViewById(R.id.interval_spinner);
+        mAudio = (Spinner) findViewById(R.id.audio_spinner);
 //        mDateButton = (Button) findViewById(R.id.date_button);
 //        mToDateButton = (Button) findViewById(R.id.to_date_btn);
 //        mDayButton = (Button) findViewById(R.id.day_btn);
 //        mTimeButton = (Button) findViewById(R.id.time_button);
         mColorPickerButton = (Button) findViewById(R.id.color_picker);
 
+
         mAlarm = new Alarm(this);
         mAlarm.fromIntent(getIntent());
 
-        mColorImageView=(ImageView)findViewById(R.id.selected_color);
+        mColorImageView = (ImageView)findViewById(R.id.selected_color);
         mColorImageView.setBackgroundColor(Color.rgb(mAlarm.getRed(), mAlarm.getGreen(), mAlarm.getBlue()));
         mDateTime = new DateTime(this);
 
@@ -233,14 +231,16 @@ public class EditAlarm extends Activity implements OnItemClickListener {
         fromdateText = (TextView) findViewById(R.id.fromdate_tv);
         todateText = (TextView) findViewById(R.id.todate_tv);
         attimeText = (TextView) findViewById(R.id.attime_tv);
-        atdayText=(TextView) findViewById(R.id.atday_tv);
+        atdayText =(TextView) findViewById(R.id.atday_tv);
 
 //		mOccurence.setSelection(mAlarm.getOccurence());
 //		mOccurence.setOnItemSelectedListener(mOccurenceSelectedListener);
 
-
         mInterval.setSelection(mAlarm.getInterval());
         mInterval.setOnItemSelectedListener(mIntervalSelectedListener);
+
+        mAudio.setSelection(mAlarm.getAudioPos());
+        mAudio.setOnItemSelectedListener(mAudioSelectedListener);
 
         mAlarmEnabled.setChecked(mAlarm.getEnabled());
         mAlarmEnabled.setOnCheckedChangeListener(mAlarmEnabledChangeListener);
@@ -271,8 +271,8 @@ public class EditAlarm extends Activity implements OnItemClickListener {
     }
 
     public void onClick(View v) {
-        switch (v.getId()) {
 
+        switch (v.getId()) {
 
             case R.id.fromdate_tv:
             case R.id.fromdate_lb:
@@ -313,7 +313,7 @@ public class EditAlarm extends Activity implements OnItemClickListener {
         if (DATE_DIALOG_ID == id)
             ((DatePickerDialog) dialog).updateDate(mYear, mMonth, mDay);
         else if(TODATE_DIALOG_ID==id)
-            ((DatePickerDialog)dialog).updateDate(mYear2, mMonth2, mDay2);
+            ((DatePickerDialog) dialog).updateDate(mYear2, mMonth2, mDay2);
         else if (TIME_DIALOG_ID == id)
             ((TimePickerDialog) dialog).updateTime(mHour, mMinute);
     }
@@ -356,13 +356,13 @@ public class EditAlarm extends Activity implements OnItemClickListener {
                 mAlarm.setBlue(Color.blue(color));
                 mAlarm.setGreen(Color.green(color));
                 mColorImageView.setBackgroundColor(Color.rgb(mAlarm.getRed(),mAlarm.getGreen(),mAlarm.getBlue()));
-
             }
-
         });
-        colorPickerDialog.show();
 
+        colorPickerDialog.show();
     }
+
+
     private void showToast(int color) {
         String rgbString = "R: " + Color.red(color) + " B: " + Color.blue(color) + " G: " + Color.green(color);
         Toast.makeText(this, rgbString, Toast.LENGTH_SHORT).show();
@@ -375,8 +375,10 @@ public class EditAlarm extends Activity implements OnItemClickListener {
 
         if (editAlarm) {
             dbAdapter.updateAlarm(alarmName, mAlarm);
-        } else
+        } else {
             dbAdapter.addAlarm(mAlarm);
+        }
+
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -463,6 +465,16 @@ public class EditAlarm extends Activity implements OnItemClickListener {
         }
     };
 
+    private AdapterView.OnItemSelectedListener mAudioSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            mAlarm.setAudioPos(position);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    };
 
     private CompoundButton.OnCheckedChangeListener mAlarmEnabledChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override

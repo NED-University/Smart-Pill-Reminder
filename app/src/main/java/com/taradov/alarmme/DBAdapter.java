@@ -319,7 +319,7 @@ public class DBAdapter {
         values.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         values.put(KEY_ALARM_TIME       , _alarm.getTime());
         values.put(KEY_ALARM_DAYS       , _alarm.getDays());
-        values.put(KEY_ALARM_AUDIO      , _alarm.getAudio());
+        values.put(KEY_ALARM_AUDIO      , _alarm.getAudioPos());
         values.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         values.put(KEY_ALARM_ICON       , _alarm.getpId());
         values.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
@@ -341,7 +341,7 @@ public class DBAdapter {
         newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
         newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
-        newValues.put(KEY_ALARM_AUDIO      , _alarm.getAudio());
+        newValues.put(KEY_ALARM_AUDIO      , _alarm.getAudioPos());
         newValues.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         newValues.put(KEY_ALARM_ICON       , _alarm.getpId());
         newValues.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
@@ -362,7 +362,7 @@ public class DBAdapter {
         newValues.put(KEY_ALARM_TODATE     , _alarm.getToDate());
         newValues.put(KEY_ALARM_TIME       , _alarm.getTime());
         newValues.put(KEY_ALARM_DAYS       , _alarm.getDays());
-        newValues.put(KEY_ALARM_AUDIO      , _alarm.getAudio());
+        newValues.put(KEY_ALARM_AUDIO      , _alarm.getAudioPos());
         newValues.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         newValues.put(KEY_ALARM_ICON       , _alarm.getpId());
         newValues.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
@@ -425,7 +425,7 @@ public class DBAdapter {
         result.setToDate(_cursor.getLong(ALARM_TODATE_COLUMN));
         result.setTime(_cursor.getLong(ALARM_TIME_COLUMN));
         result.setDays(_cursor.getInt(ALARM_DAYS_COLUMN));
-        result.setAudio(_cursor.getInt(ALARM_AUDIO_COLUMN));
+        result.setAudioPos(_cursor.getInt(ALARM_AUDIO_COLUMN));
         result.setInterval(_cursor.getInt(ALARM_INTERVAL_COLUMN));
         result.setpId(_cursor.getInt(ALARM_ICON_COLUMN));
         result.setEnabled((_cursor.getInt(ALARM_ENABLED_COLUMN) == 1));
