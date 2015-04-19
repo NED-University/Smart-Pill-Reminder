@@ -221,7 +221,7 @@ public class EditAlarm extends Activity implements OnItemClickListener {
         mAlarm.fromIntent(getIntent());
 
         mColorImageView = (ImageView)findViewById(R.id.selected_color);
-        mColorImageView.setBackgroundColor(Color.rgb(mAlarm.getRed(), mAlarm.getGreen(), mAlarm.getBlue()));
+        mColorImageView.setBackgroundColor(mAlarm.getColor());
         mDateTime = new DateTime(this);
 
         mTitle.setText(mAlarm.getTitle());
@@ -352,10 +352,8 @@ public class EditAlarm extends Activity implements OnItemClickListener {
             public void onColorSelected(int color) {
                 showToast(color);
 
-                mAlarm.setRed(Color.red(color));
-                mAlarm.setBlue(Color.blue(color));
-                mAlarm.setGreen(Color.green(color));
-                mColorImageView.setBackgroundColor(Color.rgb(mAlarm.getRed(),mAlarm.getGreen(),mAlarm.getBlue()));
+                mAlarm.setColor(color);
+                mColorImageView.setBackgroundColor(mAlarm.getColor());
             }
         });
 

@@ -3,6 +3,7 @@ package com.taradov.alarmme;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Environment;
 
@@ -11,8 +12,11 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.DateFormat;
 
+import jxl.Cell;
 import jxl.Workbook;
+import jxl.format.Colour;
 import jxl.write.Label;
+import jxl.write.WritableCellFormat;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -115,6 +119,7 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_AUDIO));
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_INTERVAL));
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_ICON));
+            sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_COLOR));
             sheet.addCell(new Label(col++, 0, DBAdapter.KEY_ALARM_ENABLED));
 
             cursor = dbAdapter.getAllAlarmCursor();
@@ -122,10 +127,10 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
             if (cursor.moveToFirst()) {
                 // start from second row, first is for labels
                 int row = 1;
-                Alarm alarm = dbAdapter.createAlarm(cursor);
 
                 do {
                     col = 0;
+                    Alarm alarm = dbAdapter.createAlarm(cursor);
 
                     sheet.addCell(new Label(col++, row, String.valueOf(alarm.getId())));
                     sheet.addCell(new Label(col++, row, alarm.getTitle()));
@@ -139,6 +144,11 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
                     sheet.addCell(new Label(col++, row, String.valueOf(alarm.getInterval())));
                     // TODO: Get human readable form of picture id
                     sheet.addCell(new Label(col++, row, String.valueOf(alarm.getpId())));
+
+                    int color = alarm.getColor();
+                    sheet.addCell(new Label(col++, row, "R" + Color.red(color) +
+                            " B" + Color.blue(color) + " G" + Color.green(color)));
+
                     sheet.addCell(new Label(col++, row, String.valueOf(alarm.getEnabled())));
 
                     row++;
@@ -171,10 +181,10 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
             if (cursor.moveToFirst()) {
                 // start from second row, first is for labels
                 int row = 1;
-                Medicine medicine = dbAdapter.createMedicineItem(cursor);
 
                 do {
                     col = 0;
+                    Medicine medicine = dbAdapter.createMedicineItem(cursor);
 
                     sheet.addCell(new Label(col++, row, String.valueOf(medicine.getId())));
                     sheet.addCell(new Label(col++, row, medicine.getName()));
@@ -214,11 +224,10 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
             if (cursor.moveToFirst()) {
                 // start from second row, first is for labels
                 int row = 1;
-                HistoryItem historyItem = dbAdapter.createHistoryItem(cursor);
-
 
                 do {
                     col = 0;
+                    HistoryItem historyItem = dbAdapter.createHistoryItem(cursor);
 
                     sheet.addCell(new Label(col++, row, String.valueOf(historyItem.getId())));
                     sheet.addCell(new Label(col++, row, String.valueOf(historyItem.getAlarmId())));
@@ -271,10 +280,10 @@ public class DatabaseExportHelper extends AsyncTask<String, String, Boolean> {
             if (cursor.moveToFirst()) {
                 // start from second row, first is for labels
                 int row = 1;
-                Patient patient = dbAdapter.createPatient(cursor);
 
                 do {
                     col = 0;
+                    Patient patient = dbAdapter.createPatient(cursor);
 
                     sheet.addCell(new Label(col++, row, String.valueOf(patient.getPatId())));
                     sheet.addCell(new Label(col++, row, patient.getPatientName()));

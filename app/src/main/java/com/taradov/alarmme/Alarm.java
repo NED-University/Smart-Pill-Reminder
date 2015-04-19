@@ -28,6 +28,7 @@ import java.util.Calendar;
 
 import android.content.Intent;
 import android.content.Context;
+import android.graphics.Color;
 
 public class Alarm implements Comparable<Alarm> {
     private Context mContext;
@@ -41,11 +42,7 @@ public class Alarm implements Comparable<Alarm> {
     private long pId;
     private boolean mEnabled;
     private int mAudioPos;
-    private int Red;
-    private int Green;
-    private int Blue;
-    private int alpha ;
-
+    private int color;
     private int mOccurence;
     private long mNextOccurence;
 
@@ -66,10 +63,7 @@ public class Alarm implements Comparable<Alarm> {
         mEnabled = true;
         mOccurence = ONCE;
         mDays = EVERY_DAY;
-        Red=255;
-        Green=0;
-        Blue=0;
-        alpha=255;
+        color = Color.rgb(255, 0, 0);
         mAudioPos=0;
         update();
     }
@@ -176,33 +170,12 @@ public class Alarm implements Comparable<Alarm> {
         update();
     }
 
-    public void setRed(int r){
-        Red=r;
+    public void setColor(int color){
+        this.color = color;
     }
-    public int getRed(){
-        return Red;
+    public int getColor(){
+        return color;
     }
-    public void setGreen(int g){
-        Green=g;
-    }
-    public int getGreen(){
-        return Green;
-    }
-    public void setBlue(int b){
-        Blue=b;
-    }
-    public int getBlue(){
-        return Blue;
-    }
-
-    public void setAlpha(int a){
-        alpha=a;
-    }
-    public int getAlpha(){
-        return alpha;
-    }
-
-
 
     public long getNextOccurence() {
         return mNextOccurence;
@@ -275,10 +248,7 @@ public class Alarm implements Comparable<Alarm> {
         intent.putExtra("com.taradov.alarmme.days", mDays);
         intent.putExtra("com.taradov.alarmme.audiopos", mAudioPos);
         intent.putExtra("com.taradov.alarmme.pId", pId);
-        intent.putExtra("com.taradov.alarmme.red", Red);
-        intent.putExtra("com.taradov.alarmme.green", Green);
-        intent.putExtra("com.taradov.alarmme.blue", Blue);
-        intent.putExtra("com.taradov.alarmme.alpha", alpha);
+        intent.putExtra("com.taradov.alarmme.color", color);
     }
 
     public void fromIntent(Intent intent) {
@@ -294,10 +264,7 @@ public class Alarm implements Comparable<Alarm> {
         mDays = intent.getIntExtra("com.taradov.alarmme.days", 0);
         mAudioPos = intent.getIntExtra("com.taradov.alarmme.audiopos", 0);
         pId = intent.getLongExtra("com.taradov.alarmme.pId", -1);
-        Red = intent.getIntExtra("com.taradov.alarmme.red", 0);
-        Green = intent.getIntExtra("com.taradov.alarmme.green", 0);
-        Blue = intent.getIntExtra("com.taradov.alarmme.blue", 0);
-        alpha = intent.getIntExtra("com.taradov.alarmme.alpha", 100);
+        color = intent.getIntExtra("com.taradov.alarmme.color", 0);
         update();
     }
 

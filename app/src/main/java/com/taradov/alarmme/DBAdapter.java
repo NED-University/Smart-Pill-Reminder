@@ -31,6 +31,7 @@ public class DBAdapter {
     public static final String KEY_ALARM_AUDIO      = "Audio";
     public static final String KEY_ALARM_INTERVAL   = "Interval";
     public static final String KEY_ALARM_ICON       = "Icon";
+    public static final String KEY_ALARM_COLOR      = "Color";
     public static final String KEY_ALARM_ENABLED    = "Enabled";
 
     public static final int ALARM_ID_COLUMN         = 0;
@@ -42,7 +43,8 @@ public class DBAdapter {
     public static final int ALARM_AUDIO_COLUMN      = 6;
     public static final int ALARM_INTERVAL_COLUMN   = 7;
     public static final int ALARM_ICON_COLUMN       = 8;
-    public static final int ALARM_ENABLED_COLUMN    = 9;
+    public static final int ALARM_COLOR_COLUMN      = 9;
+    public static final int ALARM_ENABLED_COLUMN    = 10;
 
     // Medicine Table Constants
     public static final String MEDICINE_TABLE = "Medicine";
@@ -144,6 +146,7 @@ public class DBAdapter {
                 KEY_ALARM_AUDIO       + " long, " +
                 KEY_ALARM_INTERVAL    + " integer not null, " +
                 KEY_ALARM_ICON        + " integer not null, " +
+                KEY_ALARM_COLOR       + " integer, " +
                 KEY_ALARM_ENABLED     + " integer not null" +
                 ");";
 
@@ -322,6 +325,7 @@ public class DBAdapter {
         values.put(KEY_ALARM_AUDIO      , _alarm.getAudioPos());
         values.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         values.put(KEY_ALARM_ICON       , _alarm.getpId());
+        values.put(KEY_ALARM_COLOR      , _alarm.getColor());
         values.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
 
         // Insert the row.
@@ -344,6 +348,7 @@ public class DBAdapter {
         newValues.put(KEY_ALARM_AUDIO      , _alarm.getAudioPos());
         newValues.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         newValues.put(KEY_ALARM_ICON       , _alarm.getpId());
+        newValues.put(KEY_ALARM_COLOR      , _alarm.getColor());
         newValues.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
 
         // Update the row.
@@ -365,6 +370,7 @@ public class DBAdapter {
         newValues.put(KEY_ALARM_AUDIO      , _alarm.getAudioPos());
         newValues.put(KEY_ALARM_INTERVAL   , _alarm.getInterval());
         newValues.put(KEY_ALARM_ICON       , _alarm.getpId());
+        newValues.put(KEY_ALARM_COLOR      , _alarm.getColor());
         newValues.put(KEY_ALARM_ENABLED    , _alarm.getEnabled());
 
         // Update the row.
@@ -428,6 +434,7 @@ public class DBAdapter {
         result.setAudioPos(_cursor.getInt(ALARM_AUDIO_COLUMN));
         result.setInterval(_cursor.getInt(ALARM_INTERVAL_COLUMN));
         result.setpId(_cursor.getInt(ALARM_ICON_COLUMN));
+        result.setColor(_cursor.getInt(ALARM_COLOR_COLUMN));
         result.setEnabled((_cursor.getInt(ALARM_ENABLED_COLUMN) == 1));
 
         return result;
