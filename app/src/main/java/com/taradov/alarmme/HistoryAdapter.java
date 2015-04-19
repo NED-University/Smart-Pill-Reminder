@@ -38,7 +38,11 @@ public class HistoryAdapter extends ArrayAdapter<HistoryItem> {
         String id = String.valueOf(historyItem.getId());
         String alarmId = String.valueOf(historyItem.getAlarmId());
         String timeDue = df.format(new Date(historyItem.getTimeDue()));
-        String timeTaken = df.format(new Date(historyItem.getTimeTaken()));
+
+        String timeTaken = "";
+        if (historyItem.getTimeTaken() != 0)
+            timeTaken = df.format(new Date(historyItem.getTimeTaken()));
+
         String validation = historyItem.getValidation();
 
         if (convertView == null) {

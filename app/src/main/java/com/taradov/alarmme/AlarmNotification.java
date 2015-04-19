@@ -41,6 +41,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.widget.Toast;
 
 public class AlarmNotification extends Activity {
     private final String TAG = "AlarmMe";
@@ -118,10 +119,11 @@ public class AlarmNotification extends Activity {
 
         mAlarm.fromIntent(intent);
         mHistoryItem.setAlarmId((int)mAlarm.getId());
-        mHistoryItem.setTimeDue(mAlarm.getNextOccurence());
+        mHistoryItem.setTimeDue(System.currentTimeMillis());
 
         dbAdapter.addHistory(mHistoryItem);
         mHistoryItem = dbAdapter.getLastHistoryItem();
+        dbAdapter.close();
 
         Log.i(TAG, "AlarmNotification.start('" + mAlarm.getTitle() + "')");
 
@@ -157,6 +159,7 @@ public class AlarmNotification extends Activity {
 //	  startActivity(intent);
 ////	  finish();
 
+        stop();
 
         try {
 
@@ -165,7 +168,7 @@ public class AlarmNotification extends Activity {
             intent.putExtra("SCAN_MODE", "QR_CODE_MODE,PRODUCT_MODE");
             mHistoryItem.toIntent(intent);
             startActivityForResult(intent, 0);
-            finish();
+//            finish();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,29 +192,37 @@ public class AlarmNotification extends Activity {
             mMediaPlayer.start();
     }
 
+    @Override
     //In the same activity you�ll need the following to retrieve the results:
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Toast.makeText(this, "Activity result", Toast.LENGTH_LONG);
         if (requestCode == 0) {
-
+            Toast.makeText(this, "Request code", Toast.LENGTH_LONG);
             if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "result ok", Toast.LENGTH_LONG);
                 mHistoryItem.setTimeTaken(System.currentTimeMillis());
                 mHistoryItem.setQRCode(intent.getStringExtra("SCAN_RESULT"));
-
+                dbAdapter.open();
 //                String requiredQRCode = dbAdapter.getMedicineFromAlarmID(mHistoryItem.getAlarmId()).getQRCode();
                 String requiredQRCode = getResources().getString(R.string.constant_qrcode);
 
                 if (requiredQRCode.equals(mHistoryItem.getQRCode()))
                 {
                     mHistoryItem.setValidation(HistoryItem.TAKEN);
+                    Toast.makeText(this, "success with " + mHistoryItem.getQRCode(), Toast.LENGTH_LONG);
                 }
                 else
                 {
                     mHistoryItem.setValidation(HistoryItem.INCORRECT);
+                    Toast.makeText(this, "failure with " + mHistoryItem.getQRCode(), Toast.LENGTH_LONG);
                 }
 
                 dbAdapter.updateHistory(mHistoryItem.getId(), mHistoryItem);
             }
         }
+
+        dbAdapter.close();
+        this.finish();
     }
 
     private void readPreferences() {

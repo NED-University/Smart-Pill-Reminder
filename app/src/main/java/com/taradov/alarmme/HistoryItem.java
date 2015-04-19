@@ -17,7 +17,7 @@ public class HistoryItem {
 
     public static final String MISSED = "Missed";
     public static final String TAKEN = "Taken";
-    public static final String INCORRECT = "INCORRECT";
+    public static final String INCORRECT = "Incorrect";
 
     public HistoryItem( Context _context)
     {
